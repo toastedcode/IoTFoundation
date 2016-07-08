@@ -1,0 +1,103 @@
+// *****************************************************************************
+// *****************************************************************************
+// MessageFactory.hpp
+//
+// Author: Jason Tost
+// Date:   6.3.2016
+//
+// *****************************************************************************
+// *****************************************************************************
+
+#pragma once
+
+#include "Message.hpp"
+
+static const int MAX_NUM_MESSAGES = 50;
+
+static const int MESSAGE_NOT_FOUND = MAX_NUM_MESSAGES + 1;
+
+class Message;
+
+template <typename T>
+class MessageFactory
+{
+
+public:
+
+   static T* createMessage(...)
+   {
+      T* message = getFreeMessage();
+
+      // TODO:
+      //message->initialize();
+
+      return (message);
+   }
+
+   static void received(
+      Message* message)
+   {
+      int poolIndex = find(message);
+      if (poolIndex < MAX_NUM_MESSAGES)
+      {
+         messagePool[poolIndex].second++;
+      }
+   }
+
+   static void processed(
+      Message* message)
+   {
+      int poolIndex = find(message);
+      if (poolIndex < MAX_NUM_MESSAGES)
+      {
+         messagePool[poolIndex].second--;
+      }
+   }
+
+private:
+
+   typedef std::pair<T*, int> MessagePoolEntry;
+
+   static int find(
+      Message* message)
+   {
+      for (int i = 0; i < MAX_NUM_MESSAGES; i++)
+      {
+         if (messagePool[i].first == message)
+         {
+            return (i);
+         }
+      }
+
+      return (MESSAGE_NOT_FOUND);
+   }
+
+   static bool isFree(
+      const int& poolIndex)
+   {
+      return ((poolIndex < MAX_NUM_MESSAGES) ? (messagePool[poolIndex].second == 0) : false);
+   }
+
+   static T* getFreeMessage()
+   {
+      for (int i = 0; i < MAX_NUM_MESSAGES; i++)
+      {
+         if (isFree(i))
+         {
+            return (messagePool[i].first);
+         }
+      }
+
+      return (0);
+   }
+
+   static T myMessage;
+
+   static MessagePoolEntry p;
+
+   static MessagePoolEntry messagePool[MAX_NUM_MESSAGES];
+};
+
+template <typename T>
+//MessageFactory<T>::MessagePoolEntry MessageFactory<T>::messagePool[MAX_NUM_MESSAGES];  // TODO: Why not?
+std::pair<T*, int> MessageFactory<T>::messagePool[MAX_NUM_MESSAGES];
