@@ -15,11 +15,16 @@
 static const int QUEUE_SIZE = 10;
 
 Adapter::Adapter(
-   const String& id) :
-      id(id)
+   const String& id) : Component(id)
 {
-   messageQueue = new StaticMessageQueue(QUEUE_SIZE);
 }
+
+void Adapter::handleMessage(
+   MessagePtr message)
+{
+   sendRemoteMessage(message);
+}
+
 
 void Adapter::loop()
 {
@@ -29,13 +34,7 @@ void Adapter::loop()
    // Send
    //
 
-   message = messageQueue->dequeue();
-   while (message != NULL)
-   {
-      sendRemoteMessage(message);
-
-      message = messageQueue->dequeue();
-   }
+   Component::loop();
 
    //
    // Receive

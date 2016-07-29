@@ -1,6 +1,6 @@
 // *****************************************************************************
 // *****************************************************************************
-// Adapter.hpp
+// Component.hpp
 //
 // Author: Jason Tost
 // Date:   5.26.2016
@@ -14,15 +14,15 @@
 #include "MessageQueue.hpp"
 #include "MessageRouter.hpp"
 
-class Adapter : public MessageHandler
+class Component : public MessageHandler
 {
 
 public:
 
-   Adapter(
+   Component(
       const String& id);
 
-   virtual ~Adapter();
+   virtual ~Component();
 
    virtual String getId() const;
 
@@ -34,45 +34,48 @@ public:
    virtual bool queueMessage(
       MessagePtr message);
 
+   virtual void setup();
+
    virtual void loop();
 
-   virtual bool sendRemoteMessage(
+   virtual void handleMessage(
       MessagePtr message) = 0;
-
-   virtual MessagePtr getRemoteMessage() = 0;
 
 protected:
 
    String id;
 
-   String remoteLocation;
-
    MessageQueue* messageQueue;
 };
 
-inline Adapter::~Adapter()
+inline Component::~Component()
 {
    delete (messageQueue);
 }
 
-inline String Adapter::getId() const
+inline String Component::getId() const
 {
    return (id);
 }
 
-inline Address Adapter::getAddress() const
+inline Address Component::getAddress() const
 {
    return (Address(MessageRouter::getLocation(), id));
 }
 
-inline bool Adapter::match(
+inline bool Component::match(
    const Address& address)
 {
-   return (address.location == id);
+   return (address == getAddress());
 }
 
-inline bool Adapter::queueMessage(
+inline bool Component::queueMessage(
    MessagePtr message)
 {
    return (messageQueue->enqueue(message));
+}
+
+inline void Component::setup()
+{
+   // Nothing to do here.
 }

@@ -1,28 +1,21 @@
 // *****************************************************************************
 // *****************************************************************************
-// Utility.h
+// StringUtils.h
 //
 // Author: Jason Tost
-// Date:   11.4.2015
+// Date:   7.26.2016
 //
 // *****************************************************************************
 // *****************************************************************************
 
-#ifndef UTILITY_H_INCLUDED
-#define UTILITY_H_INCLUDED
+#pragma once
 
-#include "Arduino.h"
-#include "ESP8266WiFi.h"
+#include "CommonDefs.hpp"
 
-class Utility
+class StringUtils
 {
 
 public:
-
-   // This operation converts an IPAddress object to a printable string.
-   static String toString(
-      // The IP address to convert.
-      const IPAddress& ipAddress);
 
    // This operation searches a string for the first character that matches any of the specified characters.
    static int findFirstOf(
@@ -39,6 +32,8 @@ public:
       String& string,
       // A string containing the characters to search for.
       const String& delimiters);
-};
 
-#endif  // end UTILITY_H_INCLUDED
+   static String removeAll(
+      const String& string,
+      const String& characters);
+};

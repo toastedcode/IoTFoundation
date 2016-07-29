@@ -1,33 +1,15 @@
 // *****************************************************************************
 // *****************************************************************************
-// Utility.cpp
+// StringUtils.cpp
 //
 // Author: Jason Tost
-// Date:   11.4.2015
+// Date:   7.26.2016
 //
 // *****************************************************************************
 
-#include "Utility.h"
+#include "StringUtils.hpp"
 
-String Utility::toString(
-   const IPAddress& ipAddress)
-{
-   String string = "";
-
-   for (int octet = 0; octet < 4; octet++)
-   {
-      string += String(ipAddress[octet]);
-      if (octet < 3)
-      {
-         string += ".";
-      }
-   }
-
-   return (string);
-}
-
-
-int Utility::findFirstOf(
+int StringUtils::findFirstOf(
    const String& string,
    const String& characters,
    const int& position)
@@ -40,14 +22,18 @@ int Utility::findFirstOf(
 
       if (foundPos != -1)
       {
+#ifdef ARDUINO
+         firstPos = (firstPos == -1) ? foundPos : min(firstPos, foundPos);
+#else
          firstPos = (firstPos == -1) ? foundPos : std::min(firstPos, foundPos);
+#endif
       }
    }
 
    return (firstPos);
 }
 
-String Utility::tokenize(
+String StringUtils::tokenize(
    String& string,
    const String& delimiters)
 {
@@ -74,4 +60,29 @@ String Utility::tokenize(
    }
 
    return (token);
+}
+
+String StringUtils::removeAll(
+   const String& string,
+   const String& characters)
+{
+   String newString;
+
+   int startPos = 0;
+   int foundPos = findFirstOf(string, characters, startPos);
+
+   while (foundPos != -1)
+   {
+      if (foundPos != 0)
+      {
+         newString += string.substring(startPos, foundPos);
+      }
+
+      startPos = foundPos + 1;
+      foundPos = findFirstOf(string, characters, startPos);
+   }
+
+   newString += string.substring(startPos, foundPos);
+
+   return (newString);
 }

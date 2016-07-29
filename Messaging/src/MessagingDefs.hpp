@@ -8,10 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#ifndef ARDUINO
-#include <string>
-typedef std::string String;
-#endif
+#include "CommonDefs.hpp"
 
 typedef String MessageId;
 

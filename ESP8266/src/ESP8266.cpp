@@ -10,7 +10,6 @@
 
 #include "ESP8266.h"
 #include "Logger.h"
-#include "Utility.h"
 
 Esp8266* Esp8266::instance = 0;
 
@@ -71,7 +70,7 @@ bool Esp8266::connectWifi(
    if (isConnected())
    {
       Logger::logDebug(" success!\n");
-      Logger::logDebug("Connected at " + Utility::toString(getIpAddress()) + "\n");
+      Logger::logDebug("Connected at " + toString(getIpAddress()) + "\n");
    }
    else
    {
@@ -105,7 +104,7 @@ bool Esp8266::connectWifi(
    if (isConnected())
    {
       Logger::logDebug(" success!\n");
-      Logger::logDebug("Connected at " + Utility::toString(getIpAddress()) + "\n");
+      Logger::logDebug("Connected at " + toString(getIpAddress()) + "\n");
    }
    else
    {
@@ -139,4 +138,21 @@ bool Esp8266::stopAccessPoint()
 void Esp8266::reset()
 {
    // TODO
+}
+
+String Esp8266::toString(
+   const IPAddress& ipAddress)
+{
+   String string = "";
+
+   for (int octet = 0; octet < 4; octet++)
+   {
+      string += String(ipAddress[octet]);
+      if (octet < 3)
+      {
+         string += ".";
+      }
+   }
+
+   return (string);
 }

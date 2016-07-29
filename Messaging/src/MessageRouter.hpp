@@ -10,17 +10,20 @@
 
 #pragma once
 
-#include <list>
-#include <map>
-
+#include "Map.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
+#include "Set.hpp"
 
-typedef std::map<Address, MessageHandler*> MessageHandlerMap;
+const int MAX_MESSAGE_HANDLERS = 5;
 
-typedef std::list<MessageHandler*> MessageHandlerList;
+const int MAX_TOPICS = 10;
 
-typedef std::map<Topic, MessageHandlerList> SubscriptionMap;
+typedef Map<Address, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
+
+typedef Set<MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerSet;
+
+typedef Map<Topic, MessageHandlerSet, MAX_TOPICS> SubscriptionMap;
 
 class MessageRouter
 {

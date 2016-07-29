@@ -12,7 +12,6 @@
 
 #include "Address.hpp"
 #include "MessagingDefs.hpp"
-#include "SmartPointer.hpp"
 
 class Message
 {
@@ -85,13 +84,6 @@ public:
    virtual bool isSet(
       // The name of the parameter to evaluate.
       ParameterName name) const = 0;
-
-   // Serializes the message to a string.
-   virtual String serialize() const = 0;
-
-   // Parses the message from a string.
-   virtual bool parse(
-      const String& messageString) = 0;
 };
 
 typedef Message* MessagePtr;

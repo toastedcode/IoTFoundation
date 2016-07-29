@@ -80,6 +80,11 @@ private:
    // Destructor.
    virtual ~Esp8266();
 
+   // This operation converts an IPAddress object to a printable string.
+   static String toString(
+      // The IP address to convert.
+      const IPAddress& ipAddress);
+
    // The Singleton instance.
    static Esp8266* instance;
 

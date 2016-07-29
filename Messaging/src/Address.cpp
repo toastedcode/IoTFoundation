@@ -17,6 +17,21 @@ void parseAddress(
    String& location,
    String& id)
 {
+// TODO: Add to StringUtils_Cl
+#ifdef ARDUINO
+   int seperatorPos = address.indexOf(SEPERATOR);
+
+   if (seperatorPos != address.length())
+   {
+      location = address;
+      id = "";
+   }
+   else
+   {
+      location = address.substring(0, seperatorPos);
+      id = address.substring(seperatorPos + 1);
+   }
+#else
    std::size_t seperatorPos = address.find(SEPERATOR);
 
    if (seperatorPos == std::string::npos)
@@ -29,6 +44,7 @@ void parseAddress(
       location = address.substr(0, seperatorPos);
       id = address.substr(seperatorPos + 1);
    }
+#endif
 }
 
 Address::Address(
