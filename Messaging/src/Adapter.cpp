@@ -15,7 +15,9 @@
 static const int QUEUE_SIZE = 10;
 
 Adapter::Adapter(
-   const String& id) : Component(id)
+   const String& id,
+   Protocol* protocol) : Component(id),
+                         protocol(protocol)
 {
 }
 
@@ -23,8 +25,8 @@ void Adapter::handleMessage(
    MessagePtr message)
 {
    sendRemoteMessage(message);
+   message->setFree();
 }
-
 
 void Adapter::loop()
 {

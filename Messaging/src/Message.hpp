@@ -63,6 +63,17 @@ public:
 
    virtual bool setInUse() = 0;
 
+   virtual int getParameterCount() = 0;
+
+   virtual Parameter getParameter(
+      const int& index) = 0;
+
+   virtual Parameter getParameter(
+      const ParameterName& name) = 0;
+
+   virtual void setParameter(
+      const Parameter& parameter) = 0;
+
    // Operations for getting message parameters.
    virtual bool getBool(ParameterName name) const = 0;
    virtual char getChar(ParameterName name) const = 0;

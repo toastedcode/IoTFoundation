@@ -33,6 +33,27 @@ int StringUtils::findFirstOf(
    return (firstPos);
 }
 
+int StringUtils::findFirstNotOf(
+   const String& string,
+   const String& characters,
+   const int& position)
+{
+   int firstPos = -1;
+
+   for (int pos = position; pos < string.length(); pos++)
+   {
+      int foundPos = characters.indexOf(string.charAt(pos), 0);
+
+      if (foundPos == -1)
+      {
+         firstPos = pos;
+         break;
+      }
+   }
+
+   return (firstPos);
+}
+
 String StringUtils::tokenize(
    String& string,
    const String& delimiters)

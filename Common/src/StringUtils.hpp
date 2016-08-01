@@ -26,6 +26,15 @@ public:
       // The position in the string to start the search.
       const int& position = 0);
 
+   // This operation searches a string for the first character that matches any of the specified characters.
+   static int findFirstNotOf(
+      // The string to search.
+      const String& string,
+      // A string containing the characters to search for.
+      const String& characters,
+      // The position in the string to start the search.
+      const int& position = 0);
+
    // This operation returns the next token from the specified string, broken up by any of the specified delimiters.
    static String tokenize(
       // The string to tokenize.

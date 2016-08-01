@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Component.hpp"
+#include "Protocol.hpp"
 
 class Adapter : public Component
 {
@@ -18,9 +19,13 @@ class Adapter : public Component
 public:
 
    Adapter(
-      const String& id);
+      const String& id,
+      Protocol* protocol);
 
    virtual ~Adapter();
+
+   void setProtocol(
+      Protocol* protocol);
 
    virtual bool match(
       const Address& address);
@@ -37,11 +42,19 @@ public:
 
 protected:
 
+   Protocol* protocol;
+
 };
 
 inline Adapter::~Adapter()
 {
    delete (messageQueue);
+}
+
+inline void Adapter::setProtocol(
+   Protocol* protocol)
+{
+   this->protocol = protocol;
 }
 
 inline bool Adapter::match(
