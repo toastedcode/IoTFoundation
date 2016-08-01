@@ -61,7 +61,7 @@ inline StaticMessageQueue::StaticMessageQueue(
    const int& size)
 {
    messageQueue = new MessagePtr[size];
-   memset(messageQueue, (sizeof(MessagePtr) * size), 0);
+   memset(messageQueue, 0, (sizeof(MessagePtr) * size));
 
    end = 0;
    begin = 0;
@@ -107,7 +107,7 @@ inline MessagePtr StaticMessageQueue::dequeue()
 
 inline void StaticMessageQueue::purge()
 {
-   memset(messageQueue, (sizeof(MessagePtr) * queueSize), 0);
+   memset(messageQueue, 0, (sizeof(MessagePtr) * queueSize));
    end = 0;
    begin = 0;
 }

@@ -8,6 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
+#include "Logger.h"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 
@@ -92,13 +93,11 @@ bool MessageRouter::send(
       }
    }
 
-   // TODO
-   /*
-   if (didn'tFindIt == true)
+   if (!success)
    {
-      // Logging.
+      Logger::logDebug("Failed to dispatch message [" + message->getMessageId() +
+                       "] to destination [" + message->getDestination().toString() + "].\n");
    }
-   */
 
    return (success);
 }
