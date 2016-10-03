@@ -11,7 +11,7 @@
 #ifndef LOGGER_H_INCLUDED
 #define LOGGER_H_INCLUDED
 
-#include "Arduino.h"
+#include "CommonDefs.hpp"
 
 class Logger
 {

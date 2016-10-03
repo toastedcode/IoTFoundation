@@ -8,6 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
+#include "Logger.h"
 #include "MessageFactory.hpp"
 
 MessagePtr* MessageFactory::messagePool = NULL;
@@ -20,7 +21,7 @@ MessagePtr MessageFactory::newMessage()
 
    if (message == NULL)
    {
-      printf("Insufficient message allocation.\n");
+      Logger::logDebug("Insufficient message allocation.\n");
    }
    else
    {
@@ -38,7 +39,7 @@ MessagePtr MessageFactory::newMessage(
 
    if (message == NULL)
    {
-      printf("Insufficient message allocation.\n");
+      Logger::logDebug("Insufficient message allocation.\n");
    }
    else
    {
@@ -51,7 +52,7 @@ MessagePtr MessageFactory::newMessage(
 
 MessagePtr MessageFactory::getFreeMessage()
 {
-   MessagePtr message;  // TODO: Initialize to NULL?
+   MessagePtr message = 0;
 
    for (int i = 0; i < numberOfMessages; i++)
    {

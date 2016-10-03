@@ -1,3 +1,5 @@
+#pragma once
+
 #define ARDUINO
 #ifndef ARDUINO
 #include <string>
