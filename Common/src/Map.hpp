@@ -21,7 +21,6 @@ public:
 
    Map() : containerLength(0)
    {
-
    }
 
    bool isSet(

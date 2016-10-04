@@ -135,7 +135,7 @@ inline Address BasicMessage::getSource() const
 inline void BasicMessage::setSource(
       const Address& source)
 {
-   set("destination", source.toString());
+   set("source", source.toString());
 }
 
 inline Address BasicMessage::getDestination() const

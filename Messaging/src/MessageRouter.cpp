@@ -24,7 +24,9 @@ bool MessageRouter::registerHandler(
    if (isRegistered(handler) == false)
    {
       handlers[handler->getAddress()] = handler;
-      printf("MessageRouter::registerHandler: Registered message handler [%s]\n", handler->getAddress().toString().c_str());
+
+      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
+                       handler->getAddress().toString() + "]\n");
    }
 
    return (true);
@@ -34,8 +36,9 @@ bool MessageRouter::unregisterHandler(
    MessageHandler* handler)
 {
    handlers.erase(handler->getAddress());
-   printf("MessageRouter::registerHandler: Registered message handler [%s]\n", handler->getAddress().toString().c_str());
 
+   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
+                    handler->getAddress().toString() + "]\n");
    return (true);
 }
 
@@ -52,7 +55,11 @@ bool MessageRouter::subscribe(
    if (isSubscribed(handler, topic) == false)
    {
       subscriptions[topic].add(handler);
-      printf("MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s]\n", handler->getAddress().toString().c_str(), topic.c_str());
+
+      Logger::logDebug("MessageRouter::subscribe: Message handler [" +
+         handler->getAddress().toString() +
+         "] subscribed to topic [" +
+         handler->getAddress().toString() + "]\n");
    }
 
    return (true);
@@ -80,8 +87,6 @@ bool MessageRouter::send(
 {
    bool success = false;
 
-   printf("Trying to send to %s\n", message->getDestination().toString().c_str());
-
    for (int i = 0; i < handlers.length(); i++)
    {
       const MessageHandlerMap::Entry* entry = handlers.item(i);
@@ -95,7 +100,7 @@ bool MessageRouter::send(
 
    if (!success)
    {
-      Logger::logDebug("Failed to dispatch message [" + message->getMessageId() +
+      Logger::logDebug("MessageRouter::send: Failed to dispatch message [" + message->getMessageId() +
                        "] to destination [" + message->getDestination().toString() + "].\n");
    }
 

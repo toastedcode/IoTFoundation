@@ -19,7 +19,6 @@ public:
 
    Set() : containerLength(0)
    {
-
    }
 
    void operator=(
@@ -80,8 +79,6 @@ public:
 
             isSuccess = true;
          }
-
-         isSuccess = true;
       }
 
       return (isSuccess);

@@ -29,6 +29,8 @@ void Component::loop()
    {
       handleMessage(message);
 
+      message->setFree();
+
       message = messageQueue->dequeue();
    }
 }

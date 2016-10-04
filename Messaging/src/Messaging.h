@@ -16,8 +16,10 @@ public:
       const String& location,
       const int& messagePoolSize)
    {
+      printf("Messaging::setup() \n");
       MessageRouter::setLocation(location);
       MessageFactory::allocate<T>(messagePoolSize);
+      printf("Messaging::setup() end\n");
    }
 
    static bool registerHandler(

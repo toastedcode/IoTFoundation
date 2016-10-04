@@ -27,9 +27,6 @@ public:
    void setProtocol(
       Protocol* protocol);
 
-   virtual bool match(
-      const Address& address);
-
    virtual void loop();
 
    virtual void handleMessage(
@@ -55,10 +52,4 @@ inline void Adapter::setProtocol(
    Protocol* protocol)
 {
    this->protocol = protocol;
-}
-
-inline bool Adapter::match(
-   const Address& address)
-{
-   return (address.location == id);
 }
