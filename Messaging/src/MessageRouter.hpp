@@ -19,7 +19,7 @@ const int MAX_MESSAGE_HANDLERS = 5;
 
 const int MAX_TOPICS = 10;
 
-typedef Map<Address, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
+typedef Map<String, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
 
 typedef Set<MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerSet;
 
@@ -29,11 +29,6 @@ class MessageRouter
 {
 
 public:
-
-   static void setLocation(
-      const String& location);
-
-   static String getLocation();
 
    static bool registerHandler(
       // The handler to be registered.
@@ -77,20 +72,7 @@ public:
 
 private:
 
-   static String location;
-
    static MessageHandlerMap handlers;
 
    static SubscriptionMap subscriptions;
 };
-
-inline void MessageRouter::setLocation(
-   const String& location)
-{
-   MessageRouter::location = location;
-}
-
-inline String MessageRouter::getLocation()
-{
-   return (location);
-}

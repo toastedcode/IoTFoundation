@@ -12,8 +12,6 @@
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 
-String MessageRouter::location;
-
 MessageHandlerMap MessageRouter::handlers;
 
 SubscriptionMap MessageRouter::subscriptions;
@@ -23,10 +21,10 @@ bool MessageRouter::registerHandler(
 {
    if (isRegistered(handler) == false)
    {
-      handlers[handler->getAddress()] = handler;
+      handlers[handler->getId()] = handler;
 
       Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                       handler->getAddress().toString() + "]\n");
+                       handler->getId() + "]\n");
    }
 
    return (true);
@@ -35,10 +33,10 @@ bool MessageRouter::registerHandler(
 bool MessageRouter::unregisterHandler(
    MessageHandler* handler)
 {
-   handlers.erase(handler->getAddress());
+   handlers.erase(handler->getId());
 
    Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                    handler->getAddress().toString() + "]\n");
+                    handler->getId() + "]\n");
    return (true);
 }
 
@@ -57,9 +55,9 @@ bool MessageRouter::subscribe(
       subscriptions[topic].add(handler);
 
       Logger::logDebug("MessageRouter::subscribe: Message handler [" +
-         handler->getAddress().toString() +
+         handler->getId() +
          "] subscribed to topic [" +
-         handler->getAddress().toString() + "]\n");
+         topic + "]\n");
    }
 
    return (true);
@@ -87,11 +85,12 @@ bool MessageRouter::send(
 {
    bool success = false;
 
+   // TODO: Make use of MessageHandlerMap operations.
    for (int i = 0; i < handlers.length(); i++)
    {
       const MessageHandlerMap::Entry* entry = handlers.item(i);
 
-      if (entry->value->match(message->getDestination()))
+      if (entry->key == message->getDestination())
       {
          success = entry->value->queueMessage(message);
          break;
@@ -101,7 +100,7 @@ bool MessageRouter::send(
    if (!success)
    {
       Logger::logDebug("MessageRouter::send: Failed to dispatch message [" + message->getMessageId() +
-                       "] to destination [" + message->getDestination().toString() + "].\n");
+                       "] to destination [" + message->getDestination() + "].\n");
    }
 
    return (success);

@@ -13,13 +13,9 @@ public:
 
    template <typename T>
    static void setup(
-      const String& location,
       const int& messagePoolSize)
    {
-      printf("Messaging::setup() \n");
-      MessageRouter::setLocation(location);
       MessageFactory::allocate<T>(messagePoolSize);
-      printf("Messaging::setup() end\n");
    }
 
    static bool registerHandler(
@@ -51,13 +47,6 @@ public:
    static bool publish(
       // The message to send.
       MessagePtr message);
-
-   static Address remoteAddress(
-      const String& location,
-      const String& id);
-
-   static Address localAddress(
-      const String& id);
 };
 
 inline bool Messaging::registerHandler(
@@ -101,17 +90,4 @@ inline bool Messaging::publish(
    MessagePtr message)
 {
    return (MessageRouter::publish(message));
-}
-
-inline Address Messaging::remoteAddress(
-   const String& location,
-   const String& id)
-{
-   return (Address(location, id));
-}
-
-inline Address Messaging::localAddress(
-   const String& id)
-{
-   return (Address(MessageRouter::getLocation(), id));
 }

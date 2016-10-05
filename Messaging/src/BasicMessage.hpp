@@ -27,15 +27,15 @@ public:
    virtual void setMessageId(
       const MessageId& messageId);
 
-   virtual Address getSource() const;
+   virtual String getSource() const;
 
    virtual void setSource(
-         const Address& source);
+         const String& source);
 
-   virtual Address getDestination() const;
+   virtual String getDestination() const;
 
    virtual void setDestination(
-         const Address& destination);
+         const String& destination);
 
    virtual Topic getTopic() const;
 
@@ -127,26 +127,26 @@ inline void BasicMessage::setMessageId(
    set("message_id", messageId);
 }
 
-inline Address BasicMessage::getSource() const
+inline String BasicMessage::getSource() const
 {
-   return (Address(getString("source")));
+   return (getString("source"));
 }
 
 inline void BasicMessage::setSource(
-      const Address& source)
+      const String& source)
 {
-   set("source", source.toString());
+   set("source", source);
 }
 
-inline Address BasicMessage::getDestination() const
+inline String BasicMessage::getDestination() const
 {
-   return (Address(getString("destination")));
+   return (getString("destination"));
 }
 
 inline void BasicMessage::setDestination(
-      const Address& destination)
+      const String& destination)
 {
-   set("destination", destination.toString());
+   set("destination", destination);
 }
 
 inline Topic BasicMessage::getTopic() const

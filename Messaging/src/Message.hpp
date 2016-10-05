@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "Address.hpp"
 #include "MessagingDefs.hpp"
 
 class Message
@@ -33,21 +32,21 @@ public:
       // The message id.
       const MessageId& messageId) = 0;
 
-   // The operation gets the source handler address.
-   virtual Address getSource() const = 0;
+   // The operation gets the source handler.
+   virtual String getSource() const = 0;
 
-   // The operation sets the source handler address.
+   // The operation sets the source handler.
    virtual void setSource(
-      // The address the source message handler.
-      const Address& id) = 0;
+      // The source message handler.
+      const String& id) = 0;
 
-   // The operation gets the destination handler address.
-   virtual Address getDestination() const = 0;
+   // The operation gets the destination handler.
+   virtual String getDestination() const = 0;
 
    // The operation sets the destination handler.
    virtual void setDestination(
-      // The address the destination message handler.
-      const Address& id) = 0;
+      // The destination message handler.
+      const String& id) = 0;
 
    // This operation gets the topic.
    virtual Topic getTopic() const = 0;

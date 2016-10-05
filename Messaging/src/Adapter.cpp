@@ -45,6 +45,8 @@ void Adapter::loop()
    message = getRemoteMessage();
    while (message != NULL)
    {
+      message->setSource(getId());
+
       MessageRouter::send(message);
 
       message = getRemoteMessage();
