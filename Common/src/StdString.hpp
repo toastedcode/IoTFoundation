@@ -14,7 +14,7 @@ public:
    StdString(
       const char& c);
 
-   StdString(
+   explicit StdString(
       const char* cString);
 
    StdString(
@@ -27,7 +27,7 @@ public:
    StdString(
       const T& i)
    {
-      static std::ostringstream oss;
+      std::ostringstream oss;
 
       oss << i;
       cppString = oss.str();
@@ -39,6 +39,9 @@ public:
 
    StdString operator+(
       const StdString& stdString) const;
+
+   StdString operator+(
+      const char* rhs) const;
 
    void operator+=(
       const StdString& rhs);
@@ -117,6 +120,12 @@ inline StdString StdString::operator+(
    const StdString& rhs) const
 {
    return (StdString(cppString + rhs.cppString));
+}
+
+inline StdString  StdString::operator+(
+   const char* rhs) const
+{
+   return (StdString(cppString + rhs));
 }
 
 inline void StdString::operator+=(

@@ -23,8 +23,7 @@ bool MessageRouter::registerHandler(
    {
       handlers[handler->getId()] = handler;
 
-      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                       handler->getId() + "]\n");
+      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
    }
 
    return (true);
@@ -35,8 +34,8 @@ bool MessageRouter::unregisterHandler(
 {
    handlers.erase(handler->getId());
 
-   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                    handler->getId() + "]\n");
+   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+
    return (true);
 }
 
@@ -54,10 +53,10 @@ bool MessageRouter::subscribe(
    {
       subscriptions[topic].add(handler);
 
-      Logger::logDebug("MessageRouter::subscribe: Message handler [" +
-         handler->getId() +
-         "] subscribed to topic [" +
-         topic + "]\n");
+      Logger::logDebug(
+         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
+         handler->getId().c_str(),
+         topic.c_str());
    }
 
    return (true);
@@ -99,8 +98,10 @@ bool MessageRouter::send(
 
    if (!success)
    {
-      Logger::logDebug("MessageRouter::send: Failed to dispatch message [" + message->getMessageId() +
-                       "] to destination [" + message->getDestination() + "].\n");
+      Logger::logDebug(
+         "MessageRouter::send: Failed to dispatch message [] to destination [].\n",
+         message->getMessageId().c_str(),
+         message->getDestination().c_str());
    }
 
    return (success);

@@ -11,6 +11,8 @@
 #ifndef LOGGER_H_INCLUDED
 #define LOGGER_H_INCLUDED
 
+#include <stdarg.h>
+
 #include "CommonDefs.hpp"
 
 class Logger
@@ -27,6 +29,10 @@ public:
 
    static void logDebug(
       const String& string);
+
+   static void logDebug(
+      const char* format,
+      ...);
 
    static void setEnabled(
       const bool& loggingEnabled);
@@ -55,6 +61,21 @@ inline void Logger::logDebug(
    {
       getInstance()->log(string);
    }
+}
+
+inline void Logger::logDebug(
+   const char* format,
+   ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   logDebug(String(sBuffer));
+
+   va_end(arguments);
 }
 
 inline Logger* Logger::getInstance()

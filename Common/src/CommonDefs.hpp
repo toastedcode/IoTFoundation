@@ -1,9 +1,10 @@
 #pragma once
 
-#define ARDUINO
+//#define ARDUINO
 #ifndef ARDUINO
 #include <string>
-typedef std::string String;
+#include "StdString.hpp"
+typedef StdString String;
 #else
 #include "Arduino.h"
 #endif

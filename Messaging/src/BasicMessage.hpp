@@ -175,36 +175,67 @@ inline bool BasicMessage::setInUse()
    inUse = true;
 }
 
-inline char BasicMessage::getChar(ParameterName name) const
+inline char BasicMessage::getChar(
+   ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.charAt(0) : 0);
+   char value = 0;
+
+   if ((parameters.isSet(name)) &&
+       (parameters.get(name)->value.length() > 0))
+   {
+      value = parameters.get(name)->value.charAt(0);
+   }
+
+   return (value);
 }
 
 inline double BasicMessage::getDouble(ParameterName name) const
 {
-   //String value = "";
-   //return (((value = parameters.get(name)) != 0) ? value.toDouble() : 0);
-   double d = 0;
-   return (d);
+   double value = 0;
+
+   if (parameters.isSet(name))
+   {
+      // TODO
+      //value = parameters.get(name)->value.toDouble();
+   }
+
+   return (value);
 }
 
 inline float BasicMessage::getFloat(ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.toFloat() : 0);
+   float value = 0;
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value.toFloat();
+   }
+
+   return (value);
 }
 
 inline int BasicMessage::getInt(ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.toInt() : 0);
+   int value = 0;
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value.toInt();
+   }
+
+   return (value);
 }
 
 inline String BasicMessage::getString(ParameterName name) const
 {
    String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value : "");
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value;
+   }
+
+   return (value);
 }
 
 inline void BasicMessage::set(ParameterName name, bool value)
