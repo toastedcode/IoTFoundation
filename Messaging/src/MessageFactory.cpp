@@ -21,7 +21,7 @@ MessagePtr MessageFactory::newMessage()
 
    if (message == NULL)
    {
-      Logger::logDebug("Insufficient message allocation.\n");
+      Logger::logDebug("Insufficient message allocation.");
    }
    else
    {
@@ -39,7 +39,7 @@ MessagePtr MessageFactory::newMessage(
 
    if (message == NULL)
    {
-      Logger::logDebug("Insufficient message allocation.\n");
+      Logger::logDebug("Insufficient message allocation.");
    }
    else
    {

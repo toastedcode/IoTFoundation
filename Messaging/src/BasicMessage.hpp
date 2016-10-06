@@ -118,13 +118,13 @@ inline void BasicMessage::initialize(
 
 inline MessageId BasicMessage::getMessageId() const
 {
-   return (getString("message_id"));
+   return (getString("messageId"));
 }
 
 inline void BasicMessage::setMessageId(
    const MessageId& messageId)
 {
-   set("message_id", messageId);
+   set("messageId", messageId);
 }
 
 inline String BasicMessage::getSource() const

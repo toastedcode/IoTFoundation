@@ -14,16 +14,24 @@
 
 MessageHandlerMap MessageRouter::handlers;
 
+MessageHandler* MessageRouter::defaultHandler = 0;
+
 SubscriptionMap MessageRouter::subscriptions;
 
 bool MessageRouter::registerHandler(
-   MessageHandler* handler)
+   MessageHandler* handler,
+   const bool& setDefaultHandler)
 {
    if (isRegistered(handler) == false)
    {
       handlers[handler->getId()] = handler;
 
-      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].", handler->getId().c_str());
+   }
+
+   if (setDefaultHandler)
+   {
+      defaultHandler = handler;
    }
 
    return (true);
@@ -34,7 +42,7 @@ bool MessageRouter::unregisterHandler(
 {
    handlers.erase(handler->getId());
 
-   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].", handler->getId().c_str());
 
    return (true);
 }
@@ -54,7 +62,7 @@ bool MessageRouter::subscribe(
       subscriptions[topic].add(handler);
 
       Logger::logDebug(
-         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
+         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].",
          handler->getId().c_str(),
          topic.c_str());
    }
@@ -84,20 +92,30 @@ bool MessageRouter::send(
 {
    bool success = false;
 
-   // TODO: Make use of MessageHandlerMap operations.
-   for (int i = 0; i < handlers.length(); i++)
+   // Direct un-addressed messages to the default handler.
+   if ((message->getDestination() == "") &&
+       (defaultHandler))
    {
-      const MessageHandlerMap::Entry* entry = handlers.item(i);
-
-      if (entry->key == message->getDestination())
+      success = defaultHandler->queueMessage(message);
+   }
+   // Otherwise, search for a matching message handler.
+   else
+   {
+      // TODO: Make use of MessageHandlerMap operations.
+      for (int i = 0; i < handlers.length(); i++)
       {
-         Logger::logDebug(
-            "MessageRouter::send: Dispatching message [%s] to destination [%s].",
-            message->getMessageId().c_str(),
-            message->getDestination().c_str());
+         const MessageHandlerMap::Entry* entry = handlers.item(i);
 
-         success = entry->value->queueMessage(message);
-         break;
+         if (entry->key == message->getDestination())
+         {
+            Logger::logDebug(
+               "MessageRouter::send: Dispatching message [%s] to destination [%s].",
+               message->getMessageId().c_str(),
+               message->getDestination().c_str());
+
+            success = entry->value->queueMessage(message);
+            break;
+         }
       }
    }
 
@@ -107,6 +125,8 @@ bool MessageRouter::send(
          "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].",
          message->getMessageId().c_str(),
          message->getDestination().c_str());
+
+      message->setFree();
    }
 
    return (success);

@@ -52,7 +52,7 @@ IPAddress Esp8266::getIpAddress() const
 bool Esp8266::connectWifi(
    const int& connectionTimeout)
 {
-   Logger::logDebug("Connecting to Wifi network " + String(WiFi.SSID()));
+   Logger::logDebug("Connecting to Wifi network %s ...", WiFi.SSID().c_str());
 
    WiFi.mode(WIFI_STA);
    //WiFi.begin();
@@ -65,17 +65,16 @@ bool Esp8266::connectWifi(
    {
       delay(1000);
       secondsToConnect++;
-      Logger::logDebug(" .");
+      Logger::logDebug("... trying ...");
    }
 
    if (isConnected())
    {
-      Logger::logDebug(" success!\n");
-      Logger::logDebug("Connected at " + toString(getIpAddress()) + "\n");
+      Logger::logDebug("Success!  Connected at %s", toString(getIpAddress()).c_str());
    }
    else
    {
-      Logger::logDebug(" failed!\n");
+      Logger::logDebug("Failure!  Could not connect to %s", WiFi.SSID().c_str());
    }
 
    return (isConnected());
@@ -86,7 +85,7 @@ bool Esp8266::connectWifi(
    const String& password,
    const int& connectionTimeout)
 {
-   Logger::logDebug("Connecting to Wifi network " + ssid);
+   Logger::logDebug("Connecting to Wifi network %s ...", ssid.c_str());
 
    WiFi.mode(WIFI_STA);
    WiFi.begin(ssid.c_str(), password.c_str());
@@ -99,17 +98,16 @@ bool Esp8266::connectWifi(
    {
       delay(1000);
       secondsToConnect++;
-      Logger::logDebug(" .");
+      Logger::logDebug("... trying ...");
    }
 
    if (isConnected())
    {
-      Logger::logDebug(" success!\n");
-      Logger::logDebug("Connected at " + toString(getIpAddress()) + "\n");
+      Logger::logDebug("Success!  Connected at %s", toString(getIpAddress()).c_str());
    }
    else
    {
-      Logger::logDebug(" failed!\n");
+      Logger::logDebug("Failure!  Could not connect to %s", WiFi.SSID().c_str());
    }
 
    return (isConnected());
@@ -119,7 +117,7 @@ bool Esp8266::startAccessPoint(
    const String& ssid,
    const String& password)
 {
-   Logger::logDebug("Creating wireless network " + ssid);
+   Logger::logDebug("Creating wireless network %s.", ssid.c_str());
 
    WiFi.mode(WIFI_AP);
    WiFi.softAP(ssid.c_str(), password.c_str());
@@ -129,7 +127,7 @@ bool Esp8266::startAccessPoint(
 
 bool Esp8266::stopAccessPoint()
 {
-   Logger::logDebug("Stopping wireless network " + String(WiFi.SSID()));
+   Logger::logDebug("Stopping wireless network %s.", WiFi.SSID().c_str());
 
    WiFi.softAPdisconnect();
 

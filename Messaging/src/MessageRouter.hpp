@@ -32,7 +32,9 @@ public:
 
    static bool registerHandler(
       // The handler to be registered.
-      MessageHandler* handler);
+      MessageHandler* handler,
+      // A flag indicating if this should be the default handler for unaddressed messages.
+      const bool& setDefaultHandler = false);
 
    static bool unregisterHandler(
       // The handler to be unregistered.
@@ -73,6 +75,8 @@ public:
 private:
 
    static MessageHandlerMap handlers;
+
+   static MessageHandler* defaultHandler;
 
    static SubscriptionMap subscriptions;
 };
