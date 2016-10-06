@@ -16,11 +16,11 @@ SerialLogger::SerialLogger() : Logger()
 
 SerialLogger::~SerialLogger()
 {
-
 }
 
 void SerialLogger::log(
    const String& string)
 {
    Serial.print(string);
+   Serial.print("\n");
 }

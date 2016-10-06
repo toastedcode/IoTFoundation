@@ -91,6 +91,11 @@ bool MessageRouter::send(
 
       if (entry->key == message->getDestination())
       {
+         Logger::logDebug(
+            "MessageRouter::send: Dispatching message [%s] to destination [%s].",
+            message->getMessageId().c_str(),
+            message->getDestination().c_str());
+
          success = entry->value->queueMessage(message);
          break;
       }
@@ -99,7 +104,7 @@ bool MessageRouter::send(
    if (!success)
    {
       Logger::logDebug(
-         "MessageRouter::send: Failed to dispatch message [] to destination [].\n",
+         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].",
          message->getMessageId().c_str(),
          message->getDestination().c_str());
    }
