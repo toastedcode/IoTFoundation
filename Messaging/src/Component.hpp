@@ -34,7 +34,7 @@ public:
    virtual void loop();
 
    virtual void handleMessage(
-      MessagePtr message) = 0;
+      MessagePtr message);
 
 protected:
 
