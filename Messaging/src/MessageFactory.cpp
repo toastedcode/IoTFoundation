@@ -8,7 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#include "Logger.h"
+#include "Logger.hpp"
 #include "MessageFactory.hpp"
 
 MessagePtr* MessageFactory::messagePool = NULL;

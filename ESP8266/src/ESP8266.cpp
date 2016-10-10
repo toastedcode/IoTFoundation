@@ -10,7 +10,7 @@
 
 #include "ESP8266.h"
 
-#include "../../Logger/src/Logger.h"
+#include "Logger.hpp"
 
 Esp8266* Esp8266::instance = 0;
 

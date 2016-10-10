@@ -9,7 +9,7 @@
 // *****************************************************************************
 
 #include "Component.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
