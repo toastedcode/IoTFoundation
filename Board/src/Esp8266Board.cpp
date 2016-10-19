@@ -1,41 +1,74 @@
-// *****************************************************************************
-// *****************************************************************************
-// ESP8266.cpp
-//
-// Author: Jason Tost
-// Date:   10.29.2015
-//
-// *****************************************************************************
-// *****************************************************************************
-
-#include "ESP8266.h"
-
+#include "Arduino.h"
+#include "Esp8266Board.hpp"
+#include "ESP8266WiFi.h"
 #include "Logger.hpp"
 
-Esp8266* Esp8266::instance = 0;
+Esp8266Board::Esp8266Board() {}
 
-Esp8266::Esp8266()
+Esp8266Board::~Esp8266Board() {}
+
+// **************************************************************************
+// Board operations
+
+String Esp8266Board::getBoardName()
 {
-   // Create pins.
-   for (int pinId = 1; pinId <= MAX_NUM_PINS; pinId++)
-   {
-      pins[pinId - 1] = new Pin(pinId);
-   }
+   return ("ESP8266");
 }
 
-Esp8266::~Esp8266()
+void Esp8266Board::pinMode(
+   const int& pin,
+   const int& mode)
 {
-   // Delete pins.
-   for (int pinId = 1; pinId <= MAX_NUM_PINS; pinId++)
-   {
-      if (pins[pinId - 1])
-      {
-         delete pins[pinId - 1];
-      }
-   }
+   ::pinMode(pin, mode);
 }
 
-String Esp8266::getMacAddress() const
+int Esp8266Board::analogRead(
+   const int& pin)
+{
+   return (::analogRead(pin));
+}
+
+void Esp8266Board::analogWrite(
+   const int& pin,
+   const int& value)
+{
+   ::analogWrite(pin, value);
+}
+
+int Esp8266Board::digitalRead(
+   const int& pin)
+{
+   return (::digitalRead(pin));
+}
+
+void Esp8266Board::digitalWrite(
+   const int& pin,
+   const int& value)
+{
+   return (::digitalWrite(pin, value));
+}
+
+void Esp8266Board::reset()
+{
+   // TODO
+}
+
+void Esp8266Board::lightSleep(
+   const long& milliseconds)
+{
+   // TODO
+}
+
+void Esp8266Board::deepSleep(
+   const long& milliseconds)
+{
+   // TODO
+}
+
+// **************************************************************************
+// WifiBoard operations
+
+String Esp8266Board::getMacAddress() const
 {
    unsigned char macAddress[6];
    WiFi.macAddress(macAddress);
@@ -44,12 +77,12 @@ String Esp8266::getMacAddress() const
    return ("");
 }
 
-IPAddress Esp8266::getIpAddress() const
+String Esp8266Board::getIpAddress() const
 {
-   return (WiFi.localIP());
+   return (WiFi.localIP().toString());
 }
 
-bool Esp8266::connectWifi(
+bool Esp8266Board::connectWifi(
    const int& connectionTimeout)
 {
    Logger::logDebug("Connecting to Wifi network %s ...", WiFi.SSID().c_str());
@@ -65,12 +98,12 @@ bool Esp8266::connectWifi(
    {
       delay(1000);
       secondsToConnect++;
-      Logger::logDebug("... trying ...");
+      Logger::logDebug("trying ...");
    }
 
    if (isConnected())
    {
-      Logger::logDebug("Success!  Connected at %s", getIpAddress().toString().c_str());
+      Logger::logDebug("Success!  Connected at %s", getIpAddress().c_str());
    }
    else
    {
@@ -80,7 +113,7 @@ bool Esp8266::connectWifi(
    return (isConnected());
 }
 
-bool Esp8266::connectWifi(
+bool Esp8266Board::connectWifi(
    const String& ssid,
    const String& password,
    const int& connectionTimeout)
@@ -98,12 +131,12 @@ bool Esp8266::connectWifi(
    {
       delay(1000);
       secondsToConnect++;
-      Logger::logDebug("... trying ...");
+      Logger::logDebug("trying ...");
    }
 
    if (isConnected())
    {
-      Logger::logDebug("Success!  Connected at %s", getIpAddress().toString().c_str());
+      Logger::logDebug("Success!  Connected at %s", getIpAddress().c_str());
    }
    else
    {
@@ -113,7 +146,12 @@ bool Esp8266::connectWifi(
    return (isConnected());
 }
 
-bool Esp8266::startAccessPoint(
+bool Esp8266Board::isConnected() const
+{
+   return (WiFi.status() == WL_CONNECTED);
+}
+
+bool Esp8266Board::startAccessPoint(
    const String& ssid,
    const String& password)
 {
@@ -125,16 +163,11 @@ bool Esp8266::startAccessPoint(
    return (isConnected());
 }
 
-bool Esp8266::stopAccessPoint()
+bool Esp8266Board::stopAccessPoint()
 {
    Logger::logDebug("Stopping wireless network %s.", WiFi.SSID().c_str());
 
    WiFi.softAPdisconnect();
 
    return (!isConnected());
-}
-
-void Esp8266::reset()
-{
-   // TODO
 }
