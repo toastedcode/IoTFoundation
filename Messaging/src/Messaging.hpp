@@ -35,6 +35,9 @@ public:
 
    static MessagePtr newMessage();
 
+   static MessagePtr copyMessage(
+      MessagePtr message);
+
    // This operation sends a message to a single component.
    static bool send(
       // The message to send.
@@ -62,19 +65,25 @@ inline bool Messaging::subscribe(
    MessageHandler* handler,
    Topic topic)
 {
-   MessageRouter::subscribe(handler, topic);
+   return (MessageRouter::subscribe(handler, topic));
 }
 
 inline bool Messaging::unsubscribe(
    MessageHandler* handler,
    Topic topic)
 {
-   MessageRouter::unsubscribe(handler, topic);
+   return (MessageRouter::unsubscribe(handler, topic));
 }
 
 inline MessagePtr Messaging::newMessage()
 {
    return (MessageFactory::newMessage());
+}
+
+inline MessagePtr Messaging::copyMessage(
+   MessagePtr message)
+{
+   return (MessageFactory::newMessage(message));
 }
 
 inline bool Messaging::send(

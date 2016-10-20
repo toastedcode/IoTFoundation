@@ -65,6 +65,11 @@ void Esp8266Board::deepSleep(
    // TODO
 }
 
+int Esp8266Board::systemTime() const
+{
+   return (millis());
+}
+
 // **************************************************************************
 // WifiBoard operations
 

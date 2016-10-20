@@ -53,6 +53,8 @@ public:
    virtual void deepSleep(
       const long& milliseconds) = 0;
 
+   virtual int systemTime() const = 0;
+
 private:
 
    static Board* instance;
