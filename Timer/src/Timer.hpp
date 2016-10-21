@@ -24,20 +24,28 @@ public:
    static void loop();
 
    static Timer* newTimer(
-      int period,
-      TimerType type);
+      const String& id,
+      const int& period,
+      const TimerType& type);
 
    static Timer* newTimer(
-      int period,
-      TimerType type,
+      const String& id,
+      const int& period,
+      const TimerType& type,
       MessagePtr message);
 
    static Timer* newTimer(
-      int period,
-      TimerType type,
+      const String& id,
+      const int& period,
+      const TimerType& type,
       TimerListener* listener);
 
+   static void freeTimer(
+      Timer* timer);
+
    virtual ~Timer();
+
+   String getId() const;
 
    void start();
 
@@ -56,26 +64,29 @@ public:
 private:
 
    Timer(
-      int period,
-      TimerType type);
+      const String& id,
+      const int& period,
+      const TimerType& type);
 
    Timer(
-      int period,
-      TimerType type,
+      const String& id,
+      const int& period,
+      const TimerType& type,
       MessagePtr message);
 
    Timer(
-      int period,
-      TimerType type,
+      const String& id,
+      const int& period,
+      const TimerType& type,
       TimerListener* listener);
 
    void update();
 
    void expire();
 
-   void destroy();
-
    static TimerSet timers;
+
+   String id;
 
    int period;
 
@@ -85,7 +96,12 @@ private:
 
    TimerListener* listener;
 
-   int startTime;
+   long startTime;
 
-   int expireTime;
+   long expireTime;
 };
+
+inline String Timer::getId() const
+{
+   return (id);
+}

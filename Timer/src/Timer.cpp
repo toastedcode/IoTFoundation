@@ -21,43 +21,56 @@ void Timer::loop()
       // Remove expired timers.
       if  (timer->isExpired())
       {
-         timers.remove(timer);
-         delete (timer);
+         freeTimer(timer);
       }
    }
 }
 
 Timer* Timer::newTimer(
-   int period,
-   TimerType type)
+   const String& id,
+   const int& period,
+   const TimerType& type)
 {
-   Timer* timer = new Timer(period, type);
+   Timer* timer = new Timer(id, period, type);
    timers.add(timer);
 
    return (timer);
 }
 
 Timer* Timer::newTimer(
-   int period,
-   TimerType type,
+   const String& id,
+   const int& period,
+   const TimerType& type,
    Message* message)
 {
-   Timer* timer = new Timer(period, type, message);
+   Timer* timer = new Timer(id, period, type, message);
    timers.add(timer);
 
    return (timer);
 }
 
 Timer* Timer::newTimer(
-   int period,
-   TimerType type,
+   const String& id,
+   const int& period,
+   const TimerType& type,
    TimerListener* listener)
 {
-   Timer* timer = new Timer(period, type, listener);
+   Timer* timer = new Timer(id, period, type, listener);
    timers.add(timer);
 
    return (timer);
 }
+
+void Timer::freeTimer(
+   Timer* timer)
+{
+   if (timer)
+   {
+      timers.remove(timer);
+      delete (timer);
+   }
+}
+
 
 // *****************************************************************************
 //                                  Public
@@ -112,20 +125,24 @@ void Timer::setListener(
 // *****************************************************************************
 
 Timer::Timer(
-   int period,
-   TimerType type) : period(period),
-                     type(type),
-                     message(message),
-                     listener(0),
-                     startTime(0),
-                     expireTime(0)
+   const String& id,
+   const int& period,
+   const TimerType& type) : id(id),
+                            period(period),
+                            type(type),
+                            message(0),
+                            listener(0),
+                            startTime(0),
+                            expireTime(0)
 {
 }
 
 Timer::Timer(
-   int frequency,
-   TimerType type,
-   MessagePtr message) : period(period),
+   const String& id,
+   const int& period,
+   const TimerType& type,
+   MessagePtr message) : id(id),
+                         period(period),
                          type(type),
                          message(message),
                          listener(0),
@@ -135,12 +152,14 @@ Timer::Timer(
 }
 
 Timer::Timer(
-   int frequency,
-   TimerType type,
-   TimerListener* listener) : period(period),
+   const String& id,
+   const int& period,
+   const TimerType& type,
+   TimerListener* listener) : id(id),
+                              period(period),
                               type(type),
-                              message(message),
-                              listener(0),
+                              message(0),
+                              listener(listener),
                               startTime(0),
                               expireTime(0)
 {
