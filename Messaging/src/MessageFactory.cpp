@@ -8,7 +8,6 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#include "Logger.hpp"
 #include "MessageFactory.hpp"
 
 MessagePtr* MessageFactory::messagePool = NULL;
@@ -21,7 +20,7 @@ MessagePtr MessageFactory::newMessage()
 
    if (message == NULL)
    {
-      Logger::logDebug("Insufficient message allocation.");
+      printf("Insufficient message allocation.\n");
    }
    else
    {
@@ -39,7 +38,7 @@ MessagePtr MessageFactory::newMessage(
 
    if (message == NULL)
    {
-      Logger::logDebug("Insufficient message allocation.");
+      printf("Insufficient message allocation.\n");
    }
    else
    {

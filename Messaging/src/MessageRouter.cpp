@@ -8,7 +8,6 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#include "Logger.hpp"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 
@@ -26,7 +25,7 @@ bool MessageRouter::registerHandler(
    {
       handlers[handler->getId()] = handler;
 
-      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].", handler->getId().c_str());
+      printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
    }
 
    if (setDefaultHandler)
@@ -42,7 +41,7 @@ bool MessageRouter::unregisterHandler(
 {
    handlers.erase(handler->getId());
 
-   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [%s].", handler->getId().c_str());
+   printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
 
    return (true);
 }
@@ -61,8 +60,8 @@ bool MessageRouter::subscribe(
    {
       subscriptions[topic].add(handler);
 
-      Logger::logDebug(
-         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].",
+      printf(
+         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
          handler->getId().c_str(),
          topic.c_str());
    }
@@ -108,8 +107,8 @@ bool MessageRouter::send(
 
          if (entry->key == message->getDestination())
          {
-            Logger::logDebug(
-               "MessageRouter::send: Dispatching message [%s] to destination [%s].",
+            printf(
+               "MessageRouter::send: Dispatching message [%s] to destination [%s].\n",
                message->getMessageId().c_str(),
                message->getDestination().c_str());
 
@@ -121,8 +120,8 @@ bool MessageRouter::send(
 
    if (!success)
    {
-      Logger::logDebug(
-         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].",
+      printf(
+         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].\n",
          message->getMessageId().c_str(),
          message->getDestination().c_str());
 
