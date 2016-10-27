@@ -15,7 +15,7 @@
 #include "MessageHandler.hpp"
 #include "Set.hpp"
 
-const int MAX_MESSAGE_HANDLERS = 10;
+const int MAX_MESSAGE_HANDLERS = 30;
 
 const int MAX_TOPICS = 10;
 
