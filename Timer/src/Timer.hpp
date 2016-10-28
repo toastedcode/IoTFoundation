@@ -53,6 +53,8 @@ public:
 
    void reset();
 
+   bool isStarted() const;
+
    bool isExpired() const;
 
    void setMessage(

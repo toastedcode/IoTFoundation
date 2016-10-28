@@ -85,6 +85,7 @@ void Timer::start()
 
 void Timer::stop()
 {
+   startTime = 0;
    expireTime = 0;
 }
 
@@ -97,9 +98,14 @@ void Timer::reset()
    }
 }
 
+bool Timer::isStarted() const
+{
+   return (startTime != 0);
+}
+
 bool Timer::isExpired() const
 {
-   return ((startTime != 0) &&
+   return (isStarted() &&
            (expireTime == 0));
 }
 
@@ -167,7 +173,7 @@ Timer::Timer(
 
 void Timer::update()
 {
-   if (isExpired() == false)
+   if (isStarted() && !isExpired())
    {
       if (Board::getBoard())
       {
