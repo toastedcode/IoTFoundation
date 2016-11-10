@@ -54,7 +54,7 @@ public:
    virtual void deepSleep(
       const long& milliseconds);
 
-   virtual long systemTime() const;
+   virtual unsigned long systemTime() const;
 
    // **************************************************************************
    // WifiBoard operations.

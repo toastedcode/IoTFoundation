@@ -65,7 +65,7 @@ void Esp8266Board::deepSleep(
    // TODO
 }
 
-long Esp8266Board::systemTime() const
+unsigned long Esp8266Board::systemTime() const
 {
    return (millis());
 }

@@ -1,12 +1,10 @@
 #pragma once
 
 #include "Messaging.hpp"
-#include "Set.hpp"
+#include "List.hpp"
 #include "TimerListener.hpp"
 
 static const int MAX_TIMERS = 50;
-
-typedef Set<Timer*, MAX_TIMERS> TimerSet;
 
 class Timer
 {
@@ -18,10 +16,6 @@ public:
       ONE_SHOT,
       PERIODIC
    };
-
-   static void setup();
-
-   static void loop();
 
    static Timer* newTimer(
       const String& id,
@@ -42,6 +36,8 @@ public:
 
    static void freeTimer(
       Timer* timer);
+
+   static void loop();
 
    virtual ~Timer();
 
@@ -65,28 +61,15 @@ public:
 
 private:
 
-   Timer(
-      const String& id,
-      const int& period,
-      const TimerType& type);
+   static Timer* getFreeTimer();
 
-   Timer(
-      const String& id,
-      const int& period,
-      const TimerType& type,
-      MessagePtr message);
-
-   Timer(
-      const String& id,
-      const int& period,
-      const TimerType& type,
-      TimerListener* listener);
+   Timer();
 
    void update();
 
    void expire();
 
-   static TimerSet timers;
+   static Timer timers[MAX_TIMERS];
 
    String id;
 
@@ -98,9 +81,11 @@ private:
 
    TimerListener* listener;
 
-   long startTime;
+   bool inUse;
 
-   long expireTime;
+   unsigned long startTime;
+
+   unsigned long expireTime;
 };
 
 inline String Timer::getId() const

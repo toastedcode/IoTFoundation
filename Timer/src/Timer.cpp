@@ -5,34 +5,26 @@
 //                              Public (static)
 // *****************************************************************************
 
-TimerSet Timer::timers;
-
-void Timer::setup() {}
-
-void Timer::loop()
-{
-   for (int i = 0; i < timers.length(); i++)
-   {
-      Timer* timer = timers.item(i)->value;
-
-      // Update.
-      timer->update();
-
-      // Remove expired timers.
-      if  (timer->isExpired())
-      {
-         freeTimer(timer);
-      }
-   }
-}
+Timer Timer::timers[MAX_TIMERS];
 
 Timer* Timer::newTimer(
    const String& id,
    const int& period,
    const TimerType& type)
 {
-   Timer* timer = new Timer(id, period, type);
-   timers.add(timer);
+   Timer* timer = getFreeTimer();
+
+   if (timer)
+   {
+      timer->id = id;
+      timer->period = period;
+      timer->type = type;
+      timer->message = 0;
+      timer->listener = 0;
+      timer->inUse = true;
+      timer->startTime = 0;
+      timer->expireTime = 0;
+   }
 
    return (timer);
 }
@@ -43,8 +35,19 @@ Timer* Timer::newTimer(
    const TimerType& type,
    Message* message)
 {
-   Timer* timer = new Timer(id, period, type, message);
-   timers.add(timer);
+   Timer* timer = getFreeTimer();
+
+   if (timer)
+   {
+      timer->id = id;
+      timer->period = period;
+      timer->type = type;
+      timer->message = message;
+      timer->listener = 0;
+      timer->inUse = true;
+      timer->startTime = 0;
+      timer->expireTime = 0;
+   }
 
    return (timer);
 }
@@ -55,8 +58,19 @@ Timer* Timer::newTimer(
    const TimerType& type,
    TimerListener* listener)
 {
-   Timer* timer = new Timer(id, period, type, listener);
-   timers.add(timer);
+   Timer* timer = getFreeTimer();
+
+   if (timer)
+   {
+      timer->id = id;
+      timer->period = period;
+      timer->type = type;
+      timer->message = 0;
+      timer->listener = listener;
+      timer->inUse = true;
+      timer->startTime = 0;
+      timer->expireTime = 0;
+   }
 
    return (timer);
 }
@@ -66,11 +80,30 @@ void Timer::freeTimer(
 {
    if (timer)
    {
-      timers.remove(timer);
-      delete (timer);
+      timer->id = "";
+      timer->period = 0;
+      timer->type = ONE_SHOT;
+      timer->message = 0;
+      timer->listener = 0;
+      timer->inUse = false;
+      timer->startTime = 0;
+      timer->expireTime = 0;
    }
 }
 
+
+void Timer::loop()
+{
+   for (int i = 0; i < MAX_TIMERS; i++)
+   {
+      Timer& timer = timers[i];
+
+      if (timer.inUse == true)
+      {
+         timer.update();
+      }
+   }
+}
 
 // *****************************************************************************
 //                                  Public
@@ -80,27 +113,38 @@ Timer::~Timer() {}
 
 void Timer::start()
 {
-   reset();
+   if (inUse == true)
+   {
+      reset();
+   }
 }
 
 void Timer::stop()
 {
-   startTime = 0;
-   expireTime = 0;
+   if (inUse == true)
+   {
+      startTime = 0;
+      expireTime = 0;
+   }
 }
 
 void Timer::reset()
 {
-   if (Board::getBoard())
+   if (inUse == true)
    {
-      startTime = Board::getBoard()->systemTime();
-      expireTime = (startTime + period);
+      Board* board = Board::getBoard();
+
+      if (board)
+      {
+         startTime = board->systemTime();
+         expireTime = (startTime + period);
+      }
    }
 }
 
 bool Timer::isStarted() const
 {
-   return (startTime != 0);
+   return (inUse && (startTime != 0));
 }
 
 bool Timer::isExpired() const
@@ -130,44 +174,30 @@ void Timer::setListener(
 //                                  Private
 // *****************************************************************************
 
-Timer::Timer(
-   const String& id,
-   const int& period,
-   const TimerType& type) : id(id),
-                            period(period),
-                            type(type),
-                            message(0),
-                            listener(0),
-                            startTime(0),
-                            expireTime(0)
+Timer* Timer::getFreeTimer()
 {
+   Timer* freeTimer = 0;
+
+   for (int i = 0; i < MAX_TIMERS; i++)
+   {
+      if (timers[i].inUse == false)
+      {
+         freeTimer = &(timers[i]);
+         break;
+      }
+   }
+
+   return (freeTimer);
 }
 
-Timer::Timer(
-   const String& id,
-   const int& period,
-   const TimerType& type,
-   MessagePtr message) : id(id),
-                         period(period),
-                         type(type),
-                         message(message),
-                         listener(0),
-                         startTime(0),
-                         expireTime(0)
-{
-}
-
-Timer::Timer(
-   const String& id,
-   const int& period,
-   const TimerType& type,
-   TimerListener* listener) : id(id),
-                              period(period),
-                              type(type),
-                              message(0),
-                              listener(listener),
-                              startTime(0),
-                              expireTime(0)
+Timer::Timer() : id(""),
+                 period(0),
+                 type(ONE_SHOT),
+                 message(0),
+                 listener(0),
+                 inUse(false),
+                 startTime(0),
+                 expireTime(0)
 {
 }
 
@@ -175,9 +205,11 @@ void Timer::update()
 {
    if (isStarted() && !isExpired())
    {
-      if (Board::getBoard())
+      Board* board = Board::getBoard();
+
+      if (board)
       {
-         int currentTime = Board::getBoard()->systemTime();
+         unsigned long currentTime = board->systemTime();
 
          if (currentTime > expireTime)
          {
@@ -205,6 +237,6 @@ void Timer::expire()
    }
    else
    {
-      expireTime = 0;
+      freeTimer(this);
    }
 }
