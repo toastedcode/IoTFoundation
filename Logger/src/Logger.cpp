@@ -43,7 +43,7 @@ void Logger::logDebug(
    va_end(arguments);
 }
 
-inline void Logger::logInfo(
+void Logger::logInfo(
    const char* format,
    ...)
 {
@@ -61,7 +61,7 @@ inline void Logger::logInfo(
    va_end(arguments);
 }
 
-inline void Logger::logWarning(
+void Logger::logWarning(
    const char* format,
    ...)
 {
@@ -79,7 +79,7 @@ inline void Logger::logWarning(
    va_end(arguments);
 }
 
-inline void Logger::logSevere(
+void Logger::logSevere(
    const char* format,
    ...)
 {

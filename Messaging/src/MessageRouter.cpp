@@ -52,6 +52,12 @@ bool MessageRouter::isRegistered(
    return (handlers.find(handler) != 0);
 }
 
+bool MessageRouter::isRegistered(
+   const String& handlerId)
+{
+   return (handlers.get(handlerId) != 0);
+}
+
 bool MessageRouter::subscribe(
    MessageHandler* handler,
    Topic topic)

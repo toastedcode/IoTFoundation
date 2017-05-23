@@ -50,7 +50,7 @@ void Esp8266Board::digitalWrite(
 
 void Esp8266Board::reset()
 {
-   // TODO
+   ESP.restart();
 }
 
 void Esp8266Board::lightSleep(

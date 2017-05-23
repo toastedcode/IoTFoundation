@@ -44,6 +44,10 @@ public:
       // The handler in question.
       MessageHandler* handler);
 
+   static bool isRegistered(
+      // The id of the handler in question.
+      const String& handlerId);
+
    static bool subscribe(
       // The handler to be subscribed.
       MessageHandler* handler,
