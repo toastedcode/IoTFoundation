@@ -12,8 +12,6 @@
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
 
-static const int QUEUE_SIZE = 10;
-
 Adapter::Adapter(
    const String& id,
    Protocol* protocol) : Component(id),

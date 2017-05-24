@@ -23,7 +23,8 @@ public:
    static WifiBoard* getBoard();
 
    // This operation retrieves the MAC address of the board.
-   virtual String getMacAddress() const = 0;
+   virtual void getMacAddress(
+      unsigned char macAddress[6]) const;
 
    // This operation retrieves the current IP address (if connected) of the board.
    virtual String getIpAddress() const = 0;

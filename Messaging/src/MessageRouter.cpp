@@ -10,6 +10,7 @@
 
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
+#include "StringUtils.hpp"
 
 MessageHandlerMap MessageRouter::handlers;
 
@@ -111,7 +112,7 @@ bool MessageRouter::send(
       {
          const MessageHandlerMap::Entry* entry = handlers.item(i);
 
-         if (entry->key == message->getDestination())
+         if (match(message, entry->value))
          {
             printf(
                "MessageRouter::send: Dispatching message [%s] to destination [%s].\n",
@@ -155,4 +156,22 @@ bool MessageRouter::publish(
    message->setFree();
 
    return (success);
+}
+
+
+bool MessageRouter::match(
+   const MessagePtr message,
+   const MessageHandler* handler)
+{
+   bool isDestination = false;
+
+   if (message && handler)
+   {
+      String destinationId = message->getDestination();
+      destinationId = destinationId.substring(0, StringUtils::findFirstOf(destinationId, MESSAGE_HANDLER_ID_SEPARATOR));
+
+      isDestination = (destinationId == handler->getId());
+   }
+
+   return (isDestination);
 }

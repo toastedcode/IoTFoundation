@@ -73,13 +73,10 @@ unsigned long Esp8266Board::systemTime() const
 // **************************************************************************
 // WifiBoard operations
 
-String Esp8266Board::getMacAddress() const
+void Esp8266Board::getMacAddress(
+   unsigned char macAddress[6]) const
 {
-   unsigned char macAddress[6];
    WiFi.macAddress(macAddress);
-
-   //return (String(macAddress));
-   return ("");
 }
 
 String Esp8266Board::getIpAddress() const

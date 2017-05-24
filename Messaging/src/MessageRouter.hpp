@@ -78,6 +78,13 @@ public:
 
 private:
 
+   // This operation returns true if the specifed message handler matches a message's destination.
+   static bool match(
+      // The message.
+      const MessagePtr message,
+      // The message handler to evaluate.
+      const MessageHandler* handler);
+
    static MessageHandlerMap handlers;
 
    static MessageHandler* defaultHandler;

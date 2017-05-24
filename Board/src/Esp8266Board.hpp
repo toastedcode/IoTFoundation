@@ -60,7 +60,8 @@ public:
    // WifiBoard operations.
 
    // This operation retrieves the MAC address of the ESP8266.
-   virtual String getMacAddress() const;
+   virtual void getMacAddress(
+      unsigned char macAddress[6]) const;
 
    // This operation retrieves the current IP address (if connected) of the ESP8266.
    virtual String getIpAddress() const;
