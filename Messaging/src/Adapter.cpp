@@ -9,6 +9,7 @@
 // *****************************************************************************
 
 #include "Adapter.hpp"
+#include "Address.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
 
@@ -22,6 +23,12 @@ Adapter::Adapter(
 void Adapter::handleMessage(
    MessagePtr message)
 {
+   // Remove our id from the destination address.
+   // Ex. adapterId@remoteId -> remoteId
+   Address dest(message->getDestination());
+   dest.pop();
+   message->setDestination(dest.toString());
+
    sendRemoteMessage(message);
    message->setFree();
 }
@@ -43,7 +50,11 @@ void Adapter::loop()
    message = getRemoteMessage();
    while (message != NULL)
    {
-      message->setSource(getId());
+	  // Add our id to the source address.
+	  // Ex. remoteId -> adapterId@remoteId
+	  Address src(message->getSource());
+	  src.push(getId());
+	  message->setSource(src.toString());
 
       MessageRouter::send(message);
 
