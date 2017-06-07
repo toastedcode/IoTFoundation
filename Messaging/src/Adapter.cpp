@@ -50,13 +50,20 @@ void Adapter::loop()
    message = getRemoteMessage();
    while (message != NULL)
    {
-	  // Add our id to the source address.
-	  // Ex. remoteId -> adapterId@remoteId
-	  Address src(message->getSource());
-	  src.push(getId());
-	  message->setSource(src.toString());
+      // Add our id to the source address.
+      // Ex. remoteId -> adapterId@remoteId
+      Address src(message->getSource());
+      src.push(getId());
+      message->setSource(src.toString());
 
-      MessageRouter::send(message);
+      if (message->getTopic().length() > 0)
+      {
+         MessageRouter::publish(message);
+      }
+      else
+      {
+         MessageRouter::send(message);
+      }
 
       message = getRemoteMessage();
    }

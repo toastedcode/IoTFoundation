@@ -48,13 +48,13 @@ public:
 
    virtual bool setInUse();
 
-   virtual int getParameterCount();
+   virtual int getParameterCount() const;
 
    virtual Parameter getParameter(
-      const int& index);
+      const int& index) const;
 
    virtual Parameter getParameter(
-      const ParameterName& name);
+      const ParameterName& name) const;
 
    virtual void setParameter(
       const Parameter& parameter);
@@ -114,6 +114,11 @@ inline void BasicMessage::initialize()
 inline void BasicMessage::initialize(
    const Message& copyMessage)
 {
+   for (int i = 0; i < copyMessage.getParameterCount(); i++)
+   {
+      Parameter parameter = copyMessage.getParameter(i);
+      setParameter(parameter);
+   }
 }
 
 inline MessageId BasicMessage::getMessageId() const

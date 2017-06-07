@@ -62,13 +62,13 @@ public:
 
    virtual bool setInUse() = 0;
 
-   virtual int getParameterCount() = 0;
+   virtual int getParameterCount() const = 0;
 
    virtual Parameter getParameter(
-      const int& index) = 0;
+      const int& index) const = 0;
 
    virtual Parameter getParameter(
-      const ParameterName& name) = 0;
+      const ParameterName& name) const = 0;
 
    virtual void setParameter(
       const Parameter& parameter) = 0;
