@@ -15,8 +15,9 @@
 
 Adapter::Adapter(
    const String& id,
-   Protocol* protocol) : Component(id),
-                         protocol(protocol)
+   Protocol* protocol) :
+      Component(id),
+      protocol(protocol)
 {
 }
 
@@ -35,7 +36,7 @@ void Adapter::handleMessage(
 
 void Adapter::loop()
 {
-   MessagePtr message = NULL;
+   MessagePtr message = 0;
 
    //
    // Send
@@ -48,7 +49,7 @@ void Adapter::loop()
    //
 
    message = getRemoteMessage();
-   while (message != NULL)
+   while (message)
    {
       // Add our id to the source address.
       // Ex. remoteId -> adapterId@remoteId

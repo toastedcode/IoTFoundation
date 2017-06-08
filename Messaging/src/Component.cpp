@@ -24,10 +24,10 @@ Component::Component(
 
 void Component::loop()
 {
-   MessagePtr message;
+   MessagePtr message = 0;
 
    message = messageQueue->dequeue();
-   while (message != NULL)
+   while (message)
    {
       handleMessage(message);
 
@@ -54,9 +54,11 @@ void Component::handleMessage(
    }
    else
    {
+#ifdef MESSAGING_DEBUG
       printf("Component::handleMessage: Unhandled message [%s] in component [%s].\n",
              message->getMessageId().c_str(),
              getId().c_str());
+#endif
    }
 
    message->setFree();

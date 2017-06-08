@@ -26,7 +26,9 @@ bool MessageRouter::registerHandler(
    {
       handlers[handler->getId()] = handler;
 
+#ifdef MESSAGING_DEBUG
       printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+#endif
    }
 
    if (setDefaultHandler)
@@ -42,7 +44,9 @@ bool MessageRouter::unregisterHandler(
 {
    handlers.erase(handler->getId());
 
+#ifdef MESSAGING_DEBUG
    printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+#endif
 
    return (true);
 }
@@ -67,10 +71,12 @@ bool MessageRouter::subscribe(
    {
       subscriptions[topic].add(handler);
 
+#ifdef MESSAGING_DEBUG
       printf(
          "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
          handler->getId().c_str(),
          topic.c_str());
+#endif
    }
 
    return (true);
@@ -114,10 +120,12 @@ bool MessageRouter::send(
 
          if (match(message, entry->value))
          {
+#ifdef MESSAGING_DEBUG
             printf(
                "MessageRouter::send: Dispatching message [%s] to destination [%s].\n",
                message->getMessageId().c_str(),
                message->getDestination().c_str());
+#endif
 
             success = entry->value->queueMessage(message);
             break;
@@ -127,10 +135,12 @@ bool MessageRouter::send(
 
    if (!success)
    {
+#ifdef MESSAGING_DEBUG
       printf(
          "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].\n",
          message->getMessageId().c_str(),
          message->getDestination().c_str());
+#endif
 
       message->setFree();
    }

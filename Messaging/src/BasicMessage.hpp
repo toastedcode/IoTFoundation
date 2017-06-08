@@ -90,7 +90,8 @@ private:
    bool inUse;
 };
 
-inline BasicMessage::BasicMessage()
+inline BasicMessage::BasicMessage() :
+   inUse(false)
 {
    // Nothing to do here.
 }
