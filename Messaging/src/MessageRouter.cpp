@@ -8,25 +8,32 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#include "Logger.h"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
-
-String MessageRouter::location;
+#include "StringUtils.hpp"
 
 MessageHandlerMap MessageRouter::handlers;
+
+MessageHandler* MessageRouter::defaultHandler = 0;
 
 SubscriptionMap MessageRouter::subscriptions;
 
 bool MessageRouter::registerHandler(
-   MessageHandler* handler)
+   MessageHandler* handler,
+   const bool& setDefaultHandler)
 {
    if (isRegistered(handler) == false)
    {
-      handlers[handler->getAddress()] = handler;
+      handlers[handler->getId()] = handler;
 
-      Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                       handler->getAddress().toString() + "]\n");
+#ifdef MESSAGING_DEBUG
+      printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+#endif
+   }
+
+   if (setDefaultHandler)
+   {
+      defaultHandler = handler;
    }
 
    return (true);
@@ -35,10 +42,12 @@ bool MessageRouter::registerHandler(
 bool MessageRouter::unregisterHandler(
    MessageHandler* handler)
 {
-   handlers.erase(handler->getAddress());
+   handlers.erase(handler->getId());
 
-   Logger::logDebug("MessageRouter::registerHandler: Registered message handler [" +
-                    handler->getAddress().toString() + "]\n");
+#ifdef MESSAGING_DEBUG
+   printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
+#endif
+
    return (true);
 }
 
@@ -46,6 +55,12 @@ bool MessageRouter::isRegistered(
    MessageHandler* handler)
 {
    return (handlers.find(handler) != 0);
+}
+
+bool MessageRouter::isRegistered(
+   const String& handlerId)
+{
+   return (handlers.get(handlerId) != 0);
 }
 
 bool MessageRouter::subscribe(
@@ -56,10 +71,12 @@ bool MessageRouter::subscribe(
    {
       subscriptions[topic].add(handler);
 
-      Logger::logDebug("MessageRouter::subscribe: Message handler [" +
-         handler->getAddress().toString() +
-         "] subscribed to topic [" +
-         handler->getAddress().toString() + "]\n");
+#ifdef MESSAGING_DEBUG
+      printf(
+         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
+         handler->getId().c_str(),
+         topic.c_str());
+#endif
    }
 
    return (true);
@@ -87,21 +104,45 @@ bool MessageRouter::send(
 {
    bool success = false;
 
-   for (int i = 0; i < handlers.length(); i++)
+   // Direct un-addressed messages to the default handler.
+   if ((message->getDestination() == "") &&
+       (defaultHandler))
    {
-      const MessageHandlerMap::Entry* entry = handlers.item(i);
-
-      if (entry->value->match(message->getDestination()))
+      success = defaultHandler->queueMessage(message);
+   }
+   // Otherwise, search for a matching message handler.
+   else
+   {
+      // TODO: Make use of MessageHandlerMap operations.
+      for (int i = 0; i < handlers.length(); i++)
       {
-         success = entry->value->queueMessage(message);
-         break;
+         const MessageHandlerMap::Entry* entry = handlers.item(i);
+
+         if (match(message, entry->value))
+         {
+#ifdef MESSAGING_DEBUG
+            printf(
+               "MessageRouter::send: Dispatching message [%s] to destination [%s].\n",
+               message->getMessageId().c_str(),
+               message->getDestination().c_str());
+#endif
+
+            success = entry->value->queueMessage(message);
+            break;
+         }
       }
    }
 
    if (!success)
    {
-      Logger::logDebug("MessageRouter::send: Failed to dispatch message [" + message->getMessageId() +
-                       "] to destination [" + message->getDestination().toString() + "].\n");
+#ifdef MESSAGING_DEBUG
+      printf(
+         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].\n",
+         message->getMessageId().c_str(),
+         message->getDestination().c_str());
+#endif
+
+      message->setFree();
    }
 
    return (success);
@@ -125,4 +166,22 @@ bool MessageRouter::publish(
    message->setFree();
 
    return (success);
+}
+
+
+bool MessageRouter::match(
+   const MessagePtr message,
+   const MessageHandler* handler)
+{
+   bool isDestination = false;
+
+   if (message && handler)
+   {
+      String destinationId = message->getDestination();
+      destinationId = destinationId.substring(0, StringUtils::findFirstOf(destinationId, MESSAGE_HANDLER_ID_SEPARATOR));
+
+      isDestination = (destinationId == handler->getId());
+   }
+
+   return (isDestination);
 }

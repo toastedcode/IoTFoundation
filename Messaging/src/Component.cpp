@@ -9,6 +9,8 @@
 // *****************************************************************************
 
 #include "Component.hpp"
+#include "MessageFactory.hpp"
+#include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
 
 static const int QUEUE_SIZE = 10;
@@ -30,10 +32,10 @@ Component::Component(
 
 void Component::loop()
 {
-   MessagePtr message;
+   MessagePtr message = 0;
 
    message = messageQueue->dequeue();
-   while (message != NULL)
+   while (message)
    {
       handleMessage(message);
 
@@ -41,4 +43,31 @@ void Component::loop()
 
       message = messageQueue->dequeue();
    }
+}
+
+
+void Component::handleMessage(
+   MessagePtr message)
+{
+   //  ping
+   if (message->getMessageId() == "ping")
+   {
+      Message* reply = MessageFactory::newMessage();
+
+      reply->setMessageId("pong");
+      reply->setSource(getId());
+      reply->setDestination(message->getSource());
+
+      MessageRouter::send(reply);
+   }
+   else
+   {
+#ifdef MESSAGING_DEBUG
+      printf("Component::handleMessage: Unhandled message [%s] in component [%s].\n",
+             message->getMessageId().c_str(),
+             getId().c_str());
+#endif
+   }
+
+   message->setFree();
 }

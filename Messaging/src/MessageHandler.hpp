@@ -17,10 +17,7 @@ class MessageHandler
 
 public:
 
-   virtual Address getAddress() const = 0;
-
-   virtual bool match(
-      const Address& address) = 0;
+   virtual String getId() const = 0;
 
    // This operation retrieves the message id.
    // True is returned if the message was successfully queued.
