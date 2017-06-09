@@ -20,6 +20,14 @@ Component::Component(
    messageQueue = new StaticMessageQueue(QUEUE_SIZE);
 }
 
+Component::Component(
+   MessagePtr message)
+{
+   id = (message->isSet("id")) ? message->getString("id") : "motor";
+
+   messageQueue = new StaticMessageQueue(QUEUE_SIZE);
+}
+
 void Component::loop()
 {
    MessagePtr message;
