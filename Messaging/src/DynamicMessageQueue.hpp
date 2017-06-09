@@ -65,7 +65,7 @@ inline bool DynamicMessageQueue::enqueue(
 
 inline MessagePtr DynamicMessageQueue::dequeue()
 {
-   MessagePtr message = NULL;
+   MessagePtr message = 0;
 
    if (messageQueue.size() > 0)
    {

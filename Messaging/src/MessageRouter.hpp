@@ -15,11 +15,11 @@
 #include "MessageHandler.hpp"
 #include "Set.hpp"
 
-const int MAX_MESSAGE_HANDLERS = 5;
+const int MAX_MESSAGE_HANDLERS = 30;
 
 const int MAX_TOPICS = 10;
 
-typedef Map<Address, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
+typedef Map<String, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
 
 typedef Set<MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerSet;
 
@@ -30,14 +30,11 @@ class MessageRouter
 
 public:
 
-   static void setLocation(
-      const String& location);
-
-   static String getLocation();
-
    static bool registerHandler(
       // The handler to be registered.
-      MessageHandler* handler);
+      MessageHandler* handler,
+      // A flag indicating if this should be the default handler for unaddressed messages.
+      const bool& setDefaultHandler = false);
 
    static bool unregisterHandler(
       // The handler to be unregistered.
@@ -46,6 +43,10 @@ public:
    static bool isRegistered(
       // The handler in question.
       MessageHandler* handler);
+
+   static bool isRegistered(
+      // The id of the handler in question.
+      const String& handlerId);
 
    static bool subscribe(
       // The handler to be subscribed.
@@ -77,20 +78,16 @@ public:
 
 private:
 
-   static String location;
+   // This operation returns true if the specifed message handler matches a message's destination.
+   static bool match(
+      // The message.
+      const MessagePtr message,
+      // The message handler to evaluate.
+      const MessageHandler* handler);
 
    static MessageHandlerMap handlers;
 
+   static MessageHandler* defaultHandler;
+
    static SubscriptionMap subscriptions;
 };
-
-inline void MessageRouter::setLocation(
-   const String& location)
-{
-   MessageRouter::location = location;
-}
-
-inline String MessageRouter::getLocation()
-{
-   return (location);
-}

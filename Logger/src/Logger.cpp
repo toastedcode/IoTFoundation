@@ -25,17 +25,74 @@ void Logger::setLogger(
    instance = logger;
 }
 
-Logger::Logger()
+void Logger::logDebug(
+   const char* format,
+   ...)
 {
+   va_list arguments;
+   va_start(arguments, format);
 
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   if (instance && loggingEnabled)
+   {
+      instance->log(DEBUG, String(sBuffer));
+   }
+
+   va_end(arguments);
 }
 
-Logger::~Logger()
+void Logger::logInfo(
+   const char* format,
+   ...)
 {
+   va_list arguments;
+   va_start(arguments, format);
 
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   if (instance && loggingEnabled)
+   {
+      instance->log(INFO, String(sBuffer));
+   }
+
+   va_end(arguments);
 }
 
-void Logger::log(
-   const String& string)
+void Logger::logWarning(
+   const char* format,
+   ...)
 {
+   va_list arguments;
+   va_start(arguments, format);
+
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   if (instance && loggingEnabled)
+   {
+      instance->log(WARNING, String(sBuffer));
+   }
+
+   va_end(arguments);
+}
+
+void Logger::logSevere(
+   const char* format,
+   ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   if (instance && loggingEnabled)
+   {
+      instance->log(SEVERE, String(sBuffer));
+   }
+
+   va_end(arguments);
 }

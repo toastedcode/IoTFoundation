@@ -8,10 +8,9 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#include "Logger.h"
 #include "MessageFactory.hpp"
 
-MessagePtr* MessageFactory::messagePool = NULL;
+MessagePtr* MessageFactory::messagePool = 0;
 
 int MessageFactory::numberOfMessages = 0;
 
@@ -19,9 +18,11 @@ MessagePtr MessageFactory::newMessage()
 {
    MessagePtr message = getFreeMessage();
 
-   if (message == NULL)
+   if (message == 0)
    {
-      Logger::logDebug("Insufficient message allocation.\n");
+#ifdef MESSAGING_DEBUG
+      printf("Insufficient message allocation.\n");
+#endif
    }
    else
    {
@@ -37,9 +38,11 @@ MessagePtr MessageFactory::newMessage(
 {
    MessagePtr message = getFreeMessage();
 
-   if (message == NULL)
+   if (message == 0)
    {
-      Logger::logDebug("Insufficient message allocation.\n");
+#ifdef MESSAGING_DEBUG
+      printf("Insufficient message allocation.\n");
+#endif
    }
    else
    {

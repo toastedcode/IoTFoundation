@@ -1,66 +1,105 @@
-// *****************************************************************************
-// *****************************************************************************
-// Address.cpp
-//
-// Author: Jason Tost
-// Date:   7.5.2016
-//
-// *****************************************************************************
-// *****************************************************************************
-
 #include "Address.hpp"
+#include "StringUtils.hpp"
 
-const String SEPERATOR = ".";
-
-void parseAddress(
-   const String& address,
-   String& location,
-   String& id)
+Address::Address() :
+   numTokens(0)
 {
-   int seperatorPos = address.indexOf(SEPERATOR);
-
-   if (seperatorPos == -1)
-   {
-      location = address;
-      id = "";
-   }
-   else
-   {
-      location = address.substring(0, seperatorPos);
-      id = address.substring(seperatorPos + 1);
-   }
 }
 
 Address::Address(
-   const String& address)
+   const String& addressString) :
+      numTokens(0)
 {
-   parseAddress(String(address), location, id);
+   parse(addressString);
 }
 
-Address::Address(
-   const char* address)
+Address::~Address()
 {
-   parseAddress(String(address), location, id);
+
 }
 
-Address& Address::operator=(const Address& rhs)
+int Address::length() const
 {
-   if (this != &rhs)
+   return (numTokens);
+}
+
+void Address::parse(
+   const String& addressString)
+{
+   numTokens = 0;
+
+   String nonConstString = addressString;
+
+   String tempTokens[MAX_TOKENS];
+   int i = 0;
+
+   // Tokenize.
+   String token = StringUtils::tokenize(nonConstString, MESSAGE_HANDLER_ID_SEPARATOR);
+   while ((token != "") &&
+          (i < MAX_TOKENS))
    {
-      location = rhs.location;
-      id = rhs.id;
+      tempTokens[i] = token;
+
+      i++;
+      token = StringUtils::tokenize(nonConstString, MESSAGE_HANDLER_ID_SEPARATOR);
    }
 
-   return (*this);
+   // Push on in reverse order.
+   for (int j = i; j > 0; j--)
+   {
+      push(tempTokens[j - 1]);
+   }
+}
+
+HandlerId Address::getTop() const
+{
+   String token = "";
+
+   if (numTokens > 0)
+   {
+      token = tokens[numTokens - 1];
+   }
+
+   return (token);
+}
+
+void Address::push(
+   const HandlerId& handlerId)
+{
+   if (numTokens < MAX_TOKENS)
+   {
+      tokens[numTokens] = handlerId;
+      numTokens++;
+   }
+}
+
+HandlerId Address::pop()
+{
+   HandlerId handlerId = "";
+
+   if (numTokens > 0)
+   {
+      handlerId = tokens[numTokens - 1];
+      tokens[numTokens - 1] = "";
+      numTokens--;
+   }
+
+   return (handlerId);
 }
 
 String Address::toString() const
 {
-   String address = location;
-   if (id != "")
+   String addressString = "";
+
+   for (int i = numTokens; i > 0; i--)
    {
-      address += SEPERATOR + id;
+      if (i < numTokens)
+      {
+         addressString += MESSAGE_HANDLER_ID_SEPARATOR;
+      }
+
+      addressString += tokens[i - 1];
    }
 
-   return (address);
+   return (addressString);
 }

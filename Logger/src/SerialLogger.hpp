@@ -8,8 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#ifndef SERIALLOGGER_H_INCLUDED
-#define SERIALLOGGER_H_INCLUDED
+#pragma once
 
 #include "Logger.h"
 
@@ -23,8 +22,6 @@ public:
    virtual ~SerialLogger();
 
    virtual void log(
+      const LogLevel& logLevel,
       const String& string);
-
 };
-
-#endif  // SERIALLOGGER_H_INCLUDED

@@ -27,15 +27,15 @@ public:
    virtual void setMessageId(
       const MessageId& messageId);
 
-   virtual Address getSource() const;
+   virtual String getSource() const;
 
    virtual void setSource(
-         const Address& source);
+         const String& source);
 
-   virtual Address getDestination() const;
+   virtual String getDestination() const;
 
    virtual void setDestination(
-         const Address& destination);
+         const String& destination);
 
    virtual Topic getTopic() const;
 
@@ -48,13 +48,13 @@ public:
 
    virtual bool setInUse();
 
-   virtual int getParameterCount();
+   virtual int getParameterCount() const;
 
    virtual Parameter getParameter(
-      const int& index);
+      const int& index) const;
 
    virtual Parameter getParameter(
-      const ParameterName& name);
+      const ParameterName& name) const;
 
    virtual void setParameter(
       const Parameter& parameter);
@@ -90,7 +90,8 @@ private:
    bool inUse;
 };
 
-inline BasicMessage::BasicMessage()
+inline BasicMessage::BasicMessage() :
+   inUse(false)
 {
    // Nothing to do here.
 }
@@ -114,39 +115,44 @@ inline void BasicMessage::initialize()
 inline void BasicMessage::initialize(
    const Message& copyMessage)
 {
+   for (int i = 0; i < copyMessage.getParameterCount(); i++)
+   {
+      Parameter parameter = copyMessage.getParameter(i);
+      setParameter(parameter);
+   }
 }
 
 inline MessageId BasicMessage::getMessageId() const
 {
-   return (getString("message_id"));
+   return (getString("messageId"));
 }
 
 inline void BasicMessage::setMessageId(
    const MessageId& messageId)
 {
-   set("message_id", messageId);
+   set("messageId", messageId);
 }
 
-inline Address BasicMessage::getSource() const
+inline String BasicMessage::getSource() const
 {
-   return (Address(getString("source")));
+   return (getString("source"));
 }
 
 inline void BasicMessage::setSource(
-      const Address& source)
+      const String& source)
 {
-   set("source", source.toString());
+   set("source", source);
 }
 
-inline Address BasicMessage::getDestination() const
+inline String BasicMessage::getDestination() const
 {
-   return (Address(getString("destination")));
+   return (getString("destination"));
 }
 
 inline void BasicMessage::setDestination(
-      const Address& destination)
+      const String& destination)
 {
-   set("destination", destination.toString());
+   set("destination", destination);
 }
 
 inline Topic BasicMessage::getTopic() const
@@ -175,36 +181,67 @@ inline bool BasicMessage::setInUse()
    inUse = true;
 }
 
-inline char BasicMessage::getChar(ParameterName name) const
+inline char BasicMessage::getChar(
+   ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.charAt(0) : 0);
+   char value = 0;
+
+   if ((parameters.isSet(name)) &&
+       (parameters.get(name)->value.length() > 0))
+   {
+      value = parameters.get(name)->value.charAt(0);
+   }
+
+   return (value);
 }
 
 inline double BasicMessage::getDouble(ParameterName name) const
 {
-   //String value = "";
-   //return (((value = parameters.get(name)) != 0) ? value.toDouble() : 0);
-   double d = 0;
-   return (d);
+   double value = 0;
+
+   if (parameters.isSet(name))
+   {
+      // TODO
+      //value = parameters.get(name)->value.toDouble();
+   }
+
+   return (value);
 }
 
 inline float BasicMessage::getFloat(ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.toFloat() : 0);
+   float value = 0;
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value.toFloat();
+   }
+
+   return (value);
 }
 
 inline int BasicMessage::getInt(ParameterName name) const
 {
-   String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value.toInt() : 0);
+   int value = 0;
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value.toInt();
+   }
+
+   return (value);
 }
 
 inline String BasicMessage::getString(ParameterName name) const
 {
    String value = "";
-   return (((value = parameters.get(name)->value) != 0) ? value : "");
+
+   if (parameters.isSet(name))
+   {
+      value = parameters.get(name)->value;
+   }
+
+   return (value);
 }
 
 inline void BasicMessage::set(ParameterName name, bool value)

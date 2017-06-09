@@ -26,11 +26,6 @@ public:
 
    virtual String getId() const;
 
-   virtual Address getAddress() const;
-
-   virtual bool match(
-      const Address& address);
-
    virtual bool queueMessage(
       MessagePtr message);
 
@@ -39,7 +34,7 @@ public:
    virtual void loop();
 
    virtual void handleMessage(
-      MessagePtr message) = 0;
+      MessagePtr message);
 
 protected:
 
@@ -56,17 +51,6 @@ inline Component::~Component()
 inline String Component::getId() const
 {
    return (id);
-}
-
-inline Address Component::getAddress() const
-{
-   return (Address(MessageRouter::getLocation(), id));
-}
-
-inline bool Component::match(
-   const Address& address)
-{
-   return (address == getAddress());
 }
 
 inline bool Component::queueMessage(

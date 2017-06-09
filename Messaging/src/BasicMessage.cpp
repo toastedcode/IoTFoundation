@@ -1,12 +1,12 @@
 #include "BasicMessage.hpp"
 
-int BasicMessage::getParameterCount()
+int BasicMessage::getParameterCount() const
 {
    return (parameters.length());
 }
 
 Parameter BasicMessage::getParameter(
-   const int& index)
+   const int& index) const
 {
    Parameter parameter;
 
@@ -19,7 +19,7 @@ Parameter BasicMessage::getParameter(
 }
 
 Parameter BasicMessage::getParameter(
-   const ParameterName& name)
+   const ParameterName& name) const
 {
    Parameter parameter;
 

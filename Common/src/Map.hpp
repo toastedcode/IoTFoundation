@@ -29,7 +29,7 @@ public:
       return (findKey(key) != sNOT_FOUND);
    }
 
-   int length()
+   int length() const
    {
       return (containerLength);
    }
@@ -50,7 +50,7 @@ public:
    }
 
    const Entry* item(
-      const int& index)
+      const int& index) const
    {
       const Entry* entry = 0;
 

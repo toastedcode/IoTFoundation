@@ -1,68 +1,37 @@
-// *****************************************************************************
-// *****************************************************************************
-// Address.hpp
-//
-// Author: Jason Tost
-// Date:   6.3.2016
-//
-// *****************************************************************************
-// *****************************************************************************
-
-#pragma once
-
+#include "CommonDefs.hpp"
 #include "MessagingDefs.hpp"
 
-struct Address
+class Address
 {
+
+public:
 
    Address();
 
    Address(
-      const String& location,
-      const String& id);
+      const String& addressString);
 
-   Address(
-      const String& address);
+   virtual ~Address();
 
-   Address(
-      const char* address);
+   int length() const;
 
-   bool operator==(const Address& rhs) const;
+   void parse(
+      const String& addressString);
 
-   bool operator<(const Address& rhs) const;
+   HandlerId getTop() const;
 
-   Address& operator=(const Address& rhs);
+   void push(
+      const HandlerId& handlerId);
+
+   HandlerId pop();
 
    String toString() const;
 
-   String location;
+private:
 
-   String id;
+   static const int MAX_TOKENS = 3;
+
+   HandlerId tokens[MAX_TOKENS];
+
+   int numTokens;
 };
-
-inline Address::Address() :
-   location(""),
-   id("")
-{
-   // Nothing to do here.
-}
-
-inline Address::Address(
-   const String& location,
-   const String& id) :
-      location(location),
-      id(id)
-{
-   // Nothing to do here.
-}
-
-inline bool Address::operator==(const Address& rhs) const
-{
-   return ((location == rhs.location) &&
-           (id == rhs.id));
-}
-
-inline bool Address::operator<(const Address& rhs) const
-{
-   return (toString() < rhs.toString());
-}

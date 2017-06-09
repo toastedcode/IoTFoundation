@@ -20,6 +20,10 @@ typedef String Topic;
 
 typedef String ParameterName;
 
+// A character used in separating a message handler id from extra routing information.
+//Ex: updHander@10.4.41.179:8080
+static const String MESSAGE_HANDLER_ID_SEPARATOR = "@";
+
 enum ParameterType
 {
    UNKNOWN,
