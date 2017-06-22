@@ -9,6 +9,7 @@
 // *****************************************************************************
 
 #include "Component.hpp"
+#include "Logger.hpp"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
@@ -62,11 +63,10 @@ void Component::handleMessage(
    }
    else
    {
-#ifdef MESSAGING_DEBUG
-      printf("Component::handleMessage: Unhandled message [%s] in component [%s].\n",
-             message->getMessageId().c_str(),
-             getId().c_str());
-#endif
+      Logger::logDebugFinest(
+         "Component::handleMessage: Unhandled message [%s] in component [%s].\n",
+         message->getMessageId().c_str(),
+         getId().c_str());
    }
 
    message->setFree();

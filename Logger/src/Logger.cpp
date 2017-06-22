@@ -14,6 +14,25 @@ Logger* Logger::instance = 0;
 
 bool Logger::loggingEnabled = true;
 
+LogLevel Logger::logLevel = DEBUG;
+
+LogLevel fromString(
+   const String& logLevelString)
+{
+   LogLevel logLevel = SEVERE;
+
+   for (int i = LOG_LEVEL_FIRST; i < LOG_LEVEL_LAST; i++)
+   {
+      if (logLevelString == toString(static_cast<LogLevel>(i)))
+      {
+         logLevel = static_cast<LogLevel>(i);
+         break;
+      }
+   }
+
+   return (logLevel);
+}
+
 void Logger::setLogger(
    Logger* logger)
 {
@@ -23,6 +42,35 @@ void Logger::setLogger(
    }
 
    instance = logger;
+}
+
+void Logger::setLogLevel(
+   const LogLevel& logLevel)
+{
+   Logger::logLevel = logLevel;
+}
+
+LogLevel Logger::getLogLevel()
+{
+   return (logLevel);
+}
+
+void Logger::logDebugFinest(
+   const char* format,
+   ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   static char sBuffer[200];
+   vsnprintf(sBuffer, 200, format, arguments);
+
+   if (instance && loggingEnabled && shouldLog(DEBUG_FINEST))
+   {
+      instance->log(DEBUG_FINEST, String(sBuffer));
+   }
+
+   va_end(arguments);
 }
 
 void Logger::logDebug(
@@ -35,7 +83,7 @@ void Logger::logDebug(
    static char sBuffer[200];
    vsnprintf(sBuffer, 200, format, arguments);
 
-   if (instance && loggingEnabled)
+   if (instance && loggingEnabled && shouldLog(DEBUG))
    {
       instance->log(DEBUG, String(sBuffer));
    }
@@ -71,7 +119,7 @@ void Logger::logWarning(
    static char sBuffer[200];
    vsnprintf(sBuffer, 200, format, arguments);
 
-   if (instance && loggingEnabled)
+   if (instance && loggingEnabled && shouldLog(WARNING))
    {
       instance->log(WARNING, String(sBuffer));
    }
@@ -89,7 +137,7 @@ void Logger::logSevere(
    static char sBuffer[200];
    vsnprintf(sBuffer, 200, format, arguments);
 
-   if (instance && loggingEnabled)
+   if (instance && loggingEnabled && shouldLog(SEVERE))
    {
       instance->log(SEVERE, String(sBuffer));
    }

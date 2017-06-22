@@ -1,5 +1,44 @@
+#pragma once
+
 #include "Component.hpp"
 #include "Map.hpp"
+#include "Messaging.hpp"
+
+#define REGISTER(CLASS_NAME, CLASS_STRING) static const ComponentCreator<CLASS_NAME> CLASS_NAME ## Creator(#CLASS_STRING);
+
+// *****************************************************************************
+//                               Typedefs
+// *****************************************************************************
+
+static const int MAX_REGISTERED_COMPONENT_TYPES = 20;
+
+typedef Component* (*ComponentConstructor)(MessagePtr);
+
+typedef Map<String, ComponentConstructor, MAX_REGISTERED_COMPONENT_TYPES> ConstructorRegistry;
+
+// *****************************************************************************
+//                           ComponentFactory
+// *****************************************************************************
+
+class ComponentFactory
+{
+
+public:
+
+   static void registerComponent(
+      const String& classId,
+      ComponentConstructor constructor);
+
+   static Component* create(
+      const String& classId,
+      MessagePtr message);
+
+   static ConstructorRegistry registry;
+};
+
+// *****************************************************************************
+//                           ComponentCreator
+// *****************************************************************************
 
 template <class T>
 class ComponentCreator
@@ -8,50 +47,14 @@ class ComponentCreator
 public:
 
    ComponentCreator(
-      const String& className)
+      const String& classId)
    {
-      ComponentFactory::registerComponent(className, this);
+      ComponentFactory::registerComponent(classId, create);
    }
-
-   Component* create(MessagePtr message) {return (new T(message));
-};
-
-class ComponentFactory
-{
-   static void registerComponent(
-      const String& className,
-      ComponentCreator* creator);
 
    static Component* create(
-      const String& className,
-      MessagePtr message);
-
-   typedef Map<String, ComponentCreator, 20> RegistryMap;
-
-   static RegistryMap creatorRegistry;
-};
-
-inline void ComponentFactory::registerComponent(
-   const String& className,
-   ComponentCreator* creator)
-{
-   creatorRegistry.put(String, creator);
-}
-
-inline Component* ComponentFactory::create(
-   const String& className,
-   MessagePtr message)
-{
-   Component* component = 0;
-
-   ComponentCreator* creator = creatorRegistry.get(className);
-
-   if (creator)
+      MessagePtr message)
    {
-      creator->create(message);
+      return (new T(message));
    }
-
-   return (component);
-}
-
-static ComponentCreator<Motor> creator("motor");
+};
