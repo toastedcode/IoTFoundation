@@ -22,7 +22,7 @@ public:
    Component(
       const String& id);
 
-   Component::Component(
+   Component(
       MessagePtr message);
 
    virtual ~Component();
