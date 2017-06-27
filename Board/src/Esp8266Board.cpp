@@ -148,6 +148,18 @@ bool Esp8266Board::connectWifi(
    return (isConnected());
 }
 
+bool Esp8266Board::disconnectWifi()
+{
+   if (WiFi.getMode() == WIFI_STA)
+   {
+      Logger::logDebug("Disconnected from Wifi network.");
+
+      WiFi.disconnect();
+   }
+
+   return (!isConnected());
+}
+
 bool Esp8266Board::isConnected() const
 {
    return (WiFi.status() == WL_CONNECTED);
@@ -167,9 +179,12 @@ bool Esp8266Board::startAccessPoint(
 
 bool Esp8266Board::stopAccessPoint()
 {
-   Logger::logDebug("Stopping wireless network %s.", WiFi.SSID().c_str());
+   if (WiFi.getMode() == WIFI_AP)
+   {
+      Logger::logDebug("Stopping wireless network %s.", WiFi.SSID().c_str());
 
-   WiFi.softAPdisconnect();
+      WiFi.mode(WIFI_OFF);
+   }
 
    return (!isConnected());
 }

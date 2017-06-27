@@ -32,6 +32,15 @@ public:
    int getInt(const String& name) const;
    String getString(const String& name) const;
 
+   void getKeys(
+      String keys[],
+      int& count) const;
+
+   void getKeys(
+      const String& namePrefix,
+      String keys[],
+      int& count) const;
+
    // Operations for setting properties.
    void set(const String& name, bool value);
    void set(const String& name, char value);

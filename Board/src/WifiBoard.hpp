@@ -46,6 +46,9 @@ public:
       // A time (in seconds) to attempt to connect.
       const int& connectionTimeout = 30);
 
+   // Disconnect the device from the Wifi network.
+   virtual bool disconnectWifi() = 0;
+
    // This operation return true if the ESP8266 is connected to a Wifi network.
    virtual bool isConnected() const = 0;
 
