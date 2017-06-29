@@ -32,6 +32,8 @@ bool Properties::load(
    }
    else
    {
+      this->path = path;
+
       String line = file.readStringUntil('\n');
       while (line.length() > 0)
       {
