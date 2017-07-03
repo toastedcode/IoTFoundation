@@ -19,10 +19,13 @@
 
 enum LogLevel
 {
+   LOG_LEVEL_FIRST,
+   DEBUG_FINEST = LOG_LEVEL_FIRST,
    DEBUG,
    INFO,
    WARNING,
-   SEVERE
+   SEVERE,
+   LOG_LEVEL_LAST
 };
 
 inline String toString(
@@ -30,6 +33,7 @@ inline String toString(
 {
    static const String enumToString[]
    {
+      "DEBUG_FINEST",
       "DEBUG",
       "INFO",
       "WARNING",
@@ -38,6 +42,9 @@ inline String toString(
 
    return (enumToString[logLevel]);
 }
+
+LogLevel fromString(
+   const String& logLevelString);
 
 // *****************************************************************************
 
@@ -53,8 +60,17 @@ public:
    static void setLogger(
       Logger* logger);
 
+   static void setLogLevel(
+      const LogLevel& logLevel);
+
+   static LogLevel getLogLevel();
+
    static void setEnabled(
       const bool& loggingEnabled);
+
+   static void logDebugFinest(
+      const char* format,
+      ...);
 
    static void logDebug(
       const char* format,
@@ -82,9 +98,15 @@ protected:
 
 private:
 
+   // Compares the specified log level to Logger::logLevel and returns true if
+   // the logger should log.
+   static bool shouldLog(LogLevel logLevel);
+
    static Logger* instance;
 
    static bool loggingEnabled;
+
+   static LogLevel logLevel;
 };
 
 // *****************************************************************************
@@ -109,4 +131,9 @@ inline void Logger::setEnabled(
    const bool& loggingEnabled)
 {
    Logger::loggingEnabled = loggingEnabled;
+}
+
+inline bool Logger::shouldLog(LogLevel logLevel)
+{
+   return (logLevel >= Logger::logLevel);
 }

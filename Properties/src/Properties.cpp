@@ -32,6 +32,8 @@ bool Properties::load(
    }
    else
    {
+      this->path = path;
+
       String line = file.readStringUntil('\n');
       while (line.length() > 0)
       {
@@ -89,6 +91,38 @@ bool Properties::saveAs(
    }
 
    return (success);
+}
+
+void Properties::getKeys(
+   String keys[],
+   int& count) const
+{
+   for (int i = 0; i < propertyMap.length(); i++)
+   {
+      const PropertyMap::Entry* entry = propertyMap.item(i);
+
+      keys[i] = entry->key;
+      count++;
+   }
+}
+
+void Properties::getKeys(
+   const String& namePrefix,
+   String keys[],
+   int& count) const
+{
+   static const String DELIMITER = "%";
+
+   for (int i = 0; i < propertyMap.length(); i++)
+   {
+      const PropertyMap::Entry* entry = propertyMap.item(i);
+
+      if (entry->key.startsWith(namePrefix + DELIMITER))
+      {
+         keys[count] = entry->key;
+         count++;
+      }
+   }
 }
 
 bool Properties::getBool(const String& name) const
@@ -244,8 +278,8 @@ bool Properties::parseLine(
       String rhs = line.substring(pos + 1);
 
       // TODO: Implment a trim function.
-      lhs = StringUtils::removeAll(lhs, " ");
-      rhs = StringUtils::removeAll(rhs, " ");
+      lhs = StringUtils::removeAll(lhs, " \n\r");
+      rhs = StringUtils::removeAll(rhs, " \n\r");
 
       if ((lhs.length() > 0) &&
           (rhs.length() > 0))

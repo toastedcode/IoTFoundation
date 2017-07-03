@@ -8,6 +8,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
+#include "Logger.hpp"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 #include "StringUtils.hpp"
@@ -26,9 +27,9 @@ bool MessageRouter::registerHandler(
    {
       handlers[handler->getId()] = handler;
 
-#ifdef MESSAGING_DEBUG
-      printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
-#endif
+      Logger::logDebugFinest(
+         "MessageRouter::registerHandler: Registered message handler [%s].",
+         handler->getId().c_str());
    }
 
    if (setDefaultHandler)
@@ -44,9 +45,9 @@ bool MessageRouter::unregisterHandler(
 {
    handlers.erase(handler->getId());
 
-#ifdef MESSAGING_DEBUG
-   printf("MessageRouter::registerHandler: Registered message handler [%s].\n", handler->getId().c_str());
-#endif
+   Logger::logDebugFinest(
+      "MessageRouter::registerHandler: Registered message handler [%s].",
+      handler->getId().c_str());
 
    return (true);
 }
@@ -71,12 +72,10 @@ bool MessageRouter::subscribe(
    {
       subscriptions[topic].add(handler);
 
-#ifdef MESSAGING_DEBUG
-      printf(
-         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].\n",
+      Logger::logDebugFinest(
+         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].",
          handler->getId().c_str(),
          topic.c_str());
-#endif
    }
 
    return (true);
@@ -120,12 +119,10 @@ bool MessageRouter::send(
 
          if (match(message, entry->value))
          {
-#ifdef MESSAGING_DEBUG
-            printf(
-               "MessageRouter::send: Dispatching message [%s] to destination [%s].\n",
+            Logger::logDebugFinest(
+               "MessageRouter::send: Dispatching message [%s] to destination [%s].",
                message->getMessageId().c_str(),
                message->getDestination().c_str());
-#endif
 
             success = entry->value->queueMessage(message);
             break;
@@ -135,12 +132,10 @@ bool MessageRouter::send(
 
    if (!success)
    {
-#ifdef MESSAGING_DEBUG
-      printf(
-         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].\n",
+      Logger::logDebugFinest(
+         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].",
          message->getMessageId().c_str(),
          message->getDestination().c_str());
-#endif
 
       message->setFree();
    }
@@ -154,6 +149,12 @@ bool MessageRouter::publish(
    bool success = true;
 
    MessageHandlerSet topicHandlers = subscriptions[message->getTopic()];
+
+   Logger::logDebugFinest(
+      "MessageRouter::publish: Broadcasting message [%s] with topic [%s] to %d subscribers.",
+      message->getMessageId().c_str(),
+      message->getTopic().c_str(),
+      topicHandlers.length());
 
    for (int i = 0; i < topicHandlers.length(); i++)
    {

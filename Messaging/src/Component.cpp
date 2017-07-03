@@ -9,6 +9,7 @@
 // *****************************************************************************
 
 #include "Component.hpp"
+#include "Logger.hpp"
 #include "MessageFactory.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
@@ -19,6 +20,14 @@ Component::Component(
    const String& id) :
      id(id)
 {
+   messageQueue = new StaticMessageQueue(QUEUE_SIZE);
+}
+
+Component::Component(
+   MessagePtr message)
+{
+   id = (message->isSet("id")) ? message->getString("id") : "motor";
+
    messageQueue = new StaticMessageQueue(QUEUE_SIZE);
 }
 
@@ -54,11 +63,10 @@ void Component::handleMessage(
    }
    else
    {
-#ifdef MESSAGING_DEBUG
-      printf("Component::handleMessage: Unhandled message [%s] in component [%s].\n",
-             message->getMessageId().c_str(),
-             getId().c_str());
-#endif
+      Logger::logDebugFinest(
+         "Component::handleMessage: Unhandled message [%s] in component [%s].\n",
+         message->getMessageId().c_str(),
+         getId().c_str());
    }
 
    message->setFree();

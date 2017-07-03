@@ -10,6 +10,9 @@
 
 #pragma once
 
+// Uncomment to enable messaging debugging.
+//#define MESSAGING_DEBUG
+
 #include "CommonDefs.hpp"
 
 typedef String MessageId;

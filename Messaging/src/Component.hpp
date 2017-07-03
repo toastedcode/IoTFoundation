@@ -22,6 +22,9 @@ public:
    Component(
       const String& id);
 
+   Component(
+      MessagePtr message);
+
    virtual ~Component();
 
    virtual String getId() const;
