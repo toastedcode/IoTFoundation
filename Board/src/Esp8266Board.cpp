@@ -70,6 +70,11 @@ unsigned long Esp8266Board::systemTime() const
    return (millis());
 }
 
+unsigned long Esp8266Board::getFreeHeap() const
+{
+   return (ESP.getFreeHeap());
+}
+
 // **************************************************************************
 // WifiBoard operations
 

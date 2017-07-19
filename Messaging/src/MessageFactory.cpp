@@ -21,7 +21,8 @@ MessagePtr MessageFactory::newMessage()
 
    if (message == 0)
    {
-      Logger::logWarning("Insufficient message allocation.");
+      // Note: Logged at DEBUG_FINEST to protect RemoteLogger from stack overflow.
+      Logger::logDebugFinest("Insufficient message allocation.");
    }
    else
    {
@@ -39,7 +40,8 @@ MessagePtr MessageFactory::newMessage(
 
    if (message == 0)
    {
-      Logger::logWarning("Insufficient message allocation.");
+      // Note: Logged at DEBUG_FINEST to protect RemoteLogger from stack overflow.
+      Logger::logDebugFinest("Insufficient message allocation.");
    }
    else
    {

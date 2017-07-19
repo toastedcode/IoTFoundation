@@ -55,6 +55,9 @@ public:
 
    virtual unsigned long systemTime() const = 0;
 
+   // Returns the amount of free memory on the heap, in bytes.
+   virtual unsigned long getFreeHeap() const = 0;
+
 private:
 
    static Board* instance;

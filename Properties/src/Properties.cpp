@@ -265,6 +265,15 @@ String Properties::toString() const
    return (s);
 }
 
+void Properties::log() const
+{
+   for (int i = 0; i < propertyMap.length(); i++)
+   {
+      const PropertyMap::Entry* entry = propertyMap.item(i);
+      Logger::logDebug("%s = %s", entry->key.c_str(), entry->value.c_str());
+   }
+}
+
 bool Properties::parseLine(
    const String& line)
 {
@@ -291,5 +300,3 @@ bool Properties::parseLine(
 
    return (success);
 }
-
-

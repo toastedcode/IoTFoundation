@@ -61,6 +61,9 @@ public:
    // Dumps the contents of the properties file to a string.
    String toString() const;
 
+   // Writes the contents of the properties file, line by line, to the Logger.
+   void log() const;
+
 private:
 
    bool parseLine(

@@ -56,6 +56,9 @@ public:
 
    virtual unsigned long systemTime() const;
 
+   // Returns the amount of free memory on the heap, in bytes.
+   virtual unsigned long getFreeHeap() const;
+
    // **************************************************************************
    // WifiBoard operations.
 
