@@ -231,9 +231,12 @@ void Timer::expire()
       listener->timeout(this);
    }
 
-   if (isStarted() && (type == PERIODIC))
+   if (type == PERIODIC)
    {
-      reset();
+	  if (isStarted())
+      {
+         reset();
+      }
    }
    else
    {
