@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CommonDefs.hpp"
 #include "Message.hpp"
 
 class Protocol
