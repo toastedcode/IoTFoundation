@@ -58,9 +58,13 @@ public:
    char charAt(
       const int& index) const;
 
+   bool toBool() const;
+
+   double toDouble() const;
+
    float toFloat() const;
 
-   int toInt() const;
+   long toInt() const;
 
    void toLowerCase();
 
@@ -158,16 +162,30 @@ inline char StdString::charAt(
    return (cppString.at(index));
 }
 
+inline bool StdString::toBool() const
+{
+   bool b = false;
+   std::istringstream(cppString) >> b;
+   return (b);
+}
+
+inline double StdString::toDouble() const
+{
+   double d = 0.0;
+   std::istringstream(cppString) >> d;
+   return (d);
+}
+
 inline float StdString::toFloat() const
 {
-   float f= 0;
+   float f = 0.0F;
    std::istringstream(cppString) >> f;
    return (f);
 }
 
-inline int StdString::toInt() const
+inline long StdString::toInt() const
 {
-   int i= 0;
+   long i = 0;
    std::istringstream(cppString) >> i;
    return (i);
 }

@@ -45,4 +45,7 @@ public:
    static String removeAll(
       const String& string,
       const String& characters);
+
+   static bool toBool(
+      const String& string);
 };

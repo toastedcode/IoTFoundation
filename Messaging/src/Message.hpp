@@ -11,6 +11,7 @@
 #pragma once
 
 #include "MessagingDefs.hpp"
+#include "Parameter.hpp"
 
 class Message
 {
@@ -62,38 +63,31 @@ public:
 
    virtual bool setInUse() = 0;
 
-   virtual int getParameterCount() const = 0;
-
-   virtual Parameter getParameter(
-      const int& index) const = 0;
-
-   virtual Parameter getParameter(
-      const ParameterName& name) const = 0;
-
-   virtual void setParameter(
-      const Parameter& parameter) = 0;
-
    // Operations for getting message parameters.
-   virtual bool getBool(ParameterName name) const = 0;
-   virtual char getChar(ParameterName name) const = 0;
-   virtual double getDouble(ParameterName name) const = 0;
-   virtual float getFloat(ParameterName name) const = 0;
-   virtual int getInt(ParameterName name) const = 0;
-   virtual String getString(ParameterName name) const = 0;
+   virtual bool getBool(const String& name) const = 0;
+   virtual double getDouble(const String& name) const = 0;
+   virtual float getFloat(const String& name) const = 0;
+   virtual int getInt(const String& name) const = 0;
+   virtual String getString(const String& name) const = 0;
 
    // Operations for setting message parameters.
-   virtual void set(ParameterName name, bool value) = 0;
-   virtual void set(ParameterName name, char value) = 0;
-   virtual void set(ParameterName name, double value) = 0;
-   virtual void set(ParameterName name, float value) = 0;
-   virtual void set(ParameterName name, int value) = 0;
-   virtual void set(ParameterName name, char* value) = 0;
-   virtual void set(ParameterName name, String value) = 0;
+   virtual void set(const String& name, bool value) = 0;
+   virtual void set(const String& name, double value) = 0;
+   virtual void set(const String& name, float value) = 0;
+   virtual void set(const String& name, int value) = 0;
+   virtual void set(const String& name, char* value) = 0;
+   virtual void set(const String& name, String value) = 0;
 
    // Returns true if the message has the specified parameter set.
    virtual bool isSet(
       // The name of the parameter to evaluate.
-      ParameterName name) const = 0;
+      const String& name) const = 0;
+
+   virtual void getParameters(
+      Parameter parameters[],
+      int& nameCount) const = 0;
+
+   virtual bool setParameter(const Parameter& parameter) = 0;
 };
 
 typedef Message* MessagePtr;

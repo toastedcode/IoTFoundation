@@ -107,3 +107,24 @@ String StringUtils::removeAll(
 
    return (newString);
 }
+
+bool StringUtils::toBool(
+   const String& string)
+{
+   bool b = false;
+
+   if (findFirstNotOf(string, "123456789.-") == -1)  // is numeric
+   {
+      b = (string.toInt() != 0);
+   }
+   else
+   {
+      // TODO: Another way that doesn't involve creating a String?
+      String lowerCaseString = string;
+      lowerCaseString.toLowerCase();
+
+      b = (lowerCaseString == "true");
+   }
+
+   return (b);
+}
