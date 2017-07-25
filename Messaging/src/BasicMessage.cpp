@@ -203,15 +203,25 @@ bool BasicMessage::setParameter(
 {
    bool success = false;
 
-   for (int i = 0; i < MAX_PARAMETERS; i++)
+   Parameter* currentParameter = getParameter(parameter.getName());
+
+   if (currentParameter)
    {
-      // Look for an empty slot.
-      if (strnlen(parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-      {
-         parameters[i] = parameter;
-         success = true;
-         break;
-      }
+	   *currentParameter = parameter;
+	   success = true;
+   }
+   else
+   {
+	   for (int i = 0; i < MAX_PARAMETERS; i++)
+	   {
+		  // Look for an empty slot.
+		  if (strnlen(parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
+		  {
+			 parameters[i] = parameter;
+			 success = true;
+			 break;
+		  }
+	   }
    }
 
    return (success);
@@ -238,7 +248,7 @@ void BasicMessage::getParameters(
 const Parameter* BasicMessage::findParameter(
    const char* name) const
 {
-   const Parameter* parameter;
+   const Parameter* parameter = 0;
 
    for (int i = 0; i < MAX_PARAMETERS; i++)
    {
@@ -255,7 +265,7 @@ const Parameter* BasicMessage::findParameter(
 Parameter* BasicMessage::getParameter(
    const char* name)
 {
-   Parameter* parameter;
+   Parameter* parameter = 0;
 
    for (int i = 0; i < MAX_PARAMETERS; i++)
    {

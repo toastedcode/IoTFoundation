@@ -136,7 +136,8 @@ bool Parameter::operator==(
    const Parameter& rhs) const
 {
    return ((strncmp(name, rhs.name, sizeof(ParameterName)) == 0) &&
-           (memcmp(&value, &rhs.value, sizeof(ParameterValue)) == 0));
+           (memcmp(&value, &rhs.value, sizeof(ParameterValue)) == 0) &&
+		   (type == rhs.type));
 }
 
 Parameter& Parameter::operator=(
@@ -146,6 +147,7 @@ Parameter& Parameter::operator=(
    {
       strncpy(name, rhs.name, sizeof(ParameterName));
       memcpy(&value, &rhs.value, sizeof(ParameterValue));
+      type = rhs.type;
    }
 
    return (*this);
