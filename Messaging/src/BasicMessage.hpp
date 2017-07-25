@@ -67,11 +67,15 @@ public:
       // The name of the parameter to evaluate.
       const String& name) const;
 
-   virtual bool setParameter(const Parameter& parameter);
-
    virtual void getParameters(
       Parameter parameters[],
       int& count) const;
+
+   virtual Parameter getParameter(
+      const String& name);
+
+   virtual bool setParameter(
+      const Parameter& parameter);
 
 private:
 

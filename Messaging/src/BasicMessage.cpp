@@ -91,11 +91,13 @@ inline bool BasicMessage::isFree() const
 inline bool BasicMessage::setFree()
 {
    inUse = false;
+   return (true);
 }
 
 inline bool BasicMessage::setInUse()
 {
    inUse = true;
+   return (true);
 }
 
 bool BasicMessage::getBool(const String& name) const
@@ -198,36 +200,6 @@ inline bool BasicMessage::isSet(const String& name) const
    return ((name != "") && findParameter(name.c_str()) != 0);
 }
 
-bool BasicMessage::setParameter(
-   const Parameter& parameter)
-{
-   bool success = false;
-
-   Parameter* currentParameter = getParameter(parameter.getName());
-
-   if (currentParameter)
-   {
-	   *currentParameter = parameter;
-	   success = true;
-   }
-   else
-   {
-	   for (int i = 0; i < MAX_PARAMETERS; i++)
-	   {
-		  // Look for an empty slot.
-		  if (strnlen(parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-		  {
-			 parameters[i] = parameter;
-			 success = true;
-			 break;
-		  }
-	   }
-   }
-
-   return (success);
-}
-
-
 void BasicMessage::getParameters(
    Parameter parameters[],
    int& count) const
@@ -240,6 +212,53 @@ void BasicMessage::getParameters(
          count++;
       }
    }
+}
+
+Parameter BasicMessage::getParameter(
+   const String& name)
+{
+   Parameter parameter;
+
+   const Parameter* foundParameter = findParameter(name.c_str());
+   if (foundParameter)
+   {
+      parameter = *foundParameter;
+   }
+
+   return (parameter);
+}
+
+bool BasicMessage::setParameter(
+   const Parameter& parameter)
+{
+   bool success = false;
+
+   int freeIndex = -1;
+
+   for (int i = 0; i < MAX_PARAMETERS; i++)
+   {
+      if (strnlen(parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
+      {
+         if (freeIndex == -1)
+         {
+            freeIndex = i;
+         }
+      }
+      else if (strncmp(parameter.getName(), parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
+      {
+         parameters[i] = parameter;
+         success = true;
+         break;
+      }
+   }
+
+   if (!success && (freeIndex != -1))
+   {
+      parameters[freeIndex] = parameter;
+      success = true;
+   }
+
+   return (success);
 }
 
 // *****************************************************************************

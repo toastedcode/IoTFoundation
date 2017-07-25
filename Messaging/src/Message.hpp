@@ -87,6 +87,8 @@ public:
       Parameter parameters[],
       int& nameCount) const = 0;
 
+   virtual Parameter getParameter(const String& name) = 0;
+
    virtual bool setParameter(const Parameter& parameter) = 0;
 };
 

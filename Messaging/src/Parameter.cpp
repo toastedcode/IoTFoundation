@@ -137,7 +137,7 @@ bool Parameter::operator==(
 {
    return ((strncmp(name, rhs.name, sizeof(ParameterName)) == 0) &&
            (memcmp(&value, &rhs.value, sizeof(ParameterValue)) == 0) &&
-		   (type == rhs.type));
+           (type == rhs.type));
 }
 
 Parameter& Parameter::operator=(

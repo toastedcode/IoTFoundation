@@ -29,7 +29,7 @@ public:
    {
       std::ostringstream oss;
 
-      oss << i;
+      oss << std::boolalpha << i;
       cppString = oss.str();
    }
 
@@ -79,6 +79,8 @@ public:
    int indexOf(
       const char& c,
       const int& from = 0) const;
+
+   void trim();
 
 private:
 
@@ -165,7 +167,7 @@ inline char StdString::charAt(
 inline bool StdString::toBool() const
 {
    bool b = false;
-   std::istringstream(cppString) >> b;
+   std::istringstream(cppString) >> std::boolalpha >> b;
    return (b);
 }
 
@@ -215,4 +217,26 @@ inline int StdString::indexOf(
    const int& from) const
 {
    return (indexOf(StdString(c), from));
+}
+
+inline void StdString::trim()
+{
+   if (length() > 0)
+   {
+      int startPos = 0;
+      while ((charAt(startPos) == ' ') &&
+             (startPos < length()))
+      {
+         startPos++;
+      }
+
+      int endPos = length() - 1;
+      while ((charAt(endPos) == ' ') &&
+             (endPos > 0))
+      {
+         endPos--;
+      }
+
+      *this = substring(startPos, endPos + 1);
+   }
 }
