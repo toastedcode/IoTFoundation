@@ -5,7 +5,7 @@ class Parameter
 
 public:
 
-   static const int PARAMETER_NAME_SIZE = 10;
+   static const int PARAMETER_NAME_SIZE = 15;
 
    static const int PARAMETER_VALUE_SIZE = 64;
 
