@@ -31,7 +31,7 @@ enum LogLevel
 inline String toString(
    const LogLevel& logLevel)
 {
-   static const String enumToString[]
+   static const String enumToString[] =
    {
       "DEBUG_FINEST",
       "DEBUG",
@@ -87,6 +87,28 @@ public:
    static void logSevere(
       const char* format,
       ...);
+
+#ifdef ARDUINO
+   static void logDebugFinest(
+      const __FlashStringHelper* format,
+      ...);
+
+   static void logDebug(
+      const __FlashStringHelper* format,
+      ...);
+
+   static void logInfo(
+      const __FlashStringHelper* format,
+      ...);
+
+   static void logWarning(
+      const __FlashStringHelper* format,
+      ...);
+
+   static void logSevere(
+      const __FlashStringHelper* format,
+      ...);
+#endif
 
 protected:
 

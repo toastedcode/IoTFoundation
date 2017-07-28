@@ -10,7 +10,7 @@ void ComponentFactory::registerComponent(
     // Register the class constructor.
    registry[name] = constructor;
 
-   Logger::logDebugFinest("ComponentFactory::registerComponent: Registered component [%s].", name.c_str());
+   Logger::logDebugFinest(F("ComponentFactory::registerComponent: Registered component [%s]."), name.c_str());
 }
 
 Component* ComponentFactory::create(
@@ -25,11 +25,11 @@ Component* ComponentFactory::create(
    {
       component = (*constructor)(message);
 
-      Logger::logDebugFinest("ComponentFactory::create: Created new %s component.", classId.c_str());
+      Logger::logDebugFinest(F("ComponentFactory::create: Created new %s component."), classId.c_str());
    }
    else
    {
-      Logger::logWarning("ComponentFactory::create: No component registered under class id [%s].", classId.c_str());
+      Logger::logWarning(F("ComponentFactory::create: No component registered under class id [%s]."), classId.c_str());
    }
 
    return (component);

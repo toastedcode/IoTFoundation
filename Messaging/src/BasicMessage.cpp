@@ -41,46 +41,46 @@ inline void BasicMessage::initialize(
 
 inline MessageId BasicMessage::getMessageId() const
 {
-   return (getString("messageId"));
+   return (getString(FPSTR(MESSAGE_ID)));
 }
 
 inline void BasicMessage::setMessageId(
    const MessageId& messageId)
 {
-   set("messageId", messageId);
+   set(FPSTR(MESSAGE_ID), messageId);
 }
 
 inline String BasicMessage::getSource() const
 {
-   return (getString("source"));
+   return (getString(FPSTR(SOURCE)));
 }
 
 inline void BasicMessage::setSource(
       const String& source)
 {
-   set("source", source);
+   set(FPSTR(SOURCE), source);
 }
 
 inline String BasicMessage::getDestination() const
 {
-   return (getString("destination"));
+   return (getString(FPSTR(DESTINATION)));
 }
 
 inline void BasicMessage::setDestination(
       const String& destination)
 {
-   set("destination", destination);
+   set(FPSTR(DESTINATION), destination);
 }
 
 inline Topic BasicMessage::getTopic() const
 {
-   return (getString("topic"));
+   return (getString(FPSTR(TOPIC)));
 }
 
 inline void BasicMessage::setTopic(
    const Topic& topic)
 {
-   set("topic", topic);
+   set(FPSTR(TOPIC), topic);
 }
 
 inline bool BasicMessage::isFree() const

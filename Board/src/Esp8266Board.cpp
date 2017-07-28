@@ -12,7 +12,7 @@ Esp8266Board::~Esp8266Board() {}
 
 String Esp8266Board::getBoardName()
 {
-   return ("ESP8266");
+   return (F("ESP8266"));
 }
 
 void Esp8266Board::pinMode(
@@ -92,7 +92,7 @@ String Esp8266Board::getIpAddress() const
 bool Esp8266Board::connectWifi(
    const int& connectionTimeout)
 {
-   Logger::logDebug("Connecting to Wifi network %s ...", WiFi.SSID().c_str());
+   Logger::logDebug(F("Connecting to Wifi network %s ..."), WiFi.SSID().c_str());
 
    WiFi.mode(WIFI_STA);
    //WiFi.begin();
@@ -110,11 +110,11 @@ bool Esp8266Board::connectWifi(
 
    if (isConnected())
    {
-      Logger::logDebug("Success!  Connected at %s", getIpAddress().c_str());
+      Logger::logDebug(F("Success!  Connected at %s"), getIpAddress().c_str());
    }
    else
    {
-      Logger::logDebug("Failure!  Could not connect to %s", WiFi.SSID().c_str());
+      Logger::logDebug(F("Failure!  Could not connect to %s"), WiFi.SSID().c_str());
    }
 
    return (isConnected());
@@ -125,7 +125,7 @@ bool Esp8266Board::connectWifi(
    const String& password,
    const int& connectionTimeout)
 {
-   Logger::logDebug("Connecting to Wifi network %s ...", ssid.c_str());
+   Logger::logDebug(F("Connecting to Wifi network %s ..."), ssid.c_str());
 
    WiFi.mode(WIFI_STA);
    WiFi.begin(ssid.c_str(), password.c_str());
@@ -138,16 +138,16 @@ bool Esp8266Board::connectWifi(
    {
       delay(1000);
       secondsToConnect++;
-      Logger::logDebug("trying ...");
+      Logger::logDebug(F("trying ..."));
    }
 
    if (isConnected())
    {
-      Logger::logDebug("Success!  Connected at %s", getIpAddress().c_str());
+      Logger::logDebug(F("Success!  Connected at %s"), getIpAddress().c_str());
    }
    else
    {
-      Logger::logDebug("Failure!  Could not connect to %s", WiFi.SSID().c_str());
+      Logger::logDebug(F("Failure!  Could not connect to %s"), WiFi.SSID().c_str());
    }
 
    return (isConnected());
@@ -157,7 +157,7 @@ bool Esp8266Board::disconnectWifi()
 {
    if (WiFi.getMode() == WIFI_STA)
    {
-      Logger::logDebug("Disconnected from Wifi network.");
+      Logger::logDebug(F("Disconnected from Wifi network."));
 
       WiFi.disconnect();
    }
@@ -174,7 +174,7 @@ bool Esp8266Board::startAccessPoint(
    const String& ssid,
    const String& password)
 {
-   Logger::logDebug("Creating wireless network %s.", ssid.c_str());
+   Logger::logDebug(F("Creating wireless network %s."), ssid.c_str());
 
    WiFi.mode(WIFI_AP);
    WiFi.softAP(ssid.c_str(), password.c_str());
@@ -186,7 +186,7 @@ bool Esp8266Board::stopAccessPoint()
 {
    if (WiFi.getMode() == WIFI_AP)
    {
-      Logger::logDebug("Stopping wireless network %s.", WiFi.SSID().c_str());
+      Logger::logDebug(F("Stopping wireless network %s."), WiFi.SSID().c_str());
 
       WiFi.mode(WIFI_OFF);
    }

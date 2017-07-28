@@ -28,7 +28,7 @@ bool MessageRouter::registerHandler(
       handlers[handler->getId()] = handler;
 
       Logger::logDebugFinest(
-         "MessageRouter::registerHandler: Registered message handler [%s].",
+         F("MessageRouter::registerHandler: Registered message handler [%s]."),
          handler->getId().c_str());
    }
 
@@ -46,7 +46,7 @@ bool MessageRouter::unregisterHandler(
    handlers.erase(handler->getId());
 
    Logger::logDebugFinest(
-      "MessageRouter::registerHandler: Registered message handler [%s].",
+      F("MessageRouter::registerHandler: Registered message handler [%s]."),
       handler->getId().c_str());
 
    return (true);
@@ -73,7 +73,7 @@ bool MessageRouter::subscribe(
       subscriptions[topic].add(handler);
 
       Logger::logDebugFinest(
-         "MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s].",
+         F("MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s]."),
          handler->getId().c_str(),
          topic.c_str());
    }
@@ -120,7 +120,7 @@ bool MessageRouter::send(
          if (match(message, entry->value))
          {
             Logger::logDebugFinest(
-               "MessageRouter::send: Dispatching message [%s] to destination [%s].",
+               F("MessageRouter::send: Dispatching message [%s] to destination [%s]."),
                message->getMessageId().c_str(),
                message->getDestination().c_str());
 
@@ -133,7 +133,7 @@ bool MessageRouter::send(
    if (!success)
    {
       Logger::logDebugFinest(
-         "MessageRouter::send: Failed to dispatch message [%s] to destination [%s].",
+         F("MessageRouter::send: Failed to dispatch message [%s] to destination [%s]."),
          message->getMessageId().c_str(),
          message->getDestination().c_str());
 
@@ -151,7 +151,7 @@ bool MessageRouter::publish(
    MessageHandlerSet topicHandlers = subscriptions[message->getTopic()];
 
    Logger::logDebugFinest(
-      "MessageRouter::publish: Broadcasting message [%s] with topic [%s] to %d subscribers.",
+      F("MessageRouter::publish: Broadcasting message [%s] with topic [%s] to %d subscribers."),
       message->getMessageId().c_str(),
       message->getTopic().c_str(),
       topicHandlers.length());

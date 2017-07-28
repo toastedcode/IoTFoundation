@@ -13,6 +13,10 @@ typedef StdString String;
 #define OUTPUT 0x1
 #define INPUT_PULLUP 0x2
 
+#define F(expression) expression
+#define PROGMEM
+#define FPSTR(expression) expressio
+
 #else
 
 #include "Arduino.h"
