@@ -26,7 +26,7 @@ Component::Component(
 Component::Component(
    MessagePtr message)
 {
-   id = (message->isSet("id")) ? message->getString("id") : "motor";
+   id = message->getString("id");
 
    messageQueue = new StaticMessageQueue(QUEUE_SIZE);
 }
@@ -64,7 +64,7 @@ void Component::handleMessage(
    else
    {
       Logger::logDebugFinest(
-         "Component::handleMessage: Unhandled message [%s] in component [%s].\n",
+         F("Component::handleMessage: Unhandled message [%s] in component [%s].\n"),
          message->getMessageId().c_str(),
          getId().c_str());
    }

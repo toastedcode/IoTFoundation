@@ -28,7 +28,7 @@ bool Properties::load(
    File file = SPIFFS.open(path, "r");
    if (!file)
    {
-      Logger::logWarning("Properties::load: Failed to open property file: %s", path.c_str());
+      Logger::logWarning(F("Properties::load: Failed to open property file: %s"), path.c_str());
    }
    else
    {
@@ -54,7 +54,7 @@ bool Properties::save()
 
    if (path.length() == 0)
    {
-      Logger::logWarning("Properties::save: No filename specified.");
+      Logger::logWarning(F("Properties::save: No filename specified."));
    }
    else
    {
@@ -74,7 +74,7 @@ bool Properties::saveAs(
       File file = SPIFFS.open(path, "w");
       if (!file)
       {
-         Logger::logWarning("Properties::saveAs: Failed to write to property file: %s", path.c_str());
+         Logger::logWarning(F("Properties::saveAs: Failed to write to property file: %s"), path.c_str());
       }
       else
       {
@@ -85,7 +85,7 @@ bool Properties::saveAs(
 
          file.close();
 
-         Logger::logDebug("Properties::saveAs: Saved properties file: %s", path.c_str());
+         Logger::logDebug(F("Properties::saveAs: Saved properties file: %s"), path.c_str());
          success = true;
       }
    }
