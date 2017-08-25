@@ -28,7 +28,7 @@ bool Properties::load(
    File file = SPIFFS.open(path, "r");
    if (!file)
    {
-      Logger::logWarning(F("Properties::load: Failed to open property file: %s"), path.c_str());
+      Logger::logWarning(F("Properties::load: Failed to load property file: %s"), path.c_str());
    }
    else
    {
@@ -42,6 +42,9 @@ bool Properties::load(
          line = file.readStringUntil('\n');
       }
 
+      file.close();
+
+      Logger::logDebug(F("Properties::load: Loaded properties file: %s"), path.c_str());
       success = true;
    }
 

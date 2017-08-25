@@ -1,11 +1,21 @@
 #include "Board.hpp"
+#include "Logger.hpp"
 #include "Timer.hpp"
 
 // *****************************************************************************
 //                              Public (static)
 // *****************************************************************************
 
-Timer Timer::timers[MAX_TIMERS];
+Timer* Timer::timers;
+
+int Timer::numberOfTimers = 0;
+
+void Timer::setup(
+   const int& numberOfTimers)
+{
+   allocate(numberOfTimers);
+}
+
 
 Timer* Timer::newTimer(
    const String& id,
@@ -94,7 +104,7 @@ void Timer::freeTimer(
 
 void Timer::loop()
 {
-   for (int i = 0; i < MAX_TIMERS; i++)
+   for (int i = 0; i < numberOfTimers; i++)
    {
       Timer& timer = timers[i];
 
@@ -174,17 +184,37 @@ void Timer::setListener(
 //                                  Private
 // *****************************************************************************
 
+void Timer::allocate(
+   const int& numberOfTimers)
+{
+   // Destroy any existing pool.
+   if (timers != 0)
+   {
+      delete [] timers;
+      Timer::numberOfTimers = 0;
+   }
+
+   // Create the pool.
+   timers = new Timer[numberOfTimers];
+   Timer::numberOfTimers = numberOfTimers;
+}
+
 Timer* Timer::getFreeTimer()
 {
    Timer* freeTimer = 0;
 
-   for (int i = 0; i < MAX_TIMERS; i++)
+   for (int i = 0; i < numberOfTimers; i++)
    {
       if (timers[i].inUse == false)
       {
          freeTimer = &(timers[i]);
          break;
       }
+   }
+
+   if (!freeTimer)
+   {
+      Logger::logSevere(F("Timer::getFreeTimer: Timer pool exhausted."));
    }
 
    return (freeTimer);

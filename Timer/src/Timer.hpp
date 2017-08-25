@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Messaging.hpp"
-#include "List.hpp"
 #include "TimerListener.hpp"
-
-static const int MAX_TIMERS = 50;
 
 class Timer
 {
@@ -16,6 +13,9 @@ public:
       ONE_SHOT,
       PERIODIC
    };
+
+   static void setup(
+      const int& numberOfTimers);
 
    static Timer* newTimer(
       const String& id,
@@ -61,6 +61,9 @@ public:
 
 private:
 
+   static void allocate(
+      const int& numberOfTimers);
+
    static Timer* getFreeTimer();
 
    Timer();
@@ -69,7 +72,9 @@ private:
 
    void expire();
 
-   static Timer timers[MAX_TIMERS];
+   static Timer* timers;
+
+   static int numberOfTimers;
 
    String id;
 
