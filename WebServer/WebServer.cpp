@@ -12,6 +12,7 @@ WebServer::WebServer(
      port(port),
      server(0)
 {
+   memset(webpages, 0, (sizeof(Webpage*) * MAX_WEBPAGES));
 }
 
 WebServer::~WebServer()
