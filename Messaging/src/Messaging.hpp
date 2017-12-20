@@ -52,13 +52,13 @@ public:
 inline bool Messaging::registerHandler(
    MessageHandler* handler)
 {
-   MessageRouter::registerHandler(handler);
+   return (MessageRouter::registerHandler(handler));
 }
 
 inline bool Messaging::unregisterHandler(
    MessageHandler* handler)
 {
-   MessageRouter::unregisterHandler(handler);
+   return (MessageRouter::unregisterHandler(handler));
 }
 
 inline bool Messaging::subscribe(
