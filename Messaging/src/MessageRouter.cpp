@@ -55,13 +55,22 @@ bool MessageRouter::unregisterHandler(
 bool MessageRouter::isRegistered(
    MessageHandler* handler)
 {
-   return (handlers.find(handler) != 0);
+   bool found = false;
+
+   for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
+   {
+      if (handler == ((*it).value))
+      {
+         found = true;
+      }
+   }
+   return (found);
 }
 
 bool MessageRouter::isRegistered(
    const String& handlerId)
 {
-   return (handlers.get(handlerId) != 0);
+   return (handlers.isSet(handlerId));
 }
 
 bool MessageRouter::subscribe(
@@ -112,19 +121,18 @@ bool MessageRouter::send(
    // Otherwise, search for a matching message handler.
    else
    {
-      // TODO: Make use of MessageHandlerMap operations.
-      for (int i = 0; i < handlers.length(); i++)
+      for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
       {
-         const MessageHandlerMap::Entry* entry = handlers.item(i);
+         MessageHandler* handler = (*it).value;
 
-         if (match(message, entry->value))
+         if (match(message, handler))
          {
             Logger::logDebugFinest(
                F("MessageRouter::send: Dispatching message [%s] to destination [%s]."),
                message->getMessageId().c_str(),
                message->getDestination().c_str());
 
-            success = entry->value->queueMessage(message);
+            success = handler->queueMessage(message);
             break;
          }
       }
@@ -156,12 +164,14 @@ bool MessageRouter::publish(
       message->getTopic().c_str(),
       topicHandlers.length());
 
-   for (int i = 0; i < topicHandlers.length(); i++)
+   for (List<MessageHandler*>::Iterator it = topicHandlers.begin(); it != topicHandlers.end(); it++)
    {
+      MessageHandler* handler = (*it);
+
       MessagePtr broadcastMessage = MessageFactory::newMessage(message);
 
       success &= ((broadcastMessage) &&
-                  topicHandlers.item(i)->value->queueMessage(broadcastMessage));
+                  handler->queueMessage(broadcastMessage));
    }
 
    message->setFree();

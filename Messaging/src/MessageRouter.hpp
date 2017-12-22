@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include "Map.hpp"
+#include "LinkedList.hpp"
+#include "ListMap.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
 #include "Set.hpp"
@@ -19,11 +20,11 @@ const int MAX_MESSAGE_HANDLERS = 30;
 
 const int MAX_TOPICS = 10;
 
-typedef Map<String, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
+typedef ListMap<String, MessageHandler*> MessageHandlerMap;
 
-typedef Set<MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerSet;
+typedef LinkedList<MessageHandler*> MessageHandlerSet;  // TODO: Change to ListSet
 
-typedef Map<Topic, MessageHandlerSet, MAX_TOPICS> SubscriptionMap;
+typedef ListMap<Topic, MessageHandlerSet> SubscriptionMap;
 
 class MessageRouter
 {

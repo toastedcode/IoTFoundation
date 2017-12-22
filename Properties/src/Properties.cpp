@@ -6,6 +6,7 @@
 
 Properties::Properties()
 {
+   propertyMap = new ListMap<String, String>();
    path = "";
 }
 
@@ -81,7 +82,7 @@ bool Properties::saveAs(
       }
       else
       {
-         if (propertyMap.length() > 0)
+         if (propertyMap->length() > 0)
          {
             file.print(toString());
          }
@@ -100,11 +101,11 @@ void Properties::getKeys(
    String keys[],
    int& count) const
 {
-   for (int i = 0; i < propertyMap.length(); i++)
+   for (int i = 0; i < propertyMap->length(); i++)
    {
-      const PropertyMap::Entry* entry = propertyMap.item(i);
+      const PropertyMap::Element* element = propertyMap->item(i);
 
-      keys[i] = entry->key;
+      keys[i] = element->key;
       count++;
    }
 }
@@ -116,13 +117,13 @@ void Properties::getKeys(
 {
    static const String DELIMITER = "%";
 
-   for (int i = 0; i < propertyMap.length(); i++)
+   for (int i = 0; i < propertyMap->length(); i++)
    {
-      const PropertyMap::Entry* entry = propertyMap.item(i);
+      const PropertyMap::Element* element = propertyMap->item(i);
 
-      if (entry->key.startsWith(namePrefix + DELIMITER))
+      if (element->key.startsWith(namePrefix + DELIMITER))
       {
-         keys[count] = entry->key;
+         keys[count] = element->key;
          count++;
       }
    }
@@ -132,9 +133,10 @@ bool Properties::getBool(const String& name) const
 {
    bool value = false;
 
-   if (propertyMap.isSet(name))
+   Map<String, String>::Iterator foundIt = propertyMap->find(name);
+   if (foundIt != propertyMap->end())
    {
-      String lowerCase = *(propertyMap.get(name));
+      String lowerCase = (*foundIt).value;
       lowerCase.toLowerCase();
 
       value = (lowerCase == "true");
@@ -147,10 +149,10 @@ char Properties::getChar(const String& name) const
 {
    char value = 0;
 
-   if ((propertyMap.isSet(name)) &&
-       (propertyMap.get(name)->length() > 0))
+   Map<String, String>::Iterator foundIt = propertyMap->find(name);
+   if (foundIt != propertyMap->end())
    {
-      value = propertyMap.get(name)->charAt(0);
+      value = (*foundIt).value.charAt(0);
    }
 
    return (value);
@@ -160,7 +162,7 @@ double Properties::getDouble(const String& name) const
 {
    double value = 0;
 
-   if (propertyMap.isSet(name))
+   if (propertyMap->isSet(name))
    {
       // TODO
       //value = parameters.get(name)->toDouble();
@@ -173,9 +175,10 @@ float Properties::getFloat(const String& name) const
 {
    float value = 0;
 
-   if (propertyMap.isSet(name))
+   Map<String, String>::Iterator foundIt = propertyMap->find(name);
+   if (foundIt != propertyMap->end())
    {
-      value = propertyMap.get(name)->toFloat();
+      value = (*foundIt).value.toFloat();
    }
 
    return (value);
@@ -185,9 +188,10 @@ int Properties::getInt(const String& name) const
 {
    int value = 0;
 
-   if (propertyMap.isSet(name))
+   Map<String, String>::Iterator foundIt = propertyMap->find(name);
+   if (foundIt != propertyMap->end())
    {
-      value = propertyMap.get(name)->toInt();
+      value = (*foundIt).value.toInt();
    }
 
    return (value);
@@ -197,9 +201,10 @@ String Properties::getString(const String& name) const
 {
    String value = "";
 
-   if (propertyMap.isSet(name))
+   Map<String, String>::Iterator foundIt = propertyMap->find(name);
+   if (foundIt != propertyMap->end())
    {
-      value = *(propertyMap.get(name));
+      value = (*foundIt).value;
    }
 
    return (value);
@@ -207,62 +212,62 @@ String Properties::getString(const String& name) const
 
 void Properties::set(const String& name, bool value)
 {
-   propertyMap.put(name, (value ? "true" : "false"));
+   propertyMap->put(name, (value ? "true" : "false"));
 }
 
 void Properties::set(const String& name, char value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::set(const String& name, double value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::set(const String& name, float value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::set(const String& name, int value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::set(const String& name, char* value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::set(const String& name, String value)
 {
-   propertyMap.put(name, String(value));
+   propertyMap->put(name, String(value));
 }
 
 void Properties::remove(const String& name)
 {
-   if (propertyMap.isSet(name))
+   if (propertyMap->isSet(name))
    {
-      propertyMap.erase(name);
+      propertyMap->erase(name);
    }
 }
 
 bool Properties::isSet(
    const String& name) const
 {
-   return (propertyMap.isSet(name));
+   return (propertyMap->isSet(name));
 }
 
 String Properties::toString() const
 {
    String s;
 
-   for (int i = 0; i < propertyMap.length(); i++)
+   for (int i = 0; i < propertyMap->length(); i++)
    {
-      const PropertyMap::Entry* entry = propertyMap.item(i);
+      const PropertyMap::Element* element = propertyMap->item(i);
 
-      s += entry->key + " = " + entry->value + "\n";
+      s += element->key + " = " + element->value + "\n";
    }
 
    return (s);
@@ -270,10 +275,10 @@ String Properties::toString() const
 
 void Properties::log() const
 {
-   for (int i = 0; i < propertyMap.length(); i++)
+   for (int i = 0; i < propertyMap->length(); i++)
    {
-      const PropertyMap::Entry* entry = propertyMap.item(i);
-      Logger::logDebug("%s = %s", entry->key.c_str(), entry->value.c_str());
+      const PropertyMap::Element* element = propertyMap->item(i);
+      Logger::logDebug("%s = %s", element->key.c_str(), element->value.c_str());
    }
 }
 
@@ -296,7 +301,7 @@ bool Properties::parseLine(
       if ((lhs.length() > 0) &&
           (rhs.length() > 0))
       {
-         propertyMap.put(lhs, rhs);
+         propertyMap->put(lhs, rhs);
          success = true;
       }
    }

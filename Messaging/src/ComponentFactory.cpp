@@ -19,17 +19,22 @@ Component* ComponentFactory::create(
 {
    Component* component = 0;
 
-   const ComponentConstructor* constructor = registry.get(classId);
+   Map<String, ComponentConstructor>::Iterator foundIt = registry.find(classId);
 
-   if (constructor)
+   if (foundIt != registry.end())
    {
-      component = (*constructor)(message);
+      const ComponentConstructor* constructor = &((*foundIt).value);
 
-      Logger::logDebugFinest(F("ComponentFactory::create: Created new %s component."), classId.c_str());
-   }
-   else
-   {
-      Logger::logWarning(F("ComponentFactory::create: No component registered under class id [%s]."), classId.c_str());
+      if (constructor)
+      {
+         component = (*constructor)(message);
+
+         Logger::logDebugFinest(F("ComponentFactory::create: Created new %s component."), classId.c_str());
+      }
+      else
+      {
+         Logger::logWarning(F("ComponentFactory::create: No component registered under class id [%s]."), classId.c_str());
+      }
    }
 
    return (component);

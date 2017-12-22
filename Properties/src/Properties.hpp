@@ -1,13 +1,11 @@
 #pragma once
 
-#include "Map.hpp"
+#include "ListMap.hpp"
 
 class Properties
 {
 
 public:
-
-   static const int MAX_PROPERTIES = 50;
 
    Properties();
 
@@ -69,9 +67,9 @@ private:
    bool parseLine(
       const String& line);
 
-   typedef Map<String, String, MAX_PROPERTIES> PropertyMap;
+   typedef Map<String, String> PropertyMap;
 
-   PropertyMap propertyMap;
+   PropertyMap* propertyMap;
 
    String path;
 
