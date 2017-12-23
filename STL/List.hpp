@@ -50,9 +50,6 @@ public:
    };
 
    static const int NOT_FOUND;
- 
-   virtual void operator=(
-      const List& copyObject) = 0;
 
    virtual int length() const = 0;
 
@@ -76,8 +73,56 @@ public:
    virtual Iterator begin() const = 0;
 
    virtual Iterator end() const = 0;
+
+   void operator=(
+      const List<T>& copyObject);
+
+   bool operator==(
+      const List<T>& rhs);
 };
 
 template <typename T>
 const int List<T>::NOT_FOUND = -1;
+
+// Assignment operator.
+template<class T>
+void List<T>::operator=(
+   const List<T>& copyObject)
+{
+   if (this != &copyObject)
+   {
+      clear();
+
+      for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
+      {
+         add(*it);
+      }
+   }
+}
+
+// Comparison operator.
+template<class T>
+bool List<T>::operator==(
+   const List<T>& rhs)
+{
+   bool equal = false;
+
+   if (this->length() == rhs.length())
+   {
+      equal = true;
+
+      typename List<T>::Iterator it = this->begin();
+      typename List<T>::Iterator ot = rhs.begin();
+
+      for (; it != this->end(); it++, ot++)
+      {
+         if (!(equal &= ((*it) == (*ot))))
+         {
+            break;
+         }
+      }
+   }
+
+   return (equal);
+}
 

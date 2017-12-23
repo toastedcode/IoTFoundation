@@ -12,12 +12,6 @@ public:
 
    virtual ~LinkedList();
 
-   virtual void operator=(
-      const List<T>& copyObject);
-
-   bool operator==(
-      const LinkedList<T>& rhs);
-
    virtual int length() const;
 
    virtual bool contains(
@@ -105,9 +99,10 @@ LinkedList<T>::~LinkedList()
   clear();
 }
 
+/*
 // Assignment operator.
 template<class T>
-void LinkedList<T>::operator=(
+void List<T>::operator=(
    const List<T>& copyObject)
 {
    if (this != &copyObject)
@@ -124,7 +119,7 @@ void LinkedList<T>::operator=(
 // Comparison operator.
 template<class T>
 bool LinkedList<T>::operator==(
-   const LinkedList<T>& rhs)
+   const List<T>& rhs)
 {
    bool equal = false;
 
@@ -146,6 +141,7 @@ bool LinkedList<T>::operator==(
 
    return (equal);
 }
+*/
 
 // Get size
 template<class T>

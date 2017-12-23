@@ -16,10 +16,6 @@
 #include "MessageHandler.hpp"
 #include "Set.hpp"
 
-const int MAX_MESSAGE_HANDLERS = 30;
-
-const int MAX_TOPICS = 10;
-
 typedef ListMap<String, MessageHandler*> MessageHandlerMap;
 
 typedef LinkedList<MessageHandler*> MessageHandlerSet;  // TODO: Change to ListSet
