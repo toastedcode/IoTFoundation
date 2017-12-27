@@ -13,4 +13,5 @@ public:
 
    T1 first;
 
+   T2 second;
 };
