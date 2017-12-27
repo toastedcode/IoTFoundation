@@ -4,6 +4,7 @@
 
 #include "Argument.hpp"
 #include "CommonDefs.hpp"
+#include "Messaging.hpp"
 
 class Webpage
 {
@@ -32,6 +33,12 @@ public:
       const String& requestUri,
       Argument arguments[],
       const int& numArguments,
+      String& responsePath);
+
+   virtual bool handle(
+      const HTTPMethod& requestMethod,
+      const String& requestUri,
+      MessagePtr message,
       String& responsePath);
 
 protected:

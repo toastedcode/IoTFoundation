@@ -65,7 +65,7 @@ public:
    virtual bool remove(
       const T& value) = 0;
 
-   virtual Iterator erase(
+   virtual void erase(
     const Iterator& iterator);
       
    virtual void clear() = 0;

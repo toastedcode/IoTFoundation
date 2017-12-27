@@ -261,6 +261,21 @@ bool BasicMessage::setParameter(
    return (success);
 }
 
+void BasicMessage::clearParameter(
+   const String& name)
+{
+   Parameter* parameter = 0;
+
+   for (int i = 0; i < MAX_PARAMETERS; i++)
+   {
+      if (strncmp(name.c_str(), parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
+      {
+         parameters[i].initialize();
+         break;
+      }
+   }
+}
+
 // *****************************************************************************
 //                                Private
 
@@ -279,31 +294,4 @@ const Parameter* BasicMessage::findParameter(
    }
 
    return (parameter);
-}
-
-Parameter* BasicMessage::getParameter(
-   const char* name)
-{
-   Parameter* parameter = 0;
-
-   for (int i = 0; i < MAX_PARAMETERS; i++)
-   {
-      if (strncmp(name, parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-      {
-         parameter = &(parameters[i]);
-         break;
-      }
-   }
-
-   return (parameter);
-}
-
-void BasicMessage::clearParameter(
-   const char* name)
-{
-   Parameter* parameter = getParameter(name);
-   if (parameter)
-   {
-      parameter->initialize();
-   }
 }

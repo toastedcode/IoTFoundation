@@ -77,16 +77,13 @@ public:
    virtual bool setParameter(
       const Parameter& parameter);
 
+   void clearParameter(
+         const String& name);
+
 private:
 
    const Parameter* findParameter(
       const char* name) const;
-
-   Parameter* getParameter(
-      const char* name);
-
-   void clearParameter(
-      const char* name);
 
    Parameter parameters[MAX_PARAMETERS];
 

@@ -7,7 +7,7 @@ public:
 
    static const int PARAMETER_NAME_SIZE = 15;
 
-   static const int PARAMETER_VALUE_SIZE = 32;
+   static const int PARAMETER_VALUE_SIZE = 100;
 
    typedef char ParameterName[PARAMETER_NAME_SIZE];
 

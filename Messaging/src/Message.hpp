@@ -90,6 +90,8 @@ public:
    virtual Parameter getParameter(const String& name) = 0;
 
    virtual bool setParameter(const Parameter& parameter) = 0;
+
+   virtual void clearParameter(const String& name) = 0;
 };
 
 typedef Message* MessagePtr;

@@ -29,10 +29,10 @@ public:
       const KEY& key,
       const VALUE& value);
 
-   virtual int erase(
+   virtual typename Map<KEY, VALUE>::Iterator erase(
       const KEY& key);
 
-   virtual typename Map<KEY, VALUE>::Iterator erase(
+   virtual void erase(
       const typename Map<KEY, VALUE>::Iterator& iterator);
       
    virtual VALUE& operator[](
@@ -117,26 +117,21 @@ const typename Map<KEY, VALUE>::Iterator ListMap<KEY, VALUE>::put(
 }
 
 template<typename KEY, typename VALUE>
-int ListMap<KEY, VALUE>::erase(
+typename Map<KEY, VALUE>::Iterator ListMap<KEY, VALUE>::erase(
    const KEY& key)
 {
-   int erased = 0;
-   
    typename Map<KEY, VALUE>::Iterator findIt = find(key);
    if (findIt != end())
    {
       list.erase(findIt);
-      erased  = 1;
    }
-
-   return (erased);   
 }
 
 template<typename KEY, typename VALUE>
-typename Map<KEY, VALUE>::Iterator ListMap<KEY, VALUE>::erase(
+void ListMap<KEY, VALUE>::erase(
    const typename Map<KEY, VALUE>::Iterator& iterator)
 {
-   return (list.erase(iterator));
+   list.erase(iterator);
 }
 
 template<typename KEY, typename VALUE>

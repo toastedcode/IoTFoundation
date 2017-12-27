@@ -14,11 +14,11 @@
 #include "ListMap.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
-#include "Set.hpp"
+#include "ListSet.hpp"
 
 typedef ListMap<String, MessageHandler*> MessageHandlerMap;
 
-typedef LinkedList<MessageHandler*> MessageHandlerSet;  // TODO: Change to ListSet
+typedef ListSet<MessageHandler*> MessageHandlerSet;
 
 typedef ListMap<Topic, MessageHandlerSet> SubscriptionMap;
 
