@@ -26,10 +26,10 @@ public:
       const KEY& key,
       const VALUE& value) = 0;
       
-   virtual int erase(
+   virtual Iterator erase(
       const KEY& key) = 0;
 
-   virtual Iterator erase(
+   virtual void erase(
       const Iterator& iterator) = 0;
       
    virtual VALUE& operator[](

@@ -34,7 +34,7 @@ public:
    virtual void remove(
       const T& value);
 
-   virtual typename List<T>::Iterator erase(
+   virtual void erase(
       const typename List<T>::Iterator& iterator);
       
    virtual void clear();
@@ -110,7 +110,7 @@ LinkedList<T>::~LinkedList()
 // Comparison operator.
 template<class T>
 bool LinkedList<T>::operator==(
-   const LinkedList<T>& rhs)
+   const List<T>& rhs)
 {
    bool equal = false;
 
@@ -132,6 +132,7 @@ bool LinkedList<T>::operator==(
 
    return (equal);
 }
+*/
 
 // Assignment operator.
 template<class T>
@@ -244,11 +245,10 @@ void LinkedList<T>::remove(
 }
 
 template<class T>
-typename List<T>::Iterator LinkedList<T>::erase(
+void LinkedList<T>::erase(
    const typename List<T>::Iterator& iterator)
 {
    Serial.println("LinkedList<T>::erase is not implemented.");
-   return (end());
 }
 
 template<class T>

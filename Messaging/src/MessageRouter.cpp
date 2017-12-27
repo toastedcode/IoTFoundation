@@ -79,7 +79,7 @@ bool MessageRouter::subscribe(
 {
    if (isSubscribed(handler, topic) == false)
    {
-      subscriptions[topic].add(handler);
+      subscriptions[topic].insert(handler);
 
       Logger::logDebugFinest(
          F("MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s]."),
@@ -94,7 +94,7 @@ bool MessageRouter::unsubscribe(
    MessageHandler* handler,
    Topic topic)
 {
-   subscriptions[topic].remove(handler);
+   subscriptions[topic].erase(handler);
 
    return (true);
 }
@@ -104,7 +104,7 @@ bool MessageRouter::isSubscribed(
    Topic topic)
 {
    MessageHandlerSet topicHandlers = subscriptions[topic];
-   return (topicHandlers.contains(handler));
+   return (topicHandlers.find(handler) != topicHandlers.end());
 }
 
 bool MessageRouter::send(
@@ -162,7 +162,7 @@ bool MessageRouter::publish(
       F("MessageRouter::publish: Broadcasting message [%s] with topic [%s] to %d subscribers."),
       message->getMessageId().c_str(),
       message->getTopic().c_str(),
-      topicHandlers.length());
+      topicHandlers.size());
 
    for (List<MessageHandler*>::Iterator it = topicHandlers.begin(); it != topicHandlers.end(); it++)
    {

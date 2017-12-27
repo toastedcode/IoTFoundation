@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ListMap.hpp"
+#include "Set.hpp"
 
 class Properties
 {
@@ -31,13 +32,11 @@ public:
    String getString(const String& name) const;
 
    void getKeys(
-      String keys[],
-      int& count) const;
+      Set<String>& keys) const;
 
    void getKeys(
       const String& namePrefix,
-      String keys[],
-      int& count) const;
+      Set<String>& keys) const;
 
    // Operations for setting properties.
    void set(const String& name, bool value);

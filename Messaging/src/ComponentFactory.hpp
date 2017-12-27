@@ -10,8 +10,6 @@
 //                               Typedefs
 // *****************************************************************************
 
-static const int MAX_REGISTERED_COMPONENT_TYPES = 20;
-
 typedef Component* (*ComponentConstructor)(MessagePtr);
 
 typedef ListMap<String, ComponentConstructor> ConstructorRegistry;

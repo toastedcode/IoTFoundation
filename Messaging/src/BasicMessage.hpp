@@ -71,6 +71,9 @@ public:
    virtual bool setParameter(
       const Parameter& parameter);
 
+   void clearParameter(
+         const String& name);
+
 private:
 
    Parameter* findParameter(

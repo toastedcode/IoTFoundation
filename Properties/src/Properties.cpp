@@ -98,33 +98,29 @@ bool Properties::saveAs(
 }
 
 void Properties::getKeys(
-   String keys[],
-   int& count) const
+   Set<String>& keys) const
 {
-   for (int i = 0; i < propertyMap->length(); i++)
-   {
-      const PropertyMap::Element* element = propertyMap->item(i);
+   keys.clear();
 
-      keys[i] = element->key;
-      count++;
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
+   {
+      keys.insert((*it).key);
    }
 }
 
 void Properties::getKeys(
    const String& namePrefix,
-   String keys[],
-   int& count) const
+   Set<String>& keys) const
 {
    static const String DELIMITER = "%";
 
-   for (int i = 0; i < propertyMap->length(); i++)
-   {
-      const PropertyMap::Element* element = propertyMap->item(i);
+   keys.clear();
 
-      if (element->key.startsWith(namePrefix + DELIMITER))
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
+   {
+      if ((*it).key.startsWith(namePrefix + DELIMITER))
       {
-         keys[count] = element->key;
-         count++;
+         keys.insert((*it).key);
       }
    }
 }
