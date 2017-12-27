@@ -39,6 +39,8 @@ public:
        virtual ~Iterator() {delete(iterator);}
        void  operator++(int) {(*iterator)++;}
        T& operator*() const {return (*(*iterator));}
+       T* operator->() {return (&(*(*iterator)));}
+       T const* operator->() const {return (&(*(*iterator)));}
        bool operator==(const Iterator& rhs) const {return((iterator == rhs.iterator) || (*iterator == *(rhs.iterator)));}
        bool operator!=(const Iterator& rhs) const {return (!(*this == rhs));}
 
@@ -51,8 +53,8 @@ public:
 
    static const int NOT_FOUND;
  
-   virtual void operator=(
-      const List& copyObject) = 0;
+   virtual List<T>& operator=(
+      const List<T>& copyObject);
 
    virtual int length() const = 0;
 
@@ -65,11 +67,11 @@ public:
    virtual bool add(
       const T& value) = 0;
 
-   virtual bool remove(
+   virtual void remove(
       const T& value) = 0;
 
    virtual Iterator erase(
-    const Iterator& iterator);
+    const Iterator& iterator) = 0;
       
    virtual void clear() = 0;
 
@@ -77,6 +79,24 @@ public:
 
    virtual Iterator end() const = 0;
 };
+
+// Assignment operator.
+template<class T>
+List<T>& List<T>::operator=(
+   const List<T>& copyObject)
+{
+   if (this != &copyObject)
+   {
+      clear();
+
+      for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
+      {
+         add(*it);
+      }
+   }
+
+   return (*this);
+}
 
 template <typename T>
 const int List<T>::NOT_FOUND = -1;

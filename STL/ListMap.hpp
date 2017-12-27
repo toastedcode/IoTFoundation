@@ -80,7 +80,7 @@ const typename Map<KEY, VALUE>::Iterator ListMap<KEY, VALUE>::find(
    
    for (typename Map<KEY, VALUE>::Iterator it = this->begin(); it != this->end(); it++)
    {
-      if ((*it).key == key)
+      if (it->first == key)
       {
          foundIt = it;
          break;
@@ -110,7 +110,7 @@ const typename Map<KEY, VALUE>::Iterator ListMap<KEY, VALUE>::put(
   }
   else
   {
-     (*foundIt).value = value;
+     foundIt->second = value;
   }
 
   return (foundIt);
@@ -150,7 +150,7 @@ VALUE& ListMap<KEY, VALUE>::operator[](
      foundIt = find(key);  // TODO: A better way.
   }
 
-  return ((*foundIt).value);
+  return (foundIt->second);
 }
 
 template<typename KEY, typename VALUE>

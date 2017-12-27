@@ -1,41 +1,39 @@
 #include "BasicMessage.hpp"
+#include "LinkedList.hpp"
 
 BasicMessage::BasicMessage() :
    inUse(false)
 {
-   // Nothing to do here.
+   parameters = new LinkedList<Parameter>();
 }
 
 BasicMessage::BasicMessage(
    const MessageId& messageId)
 {
+   parameters = new LinkedList<Parameter>();
    setMessageId(messageId);
 }
 
 BasicMessage::~BasicMessage()
 {
-   // Nothing to do here.
+   delete (parameters);
 }
 
 inline void BasicMessage::initialize()
 {
-   for (int i = 0; i < MAX_PARAMETERS; i++)
-   {
-      parameters[i].initialize();
-   }
+   parameters->clear();
 }
 
 inline void BasicMessage::initialize(
    const Message& copyMessage)
 {
-   static int count = 0;
-   Parameter copyParameters[MAX_PARAMETERS];
+   initialize();
 
-   copyMessage.getParameters(copyParameters, count);
+   const List<Parameter>& copyParameters = copyMessage.getParameters();
 
-   for (int i = 0; i < count; i++)
+   for (List<Parameter>::Iterator it = copyParameters.begin(); it != copyParameters.end(); it++)
    {
-      setParameter(copyParameters[i]);
+      setParameter(*it);
    }
 }
 
@@ -104,7 +102,7 @@ bool BasicMessage::getBool(const String& name) const
 {
    bool value = false;
 
-   const Parameter* parameter = findParameter(name.c_str());
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
       value = parameter->getBoolValue();
@@ -117,7 +115,7 @@ inline double BasicMessage::getDouble(const String& name) const
 {
    double value = 0;
 
-   const Parameter* parameter = findParameter(name.c_str());
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
       value = parameter->getDoubleValue();
@@ -130,7 +128,7 @@ inline float BasicMessage::getFloat(const String& name) const
 {
    float value = 0.0F;
 
-   const Parameter* parameter = findParameter(name.c_str());
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
       value = parameter->getFloatValue();
@@ -143,7 +141,7 @@ inline int BasicMessage::getInt(const String& name) const
 {
    int value = 0;
 
-   const Parameter* parameter = findParameter(name.c_str());
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
       value = parameter->getIntValue();
@@ -156,10 +154,10 @@ inline String BasicMessage::getString(const String& name) const
 {
    String value = "";
 
-   const Parameter* parameter = findParameter(name.c_str());
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
-      value = String(parameter->getStringValue());
+      value = parameter->getStringValue();
    }
 
    return (value);
@@ -167,65 +165,42 @@ inline String BasicMessage::getString(const String& name) const
 
 inline void BasicMessage::set(const String& name, bool value)
 {
-   setParameter(Parameter(name.c_str(), value));
+   setParameter(Parameter(name, value));
 };
 
 inline void BasicMessage::set(const String& name, double value)
 {
-   setParameter(Parameter(name.c_str(), value));
+   setParameter(Parameter(name, value));
 };
 
 inline void BasicMessage::set(const String& name, float value)
 {
-   setParameter(Parameter(name.c_str(), value));
+   setParameter(Parameter(name, value));
 };
 
 inline void BasicMessage::set(const String& name, int value)
 {
-   setParameter(Parameter(name.c_str(), value));
+   setParameter(Parameter(name, value));
 };
 
 inline void BasicMessage::set(const String& name, char* value)
 {
-   setParameter(Parameter(name.c_str(), value));
+   setParameter(Parameter(name, String(value)));
 };
 
 inline void BasicMessage::set(const String& name, String value)
 {
-   setParameter(Parameter(name.c_str(), value.c_str()));
+   setParameter(Parameter(name, value));
 };
 
 inline bool BasicMessage::isSet(const String& name) const
 {
-   return ((name != "") && findParameter(name.c_str()) != 0);
+   return ((name != "") && findParameter(name) != 0);
 }
 
-void BasicMessage::getParameters(
-   Parameter parameters[],
-   int& count) const
+const List<Parameter>& BasicMessage::getParameters() const
 {
-   for (int i = 0; i < MAX_PARAMETERS; i++)
-   {
-      if (strnlen(this->parameters[i].getName(), Parameter::PARAMETER_NAME_SIZE) != 0)
-      {
-         parameters[i] = this->parameters[i];
-         count++;
-      }
-   }
-}
-
-Parameter BasicMessage::getParameter(
-   const String& name)
-{
-   Parameter parameter;
-
-   const Parameter* foundParameter = findParameter(name.c_str());
-   if (foundParameter)
-   {
-      parameter = *foundParameter;
-   }
-
-   return (parameter);
+   return (*parameters);
 }
 
 bool BasicMessage::setParameter(
@@ -233,64 +208,33 @@ bool BasicMessage::setParameter(
 {
    bool success = false;
 
-   int freeIndex = -1;
+   Parameter* foundParameter = findParameter(parameter.getName());
 
-   for (int i = 0; i < MAX_PARAMETERS; i++)
+   if (!foundParameter)
    {
-      if (strnlen(parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-      {
-         if (freeIndex == -1)
-         {
-            freeIndex = i;
-         }
-      }
-      else if (strncmp(parameter.getName(), parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-      {
-         parameters[i] = parameter;
-         success = true;
-         break;
-      }
+      parameters->add(parameter);
+   }
+   else
+   {
+      *foundParameter = parameter;
    }
 
-   if (!success && (freeIndex != -1))
-   {
-      parameters[freeIndex] = parameter;
-      success = true;
-   }
-
-   return (success);
+   return (true);
 }
 
 // *****************************************************************************
 //                                Private
 
-const Parameter* BasicMessage::findParameter(
-   const char* name) const
-{
-   const Parameter* parameter = 0;
-
-   for (int i = 0; i < MAX_PARAMETERS; i++)
-   {
-      if (strncmp(name, parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
-      {
-         parameter = &(parameters[i]);
-         break;
-      }
-   }
-
-   return (parameter);
-}
-
-Parameter* BasicMessage::getParameter(
-   const char* name)
+Parameter* BasicMessage::findParameter(
+   const String& name) const
 {
    Parameter* parameter = 0;
 
-   for (int i = 0; i < MAX_PARAMETERS; i++)
+   for (List<Parameter>::Iterator it = parameters->begin(); it != parameters->end(); it++)
    {
-      if (strncmp(name, parameters[i].getName(), sizeof(Parameter::ParameterName)) == 0)
+      if (it->getName() == name)
       {
-         parameter = &(parameters[i]);
+         parameter = (&(*it));
          break;
       }
    }
@@ -301,9 +245,11 @@ Parameter* BasicMessage::getParameter(
 void BasicMessage::clearParameter(
    const char* name)
 {
-   Parameter* parameter = getParameter(name);
+   // TODO: Implment using erase().
+
+   const Parameter* parameter = findParameter(name);
    if (parameter)
    {
-      parameter->initialize();
+      parameters->remove(*parameter);
    }
 }

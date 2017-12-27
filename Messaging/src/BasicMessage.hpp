@@ -1,13 +1,12 @@
 #pragma once
 
+#include "List.hpp"
 #include "Message.hpp"
 
 class BasicMessage : public Message
 {
 
 public:
-
-   static const int MAX_PARAMETERS = 10;
 
    BasicMessage();
 
@@ -67,28 +66,20 @@ public:
       // The name of the parameter to evaluate.
       const String& name) const;
 
-   virtual void getParameters(
-      Parameter parameters[],
-      int& count) const;
-
-   virtual Parameter getParameter(
-      const String& name);
+   const List<Parameter>& getParameters() const;
 
    virtual bool setParameter(
       const Parameter& parameter);
 
 private:
 
-   const Parameter* findParameter(
-      const char* name) const;
-
-   Parameter* getParameter(
-      const char* name);
+   Parameter* findParameter(
+      const String& name) const;
 
    void clearParameter(
       const char* name);
 
-   Parameter parameters[MAX_PARAMETERS];
+   List<Parameter>* parameters;
 
    bool inUse;
 };

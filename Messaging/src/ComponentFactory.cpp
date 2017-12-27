@@ -23,7 +23,7 @@ Component* ComponentFactory::create(
 
    if (foundIt != registry.end())
    {
-      const ComponentConstructor* constructor = &((*foundIt).value);
+      const ComponentConstructor* constructor = &(foundIt->second);
 
       if (constructor)
       {

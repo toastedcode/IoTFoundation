@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "List.hpp"
 #include "MessagingDefs.hpp"
 #include "Parameter.hpp"
 
@@ -83,11 +84,7 @@ public:
       // The name of the parameter to evaluate.
       const String& name) const = 0;
 
-   virtual void getParameters(
-      Parameter parameters[],
-      int& nameCount) const = 0;
-
-   virtual Parameter getParameter(const String& name) = 0;
+   virtual const List<Parameter>& getParameters() const = 0;
 
    virtual bool setParameter(const Parameter& parameter) = 0;
 };

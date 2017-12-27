@@ -12,10 +12,12 @@ public:
 
    virtual ~LinkedList();
 
-   virtual void operator=(
-      const List<T>& copyObject);
-
    bool operator==(
+      const LinkedList<T>& rhs);
+
+   // Note: If you don't define this, it seems the default constructor is called, before calling
+   //       List<T>::operator()=.  TODO: Research this and  understand why.
+   virtual List<T>& operator=(
       const LinkedList<T>& rhs);
 
    virtual int length() const;
@@ -29,7 +31,7 @@ public:
    virtual bool add(
       const T& value);
 
-   virtual bool remove(
+   virtual void remove(
       const T& value);
 
    virtual typename List<T>::Iterator erase(
@@ -105,22 +107,6 @@ LinkedList<T>::~LinkedList()
   clear();
 }
 
-// Assignment operator.
-template<class T>
-void LinkedList<T>::operator=(
-   const List<T>& copyObject)
-{
-   if (this != &copyObject)
-   {
-      clear();
-
-      for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
-      {
-         add(*it);
-      }
-   }
-}
-
 // Comparison operator.
 template<class T>
 bool LinkedList<T>::operator==(
@@ -145,6 +131,15 @@ bool LinkedList<T>::operator==(
    }
 
    return (equal);
+}
+
+// Assignment operator.
+template<class T>
+List<T>& LinkedList<T>::operator=(
+   const LinkedList<T>& rhs)
+{
+   Serial.println("LinkedList<T>::operator=");
+   return (List<T>::operator=(rhs));
 }
 
 // Get size
@@ -192,25 +187,25 @@ template<class T>
 bool LinkedList<T>::add(
   const T& value)
 {
-  Node* tmp = new Node(value);
+   Node* tmp = new Node(value);
 
-  if (endNode == NULL) // list is empty
-  {
-    startNode = tmp;
-    endNode = tmp;
-  }
-  else // insert at the end
-  {
-    tmp->prev = endNode;
-    endNode->next = tmp;
-    endNode = tmp;
-  }
+   if (endNode == NULL) // list is empty
+   {
+     startNode = tmp;
+     endNode = tmp;
+   }
+   else // insert at the end
+   {
+      tmp->prev = endNode;
+      endNode->next = tmp;
+      endNode = tmp;
+   }
   
-  len++; // Increase size counter
+   len++; // Increase size counter
 }
 
 template<class T>
-bool LinkedList<T>::remove(
+void LinkedList<T>::remove(
   const T& value)
 {
    Node* tmp = startNode;

@@ -1,20 +1,14 @@
+#pragma once
+
+#include "Pair.hpp"
+
 template <typename KEY, typename VALUE>
 class Map
 {
 
 public:
 
-   typedef struct Element
-   {
-      KEY key;
-      VALUE value;
-
-      Element() {}
-
-      Element(const KEY& key, const VALUE& value) : key(key), value(value) {}
-
-      bool operator==(const Element& rhs) {return ((this->key == rhs.key) && (this->value == rhs.value));}
-   };
+   typedef Pair<KEY, VALUE> Element;
 
    typedef typename List<Element>::Iterator Iterator;
 

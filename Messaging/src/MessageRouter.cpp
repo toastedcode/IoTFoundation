@@ -59,7 +59,7 @@ bool MessageRouter::isRegistered(
 
    for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
    {
-      if (handler == ((*it).value))
+      if (handler == it->second)
       {
          found = true;
       }
@@ -123,7 +123,7 @@ bool MessageRouter::send(
    {
       for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
       {
-         MessageHandler* handler = (*it).value;
+         MessageHandler* handler = it->second;
 
          if (match(message, handler))
          {

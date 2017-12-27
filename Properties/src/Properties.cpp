@@ -136,7 +136,7 @@ bool Properties::getBool(const String& name) const
    Map<String, String>::Iterator foundIt = propertyMap->find(name);
    if (foundIt != propertyMap->end())
    {
-      String lowerCase = (*foundIt).value;
+      String lowerCase = foundIt->second;
       lowerCase.toLowerCase();
 
       value = (lowerCase == "true");
@@ -152,7 +152,7 @@ char Properties::getChar(const String& name) const
    Map<String, String>::Iterator foundIt = propertyMap->find(name);
    if (foundIt != propertyMap->end())
    {
-      value = (*foundIt).value.charAt(0);
+      value = foundIt->second.charAt(0);
    }
 
    return (value);
@@ -178,7 +178,7 @@ float Properties::getFloat(const String& name) const
    Map<String, String>::Iterator foundIt = propertyMap->find(name);
    if (foundIt != propertyMap->end())
    {
-      value = (*foundIt).value.toFloat();
+      value = foundIt->second.toFloat();
    }
 
    return (value);
@@ -191,7 +191,7 @@ int Properties::getInt(const String& name) const
    Map<String, String>::Iterator foundIt = propertyMap->find(name);
    if (foundIt != propertyMap->end())
    {
-      value = (*foundIt).value.toInt();
+      value = foundIt->second.toInt();
    }
 
    return (value);
@@ -204,7 +204,7 @@ String Properties::getString(const String& name) const
    Map<String, String>::Iterator foundIt = propertyMap->find(name);
    if (foundIt != propertyMap->end())
    {
-      value = (*foundIt).value;
+      value = foundIt->second;
    }
 
    return (value);
@@ -263,11 +263,9 @@ String Properties::toString() const
 {
    String s;
 
-   for (int i = 0; i < propertyMap->length(); i++)
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap.end(); it++)
    {
-      const PropertyMap::Element* element = propertyMap->item(i);
-
-      s += element->key + " = " + element->value + "\n";
+      s += it->first + " = " + it->second + "\n";
    }
 
    return (s);
@@ -275,10 +273,9 @@ String Properties::toString() const
 
 void Properties::log() const
 {
-   for (int i = 0; i < propertyMap->length(); i++)
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap.end(); it++)
    {
-      const PropertyMap::Element* element = propertyMap->item(i);
-      Logger::logDebug("%s = %s", element->key.c_str(), element->value.c_str());
+      Logger::logDebug("%s = %s", it->first.c_str(), it->second.c_str());
    }
 }
 
