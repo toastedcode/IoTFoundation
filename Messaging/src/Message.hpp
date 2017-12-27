@@ -84,6 +84,8 @@ public:
       // The name of the parameter to evaluate.
       const String& name) const = 0;
 
+   virtual Parameter getParameter(const String& name) const = 0;
+
    virtual const List<Parameter>& getParameters() const = 0;
 
    virtual bool setParameter(const Parameter& parameter) = 0;

@@ -53,9 +53,6 @@ public:
 
    static const int NOT_FOUND;
 
-   virtual List<T>& operator=(
-      const List<T>& copyObject);
-
    virtual int length() const = 0;
 
    virtual bool contains(
@@ -79,12 +76,15 @@ public:
 
    virtual Iterator end() const = 0;
 
-   void operator=(
+   List<T>& operator=(
       const List<T>& copyObject);
 
    bool operator==(
       const List<T>& rhs);
 };
+
+template <typename T>
+const int List<T>::NOT_FOUND = -1;
 
 // Assignment operator.
 template<class T>
@@ -102,25 +102,6 @@ List<T>& List<T>::operator=(
    }
 
    return (*this);
-}
-
-template <typename T>
-const int List<T>::NOT_FOUND = -1;
-
-// Assignment operator.
-template<class T>
-void List<T>::operator=(
-   const List<T>& copyObject)
-{
-   if (this != &copyObject)
-   {
-      clear();
-
-      for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
-      {
-         add(*it);
-      }
-   }
 }
 
 // Comparison operator.
@@ -148,4 +129,3 @@ bool List<T>::operator==(
 
    return (equal);
 }
-

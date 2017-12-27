@@ -198,6 +198,11 @@ inline bool BasicMessage::isSet(const String& name) const
    return ((name != "") && findParameter(name) != 0);
 }
 
+Parameter BasicMessage::getParameter(const String& name) const
+{
+   return (*(findParameter(name)));
+}
+
 const List<Parameter>& BasicMessage::getParameters() const
 {
    return (*parameters);
@@ -222,6 +227,18 @@ bool BasicMessage::setParameter(
    return (true);
 }
 
+void BasicMessage::clearParameter(
+   const String& name)
+{
+   // TODO: Implment using erase().
+
+   const Parameter* parameter = findParameter(name);
+   if (parameter)
+   {
+      parameters->remove(*parameter);
+   }
+}
+
 // *****************************************************************************
 //                                Private
 
@@ -240,16 +257,4 @@ Parameter* BasicMessage::findParameter(
    }
 
    return (parameter);
-}
-
-void BasicMessage::clearParameter(
-   const char* name)
-{
-   // TODO: Implment using erase().
-
-   const Parameter* parameter = findParameter(name);
-   if (parameter)
-   {
-      parameters->remove(*parameter);
-   }
 }

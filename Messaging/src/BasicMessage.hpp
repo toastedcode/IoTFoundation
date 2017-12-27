@@ -66,7 +66,9 @@ public:
       // The name of the parameter to evaluate.
       const String& name) const;
 
-   const List<Parameter>& getParameters() const;
+   virtual Parameter getParameter(const String& name) const;
+
+   virtual const List<Parameter>& getParameters() const;
 
    virtual bool setParameter(
       const Parameter& parameter);
@@ -78,9 +80,6 @@ private:
 
    Parameter* findParameter(
       const String& name) const;
-
-   void clearParameter(
-      const char* name);
 
    List<Parameter>* parameters;
 

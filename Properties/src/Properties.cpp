@@ -104,7 +104,7 @@ void Properties::getKeys(
 
    for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
    {
-      keys.insert((*it).key);
+      keys.insert((*it).first);
    }
 }
 
@@ -118,9 +118,9 @@ void Properties::getKeys(
 
    for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
    {
-      if ((*it).key.startsWith(namePrefix + DELIMITER))
+      if (it->first.startsWith(namePrefix + DELIMITER))
       {
-         keys.insert((*it).key);
+         keys.insert((*it).first);
       }
    }
 }
@@ -259,7 +259,7 @@ String Properties::toString() const
 {
    String s;
 
-   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap.end(); it++)
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
    {
       s += it->first + " = " + it->second + "\n";
    }
@@ -269,7 +269,7 @@ String Properties::toString() const
 
 void Properties::log() const
 {
-   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap.end(); it++)
+   for (PropertyMap::Iterator it = propertyMap->begin(); it != propertyMap->end(); it++)
    {
       Logger::logDebug("%s = %s", it->first.c_str(), it->second.c_str());
    }
