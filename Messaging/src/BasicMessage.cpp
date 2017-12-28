@@ -188,7 +188,7 @@ inline void BasicMessage::set(const String& name, char* value)
    setParameter(Parameter(name, String(value)));
 };
 
-inline void BasicMessage::set(const String& name, String value)
+inline void BasicMessage::set(const String& name, const String& value)
 {
    setParameter(Parameter(name, value));
 };

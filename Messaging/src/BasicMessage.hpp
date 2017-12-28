@@ -59,7 +59,7 @@ public:
    virtual void set(const String& name, float value);
    virtual void set(const String& name, int value);
    virtual void set(const String& name, char* value);
-   virtual void set(const String& name, String value);
+   virtual void set(const String& name, const String& value);
 
    // Returns true if the message has the specified parameter set.
    virtual bool isSet(
