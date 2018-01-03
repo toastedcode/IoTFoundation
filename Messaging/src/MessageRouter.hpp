@@ -10,17 +10,16 @@
 
 #pragma once
 
-#include "../../STL/List.hpp"
 #include "../../STL/Map.hpp"
 #include "../../STL/Set.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
 
-typedef ListMap<String, MessageHandler*> MessageHandlerMap;
+typedef Map<String, MessageHandler*> MessageHandlerMap;
 
-typedef ListSet<MessageHandler*> MessageHandlerSet;
+typedef Set<MessageHandler*> MessageHandlerSet;
 
-typedef ListMap<Topic, MessageHandlerSet> SubscriptionMap;
+typedef Map<Topic, MessageHandlerSet> SubscriptionMap;
 
 class MessageRouter
 {

@@ -34,6 +34,12 @@ public:
 
    virtual unsigned int size() const;
 
+   virtual bool operator==(
+      const Set<T>& rhs) const;
+
+   virtual Set<T>& operator=(
+      const Set<T>& rhs);
+
 private:
 
    List<T> list;
@@ -107,4 +113,25 @@ template<typename T>
 unsigned int Set<T>::size() const
 {
    return (list.size());
+}
+
+// Assignment operator.
+template<class T>
+Set<T>& Set<T>::operator=(
+   const Set<T>& copyObject)
+{
+   if (this != &copyObject)
+   {
+      list = copyObject.list;
+   }
+
+   return (*this);
+}
+
+// Comparison operator.
+template<class T>
+bool Set<T>::operator==(
+   const Set<T>& rhs) const
+{
+   return (list == rhs.list);
 }

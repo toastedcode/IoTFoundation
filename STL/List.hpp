@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 template <typename T>
 class List
 {
@@ -21,7 +23,7 @@ public:
    virtual void clear();
 
    bool operator==(
-      const List<T>& rhs);
+      const List<T>& rhs) const;
 
    virtual List<T>& operator=(
       const List<T>& rhs);
@@ -172,7 +174,7 @@ List<T>& List<T>::operator=(
 // Comparison operator.
 template<class T>
 bool List<T>::operator==(
-   const List<T>& rhs)
+   const List<T>& rhs) const
 {
    bool equal = false;
 

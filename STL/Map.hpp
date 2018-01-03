@@ -43,6 +43,12 @@ public:
 
    virtual typename Map<KEY, VALUE>::Iterator end() const;
 
+   virtual bool operator==(
+      const Map<KEY, VALUE>& rhs) const;
+
+   virtual Map<KEY, VALUE>& operator=(
+      const Map<KEY, VALUE>& rhs);
+
 private:
 
    List<Element> list;
@@ -158,3 +164,23 @@ typename Map<KEY, VALUE>::Iterator Map<KEY, VALUE>::end() const
    return (list.end());
 }
 
+// Assignment operator.
+template<typename KEY, typename VALUE>
+Map<KEY, VALUE>& Map<KEY, VALUE>::operator=(
+   const Map<KEY, VALUE>& rhs)
+{
+   if (this != &rhs)
+   {
+      list = rhs.list;
+   }
+
+   return (*this);
+}
+
+// Comparison operator.
+template<typename KEY, typename VALUE>
+bool Map<KEY, VALUE>::operator==(
+   const Map<KEY, VALUE>& rhs) const
+{
+   return (list == rhs.list);
+}

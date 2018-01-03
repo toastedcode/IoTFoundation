@@ -5,13 +5,13 @@
 BasicMessage::BasicMessage() :
    inUse(false)
 {
-   parameters = new LinkedList<Parameter>();
+   parameters = new List<Parameter>();
 }
 
 BasicMessage::BasicMessage(
    const MessageId& messageId)
 {
-   parameters = new LinkedList<Parameter>();
+   parameters = new List<Parameter>();
    setMessageId(messageId);
 }
 
@@ -218,7 +218,7 @@ bool BasicMessage::setParameter(
 
    if (!foundParameter)
    {
-      parameters->add(parameter);
+      parameters->push_back(parameter);
    }
    else
    {

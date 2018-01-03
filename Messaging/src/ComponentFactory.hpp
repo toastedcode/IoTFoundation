@@ -12,7 +12,7 @@
 
 typedef Component* (*ComponentConstructor)(MessagePtr);
 
-typedef ListMap<String, ComponentConstructor> ConstructorRegistry;
+typedef Map<String, ComponentConstructor> ConstructorRegistry;
 
 // *****************************************************************************
 //                           ComponentFactory

@@ -6,7 +6,7 @@
 
 Properties::Properties()
 {
-   propertyMap = new ListMap<String, String>();
+   propertyMap = new Map<String, String>();
    path = "";
 }
 
@@ -82,7 +82,7 @@ bool Properties::saveAs(
       }
       else
       {
-         if (propertyMap->length() > 0)
+         if (propertyMap->size() > 0)
          {
             file.print(toString());
          }
