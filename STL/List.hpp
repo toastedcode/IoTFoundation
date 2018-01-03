@@ -1,90 +1,155 @@
 #pragma once
 
-// https://www.codeproject.com/Articles/92671/How-to-write-abstract-iterators-in-Cplusplus
-
-template<typename A, typename B> bool compareType(A a, B b) {return false;}
-template<typename A> bool compareType(A a, A b) {return true;}
-
 template <typename T>
 class List
 {
 
 public:
 
-   class BaseIterator
-   {
-   public:
+   List();
 
-       BaseIterator() {}
-       virtual ~BaseIterator() {}
-       virtual void  operator++(int) {}
-       virtual T& operator*() const {/*return T();*/}
-       virtual BaseIterator* clone() const {/*return new BaseIterator(*this);*/}
-       
-       // The == operator is non-virtual. It checks that the derived objects have compatible types, then calls the
-       // virtual comparison function equal.
-       bool operator==(const BaseIterator& other) const {return (compareType(*this, other) && equal(other));}
+   virtual ~List();
 
-   protected:
+   virtual unsigned int size() const;
 
-      virtual bool equal(const BaseIterator& other) const {return true;}
-   };
-
-   class Iterator
-   {
-   public:
-
-       Iterator(BaseIterator* iterator) : iterator(iterator) {}
-       Iterator(const Iterator& other) : iterator(other.iterator->clone()) {}
-       virtual ~Iterator() {delete(iterator);}
-       void  operator++(int) {(*iterator)++;}
-       T& operator*() const {return (*(*iterator));}
-       T* operator->() {return (&(*(*iterator)));}
-       T const* operator->() const {return (&(*(*iterator)));}
-       bool operator==(const Iterator& rhs) const {return((iterator == rhs.iterator) || (*iterator == *(rhs.iterator)));}
-       bool operator!=(const Iterator& rhs) const {return (!(*this == rhs));}
-
-       Iterator& operator=(const Iterator& rhs) {if (this != &rhs) iterator = (rhs.iterator->clone()); return (*this);}
-
-   private:
-
-       BaseIterator* iterator;
-   };
-
-   static const int NOT_FOUND;
-
-   virtual int length() const = 0;
-
-   virtual bool contains(
-      const T& value) const = 0;
-
-   virtual const T* item(
-      const int& index) const = 0;
-
-   virtual bool add(
-      const T& value) = 0;
+   virtual void push_back(
+      const T& value);
 
    virtual void remove(
-      const T& value) = 0;
-
-   virtual Iterator erase(
-    const Iterator& iterator) = 0;
+      const T& value);
       
-   virtual void clear() = 0;
-
-   virtual Iterator begin() const = 0;
-
-   virtual Iterator end() const = 0;
-
-   List<T>& operator=(
-      const List<T>& copyObject);
+   virtual void clear();
 
    bool operator==(
       const List<T>& rhs);
+
+   virtual List<T>& operator=(
+      const List<T>& rhs);
+
+private:
+
+   typedef struct Node
+   {
+      T item;
+      Node *next;
+      Node *prev;
+
+      inline Node(const T& item) : next(NULL), prev(NULL), item(item) {}
+
+      inline bool operator==(const Node& rhs) {return (item == rhs.item) && (next == rhs.next) && (prev = rhs.prev);}
+   };
+
+   unsigned int listSize;
+  
+   Node* startNode;
+  
+   Node* endNode;   
+
+public:
+
+   class Iterator
+   {
+      friend class List;
+
+   public:
+
+       Iterator(List<T>::Node* node) : node(node) {}
+       virtual ~Iterator() {}
+       virtual void  operator++(int) {node = (node->next == NULL) ? NULL : node->next;}
+       virtual T& operator*() const {return (node->item);}
+       virtual T* operator->() {return (&(node->item));}
+       virtual T const* operator->() const {return (&(node->item));}
+       virtual bool operator==(const Iterator& rhs) const {return(node == rhs.node);}
+       virtual bool operator!=(const Iterator& rhs) const {return (!(*this == rhs));}
+       virtual Iterator& operator=(const Iterator& rhs) {if (rhs != *this) node = rhs.node; return (*this);}
+
+   private:
+   
+       List<T>::Node* node;
+   };
+
+   virtual const Iterator find(
+      const T& value) const;
+
+   virtual Iterator erase(
+      const Iterator& iterator);
+
+   virtual Iterator begin() const;
+
+   virtual Iterator end() const;
 };
 
-template <typename T>
-const int List<T>::NOT_FOUND = -1;
+
+// Constructor.
+template<class T>
+List<T>::List():
+   listSize(0),
+   startNode(NULL),
+   endNode(NULL)
+{
+}
+
+// Destructor.
+template<class T>
+List<T>::~List()
+{
+  clear();
+}
+
+// Get size
+template<class T>
+unsigned int List<T>::size() const
+{
+  return (listSize);
+}
+
+template<class T>
+void List<T>::push_back(
+  const T& value)
+{
+   Node* tmp = new Node(value);
+
+   if (endNode == NULL) // list is empty
+   {
+     startNode = tmp;
+     endNode = tmp;
+   }
+   else // insert at the end
+   {
+      tmp->prev = endNode;
+      endNode->next = tmp;
+      endNode = tmp;
+   }
+  
+   listSize++; // Increase size counter
+}
+
+template<class T>
+void List<T>::remove(
+  const T& value)
+{
+   List<T>::Iterator foundIt = find(value);
+   
+   if (foundIt != end())
+   {
+      erase(foundIt);
+   }
+}
+
+template<class T>
+void List<T>::clear()
+{
+  Node* tmp = startNode;
+  while (startNode != NULL)
+  {
+    tmp = startNode;
+    startNode = startNode->next;
+    delete tmp; // Delete item
+    listSize--; // Decrease counter
+  }
+  
+  endNode = NULL;
+}
 
 // Assignment operator.
 template<class T>
@@ -97,7 +162,7 @@ List<T>& List<T>::operator=(
 
       for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
       {
-         add(*it);
+         push_back(*it);
       }
    }
 
@@ -111,7 +176,7 @@ bool List<T>::operator==(
 {
    bool equal = false;
 
-   if (this->length() == rhs.length())
+   if (this->size() == rhs.size())
    {
       equal = true;
 
@@ -120,12 +185,80 @@ bool List<T>::operator==(
 
       for (; it != this->end(); it++, ot++)
       {
-         if (!(equal &= ((*it) == (*ot))))
+         if (*it != *ot)
          {
+            equal = false;
             break;
          }
       }
    }
 
    return (equal);
+}
+
+template<typename T>
+const typename List<T>::Iterator List<T>::find(
+   const T& value) const
+{
+   typename List<T>::Iterator foundIt = end();
+
+   for (typename List<T>::Iterator it = begin(); it != end(); it++)
+   {
+      if (*it == value)
+      {
+         foundIt = it;
+         break;
+      }
+   }
+
+   return (foundIt);
+}
+
+template<class T>
+typename List<T>::Iterator List<T>::erase(
+   const typename List<T>::Iterator& iterator)
+{
+   typename List<T>::Iterator nextIt = end();
+
+   if (iterator != end())
+   {
+      List<T>::Node* node = iterator.node;
+
+      if (node->prev != NULL)
+      {
+         node->prev->next = node->next;
+      }
+      else
+      {
+         startNode = node->next;
+      }
+
+      if (node->next != NULL)
+      {
+         node->next->prev = node->prev;
+         nextIt = Iterator(node->next);
+      }
+      else
+      {
+         endNode = node->prev;
+      }
+
+      listSize--; // Decrease counter
+
+      delete (node);
+   }
+
+   return (nextIt);
+}
+
+template<class T>
+typename List<T>::Iterator List<T>::begin() const
+{
+   return (List<T>::Iterator(startNode));
+}
+
+template<class T>
+typename List<T>::Iterator List<T>::end() const
+{
+   return (typename List<T>::Iterator(NULL));
 }

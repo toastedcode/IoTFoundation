@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include "LinkedList.hpp"
-#include "ListMap.hpp"
+#include "../../STL/List.hpp"
+#include "../../STL/Map.hpp"
+#include "../../STL/Set.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
-#include "ListSet.hpp"
 
 typedef ListMap<String, MessageHandler*> MessageHandlerMap;
 

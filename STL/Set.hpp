@@ -10,71 +10,101 @@ public:
 
    typedef typename List<T>::Iterator Iterator;
 
-   virtual Iterator begin() const = 0;
+   Set();
 
-   virtual void clear() = 0;
+   virtual ~Set();
 
-   virtual Iterator end() const = 0;
+   virtual Iterator begin() const;
+
+   virtual void clear();
+
+   virtual Iterator end() const;
 
    virtual Iterator erase(
-      const T& value) = 0;
+      const T& value);
 
    virtual void erase(
-      const Iterator& iterator) = 0;
+      const Iterator& iterator);
 
    virtual const Iterator find(
-      const T& value) const = 0;
+      const T& value) const;
 
    virtual Iterator insert(
-         const T& value);
+      const T& value);
 
-   virtual unsigned int size() const = 0;
+   virtual unsigned int size() const;
 
-   void operator=(
-      const Set<T>& copyObject);
+private:
 
-   bool operator==(
-      const Set<T>& rhs);
+   List<T> list;
 };
 
-// Assignment operator.
-template<class T>
-void Set<T>::operator=(
-   const Set<T>& copyObject)
-{
-   if (this != &copyObject)
-   {
-      clear();
-
-      for (typename Set<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
-      {
-         insert(*it);
-      }
-   }
+template<typename T>
+Set<T>::Set()
+{  
 }
 
-// Comparison operator.
-template<class T>
-bool Set<T>::operator==(
-   const Set<T>& rhs)
+template<typename T>
+Set<T>::~Set()
 {
-   bool equal = false;
+   list.clear();
+}
 
-   if (this->size() == rhs.size())
+template<typename T>
+typename List<T>::Iterator Set<T>::begin() const
+{
+   return (list.begin());
+}
+
+template<typename T>
+void Set<T>::clear()
+{
+  list.clear();
+}
+
+template<typename T>
+typename Set<T>::Iterator Set<T>::end() const
+{
+   return (list.end());
+}
+
+template<typename T>
+typename Set<T>::Iterator Set<T>::erase(
+   const T& value)
+{
+   list.remove(value);
+}
+
+template<typename T>
+void Set<T>::erase(
+   const typename Set<T>::Iterator& iterator)
+{
+   list.erase(iterator);
+}
+
+template<typename T>
+const typename Set<T>::Iterator Set<T>::find(
+   const T& value) const
+{
+   return list.find(value);
+}
+
+template<typename T>
+typename Set<T>::Iterator Set<T>::insert(
+   const T& value)
+{
+   typename Set<T>::Iterator foundIt = find(value);
+
+   if (foundIt == end())
    {
-      equal = true;
-
-      typename List<T>::Iterator it = this->begin();
-      typename List<T>::Iterator ot = rhs.begin();
-
-      for (; it != this->end(); it++, ot++)
-      {
-         if (!(equal &= ((*it) == (*ot))))
-         {
-            break;
-         }
-      }
+      list.push_back(value);
    }
 
-   return (equal);
+   return (begin());  //  TODO: Return actual iterator.
+}
+
+template<typename T>
+unsigned int Set<T>::size() const
+{
+   return (list.size());
 }

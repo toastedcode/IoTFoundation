@@ -1,5 +1,6 @@
 #include "BasicMessage.hpp"
-#include "LinkedList.hpp"
+
+#include "../../STL/List.hpp"
 
 BasicMessage::BasicMessage() :
    inUse(false)

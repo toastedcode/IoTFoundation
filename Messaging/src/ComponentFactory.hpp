@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../../STL/Map.hpp"
 #include "Component.hpp"
-#include "ListMap.hpp"
 #include "Messaging.hpp"
 
 #define REGISTER(CLASS_NAME, CLASS_STRING) static const ComponentCreator<CLASS_NAME> CLASS_NAME ## Creator(#CLASS_STRING);
