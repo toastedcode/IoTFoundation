@@ -44,8 +44,7 @@ bool Webpage::canHandle(
 bool Webpage::handle(
    const HTTPMethod& requestMethod,
    const String& requestUri,
-   Argument arguments[],
-   const int& numArguments,
+   const Dictionary& arguments,
    String& responsePath)
 {
    bool success = false;
