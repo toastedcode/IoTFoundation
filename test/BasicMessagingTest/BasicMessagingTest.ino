@@ -1,4 +1,3 @@
-#include "BasicMessage.hpp"
 #include "Esp8266Board.hpp"
 #include "Logger.h"
 #include "Messaging.h"
@@ -57,7 +56,7 @@ void setup()
 
    Board::setBoard(new Esp8266Board());
    
-   Messaging::setup<BasicMessage>(10);
+   Messaging::setup<Message>(10);
 
    Messaging::registerHandler(&sender);
    Messaging::registerHandler(&receiver);
