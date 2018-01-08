@@ -103,14 +103,16 @@ bool MessageRouter::isSubscribed(
    MessageHandler* handler,
    Topic topic)
 {
-   MessageHandlerSet topicHandlers = subscriptions[topic];
-   return (topicHandlers.find(handler) != topicHandlers.end());
+   MessageHandlerSet& topicHandlers = subscriptions[topic];
+   return (subscriptions[topic].find(handler) != topicHandlers.end());
 }
 
 bool MessageRouter::send(
    MessagePtr message)
 {
    bool success = false;
+
+   Logger::logDebugFinest("Dispatching %s to %s", message->getMessageId().c_str(), message->getDestination().c_str());
 
    // Direct un-addressed messages to the default handler.
    if ((message->getDestination() == "") &&

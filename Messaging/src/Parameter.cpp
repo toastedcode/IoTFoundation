@@ -143,6 +143,7 @@ bool Parameter::operator==(
 {
    return ((name == rhs.name) &&
            (memcmp(&value, &rhs.value, sizeof(ParameterValue)) == 0) &&
+           (stringValue == rhs.stringValue) &&
            (type == rhs.type));
 }
 
