@@ -1,7 +1,6 @@
 #include "Message.hpp"
 
-Message::Message() :
-   inUse(false)
+Message::Message()
 {
    // Nothing to do here.
 }
@@ -72,19 +71,4 @@ inline void Message::setTopic(
    const Topic& topic)
 {
    set(FPSTR(TOPIC), topic);
-}
-
-inline bool Message::isFree() const
-{
-   return (!inUse);
-}
-
-inline void Message::setFree()
-{
-   inUse = false;
-}
-
-inline void Message::setInUse()
-{
-   inUse = true;
 }

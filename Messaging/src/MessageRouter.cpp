@@ -9,7 +9,7 @@
 // *****************************************************************************
 
 #include "Logger.hpp"
-#include "MessageFactory.hpp"
+#include "MessagePool.hpp"
 #include "MessageRouter.hpp"
 #include "StringUtils.hpp"
 
@@ -147,7 +147,7 @@ bool MessageRouter::send(
          message->getMessageId().c_str(),
          message->getDestination().c_str());
 
-      message->setFree();
+      MessagePool::freeMessage(message);
    }
 
    return (success);
@@ -170,13 +170,13 @@ bool MessageRouter::publish(
    {
       MessageHandler* handler = (*it);
 
-      MessagePtr broadcastMessage = MessageFactory::newMessage(message);
+      MessagePtr broadcastMessage = MessagePool::copyMessage(message);
 
       success &= ((broadcastMessage) &&
                   handler->queueMessage(broadcastMessage));
    }
 
-   message->setFree();
+   MessagePool::freeMessage(message);
 
    return (success);
 }

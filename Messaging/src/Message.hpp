@@ -63,16 +63,6 @@ public:
    virtual void setTopic(
       // The id of the destination message handler.
       const Topic& topic);
-
-   virtual bool isFree() const;
-
-   virtual void setFree();
-
-   virtual void setInUse();
-
-private:
-
-   bool inUse;
 };
 
 typedef Message* MessagePtr;

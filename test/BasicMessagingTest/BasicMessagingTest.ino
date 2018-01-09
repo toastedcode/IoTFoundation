@@ -18,7 +18,7 @@ public:
       MessagePtr message)
    {
       Logger::logDebug("%s: Got %s from %s.", id.c_str(), message->getMessageId().c_str(), message->getSource().c_str());
-      message->setFree();
+      Messaging::freeMessage(message);
       return (true);
    }
 
@@ -56,7 +56,7 @@ void setup()
 
    Board::setBoard(new Esp8266Board());
    
-   Messaging::setup<Message>(10);
+   Messaging::setup(10);
 
    Messaging::registerHandler(&sender);
    Messaging::registerHandler(&receiver);
