@@ -10,6 +10,7 @@
 
 #include "Adapter.hpp"
 #include "Address.hpp"
+#include "MessagePool.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
 
@@ -31,7 +32,7 @@ void Adapter::handleMessage(
    message->setDestination(dest.toString());
 
    sendRemoteMessage(message);
-   message->setFree();
+   MessagePool::freeMessage(message);
 }
 
 void Adapter::loop()

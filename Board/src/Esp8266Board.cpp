@@ -50,6 +50,7 @@ void Esp8266Board::digitalWrite(
 
 void Esp8266Board::reset()
 {
+   Logger::logInfo("Resetting ESP8266 ...");
    ESP.restart();
 }
 

@@ -3,6 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
+#include "Dictionary.hpp"
 #include "Webpage.hpp"
 
 class WebServer : public RequestHandler
@@ -33,13 +34,13 @@ public:
 
    // **************************************************************************
 
-   bool addPage(
+   void addPage(
       Webpage* webpage);
 
    Webpage* getPage(
       const String& uri);
 
-   bool removePage(
+   void removePage(
       const String& uri);
 
 protected:
@@ -64,20 +65,13 @@ protected:
 
    static void getArguments(
       ESP8266WebServer& server,
-      Argument arguments[],
-      int& numArguments);
+      Dictionary& arguments);
 
 private:
-
-   static const int MAX_WEBPAGES = 10;
-
-   static const int MAX_ARGUMENTS = 10;
 
    int port;
 
    ESP8266WebServer* server;
 
-   Webpage* webpages[MAX_WEBPAGES];
-
-   Argument arguments[MAX_ARGUMENTS];
+   Map<String, Webpage*> webpages;
 };

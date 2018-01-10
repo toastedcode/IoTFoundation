@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include "Parameter.hpp"
 
 Parameter::Parameter() :
@@ -8,42 +6,50 @@ Parameter::Parameter() :
    initialize();
 }
 
-Parameter::Parameter(const char* name) :
+Parameter::Parameter(const Parameter& parameter)
+{
+   name = parameter.name;
+   memcpy(&value, &parameter.value, sizeof(ParameterValue));
+   stringValue = parameter.stringValue;
+   type = parameter.type;
+}
+
+Parameter::Parameter(const String& name) :
    type(UNKNOWN)
 {
    initialize();
    setName(name);
 }
 
-Parameter::Parameter(const char* name, const bool& value)
+Parameter::Parameter(const String& name, const bool& value)
 {
    initialize();
    setName(name);
    setValue(value);
 }
 
-Parameter::Parameter(const char* name, const double& value)
+Parameter::Parameter(const String& name, const double& value)
 {
    initialize();
    setName(name);
    setValue(value);
 }
 
-Parameter::Parameter(const char* name, const float& value)
+Parameter::Parameter(const String& name, const float& value)
 {
    initialize();
    setName(name);
    setValue(value);
 }
 
-Parameter::Parameter(const char* name, const int& value)
+Parameter::Parameter(const String& name, const int& value)
 {
    initialize();
    setName(name);
    setValue(value);
 }
 
-Parameter::Parameter(const char* name, const char* value)
+Parameter::Parameter(const String& name, const String& value)
 {
    initialize();
    setName(name);
@@ -58,16 +64,16 @@ Parameter::~Parameter()
 void Parameter::initialize()
 {
    type = UNKNOWN;
-   memset(this->name, 0, sizeof(ParameterName));
-   memset(&this->value, 0, sizeof(ParameterValue));
+   name = "";
+   memset(&value, 0, sizeof(ParameterValue));
 }
 
-void Parameter::setName(const char* name)
+void Parameter::setName(const String& name)
 {
-   strncpy(this->name, name, sizeof(ParameterName));
+   this->name = name;
 }
 
-const char* Parameter::getName() const
+const String& Parameter::getName() const
 {
    return (name);
 }
@@ -92,9 +98,9 @@ int Parameter::getIntValue() const
    return (value.intValue);
 }
 
-const char* Parameter::getStringValue() const
+const String& Parameter::getStringValue() const
 {
-   return (value.stringValue);
+   return (stringValue);
 }
 
 Parameter::ParameterType Parameter::getType() const
@@ -126,17 +132,18 @@ void Parameter::setValue(const int& value)
    type = INT;
 }
 
-void Parameter::setValue(const char* value)
+void Parameter::setValue(const String& value)
 {
-   strncpy(this->value.stringValue, value, sizeof(StringValue));
+   this->stringValue = value;
    type = STRING;
 }
 
 bool Parameter::operator==(
    const Parameter& rhs) const
 {
-   return ((strncmp(name, rhs.name, sizeof(ParameterName)) == 0) &&
+   return ((name == rhs.name) &&
            (memcmp(&value, &rhs.value, sizeof(ParameterValue)) == 0) &&
+           (stringValue == rhs.stringValue) &&
            (type == rhs.type));
 }
 
@@ -145,8 +152,9 @@ Parameter& Parameter::operator=(
 {
    if (this != &rhs)
    {
-      strncpy(name, rhs.name, sizeof(ParameterName));
+      name = rhs.name;
       memcpy(&value, &rhs.value, sizeof(ParameterValue));
+      stringValue = rhs.stringValue;
       type = rhs.type;
    }
 

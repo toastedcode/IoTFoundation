@@ -10,86 +10,59 @@
 
 #pragma once
 
+#include "Dictionary.hpp"
 #include "MessagingDefs.hpp"
-#include "Parameter.hpp"
 
-class Message
+class Message : public Dictionary
 {
 
 public:
 
+   Message();
+
+   Message(
+      const MessageId& messageId);
+
+   virtual ~Message();
+
    // Intializes a message for use/reuse.
-   virtual void initialize() = 0;
+   virtual void initialize();
 
    // Intializes a message from another message.
    virtual void initialize(
-      const Message& message) = 0;
+      const Message& message);
 
    // This operation retrieves the message id.
-   virtual MessageId getMessageId() const = 0;
+   virtual MessageId getMessageId() const;
 
    // This operation retrieves the message id.
    virtual void setMessageId(
       // The message id.
-      const MessageId& messageId) = 0;
+      const MessageId& messageId);
 
    // The operation gets the source handler.
-   virtual String getSource() const = 0;
+   virtual String getSource() const;
 
    // The operation sets the source handler.
    virtual void setSource(
       // The source message handler.
-      const String& id) = 0;
+      const String& id);
 
    // The operation gets the destination handler.
-   virtual String getDestination() const = 0;
+   virtual String getDestination() const;
 
    // The operation sets the destination handler.
    virtual void setDestination(
       // The destination message handler.
-      const String& id) = 0;
+      const String& id);
 
    // This operation gets the topic.
-   virtual Topic getTopic() const = 0;
+   virtual Topic getTopic() const;
 
    // This operation sets the topic.
    virtual void setTopic(
       // The id of the destination message handler.
-      const Topic& topic) = 0;
-
-   virtual bool isFree() const = 0;
-
-   virtual bool setFree() = 0;
-
-   virtual bool setInUse() = 0;
-
-   // Operations for getting message parameters.
-   virtual bool getBool(const String& name) const = 0;
-   virtual double getDouble(const String& name) const = 0;
-   virtual float getFloat(const String& name) const = 0;
-   virtual int getInt(const String& name) const = 0;
-   virtual String getString(const String& name) const = 0;
-
-   // Operations for setting message parameters.
-   virtual void set(const String& name, bool value) = 0;
-   virtual void set(const String& name, double value) = 0;
-   virtual void set(const String& name, float value) = 0;
-   virtual void set(const String& name, int value) = 0;
-   virtual void set(const String& name, char* value) = 0;
-   virtual void set(const String& name, String value) = 0;
-
-   // Returns true if the message has the specified parameter set.
-   virtual bool isSet(
-      // The name of the parameter to evaluate.
-      const String& name) const = 0;
-
-   virtual void getParameters(
-      Parameter parameters[],
-      int& nameCount) const = 0;
-
-   virtual Parameter getParameter(const String& name) = 0;
-
-   virtual bool setParameter(const Parameter& parameter) = 0;
+      const Topic& topic);
 };
 
 typedef Message* MessagePtr;

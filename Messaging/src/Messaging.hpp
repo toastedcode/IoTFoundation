@@ -1,19 +1,15 @@
 #pragma once
 
-#include "MessageFactory.hpp"
-#include "MessageRouter.hpp"
+#include "MessageHandler.hpp"
+#include "Pool.hpp"
 
 class Messaging
 {
 
 public:
 
-   template <typename T>
    static void setup(
-      const int& messagePoolSize)
-   {
-      MessageFactory::allocate<T>(messagePoolSize);
-   }
+      const int& messagePoolSize);
 
    static bool registerHandler(
       MessageHandler* handler);
@@ -36,6 +32,9 @@ public:
    static MessagePtr newMessage();
 
    static MessagePtr copyMessage(
+      MessagePtr copyMessage);
+
+   static void freeMessage(
       MessagePtr message);
 
    // This operation sends a message to a single component.
@@ -48,52 +47,3 @@ public:
       // The message to send.
       MessagePtr message);
 };
-
-inline bool Messaging::registerHandler(
-   MessageHandler* handler)
-{
-   return (MessageRouter::registerHandler(handler));
-}
-
-inline bool Messaging::unregisterHandler(
-   MessageHandler* handler)
-{
-   return (MessageRouter::unregisterHandler(handler));
-}
-
-inline bool Messaging::subscribe(
-   MessageHandler* handler,
-   Topic topic)
-{
-   return (MessageRouter::subscribe(handler, topic));
-}
-
-inline bool Messaging::unsubscribe(
-   MessageHandler* handler,
-   Topic topic)
-{
-   return (MessageRouter::unsubscribe(handler, topic));
-}
-
-inline MessagePtr Messaging::newMessage()
-{
-   return (MessageFactory::newMessage());
-}
-
-inline MessagePtr Messaging::copyMessage(
-   MessagePtr message)
-{
-   return (MessageFactory::newMessage(message));
-}
-
-inline bool Messaging::send(
-   MessagePtr message)
-{
-   return (MessageRouter::send(message));
-}
-
-inline bool Messaging::publish(
-   MessagePtr message)
-{
-   return (MessageRouter::publish(message));
-}

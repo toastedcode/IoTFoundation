@@ -5,14 +5,12 @@
 #include "Messaging.hpp"
 #include "WebServer.hpp"
 
-const int WebServer::MAX_WEBPAGES;
-
 WebServer::WebServer(
    const int& port) :
      port(port),
      server(0)
 {
-   memset(webpages, 0, (sizeof(Webpage*) * MAX_WEBPAGES));
+   // Nothing to do here.
 }
 
 WebServer::~WebServer()
@@ -72,21 +70,10 @@ void WebServer::handleNotFound(
    server.send(404, "text/plain", "File not found.");
 }
 
-bool WebServer::addPage(
+void WebServer::addPage(
    Webpage* webpage)
 {
-   bool success = false;
-
-   for (int i = 0; i < MAX_WEBPAGES; i++)
-   {
-      if (webpages[i] == 0)
-      {
-         webpages[i] = webpage;
-         success = true;
-      }
-   }
-
-   return (success);
+   webpages[webpage->getUri()] = webpage;
 }
 
 Webpage* WebServer::getPage(
@@ -94,36 +81,19 @@ Webpage* WebServer::getPage(
 {
    Webpage* webpage = 0;
 
-   for (int i = 0; i < MAX_WEBPAGES; i++)
+   Map<String, Webpage*>::Iterator findIt = webpages.find(uri);
+   if (findIt !=  webpages.end())
    {
-      if ((webpages[i] != 0) &&
-          (webpages[i]->getUri() == uri))
-      {
-         webpage = webpages[i];
-         break;
-      }
+      webpage = findIt->second;
    }
 
    return (webpage);
 }
 
-bool WebServer::removePage(
+void WebServer::removePage(
    const String& uri)
 {
-   bool success = false;
-
-   for (int i = 0; i < MAX_WEBPAGES; i++)
-   {
-      if ((webpages[i] != 0) &&
-          (webpages[i]->getUri() == uri))
-      {
-         webpages[i] = 0;
-         success = true;
-         break;
-      }
-   }
-
-   return (success);
+   webpages.erase(uri);
 }
 
 bool WebServer::servePage(
@@ -141,11 +111,11 @@ bool WebServer::servePage(
    {
       Logger::logDebug("WebServer::servePage: %s", requestUri.c_str());
 
-      int numArguments = 0;
-      getArguments(server, arguments, numArguments);
+      Dictionary arguments;
+      getArguments(server, arguments);
 
       String contentFile = "";
-      if (webpage->handle(requestMethod, requestUri, arguments, numArguments, contentFile))
+      if (webpage->handle(requestMethod, requestUri, arguments, contentFile))
       {
          success = serveFile(server, requestMethod, contentFile);
       }
@@ -245,23 +215,11 @@ String WebServer::getDataType(
 
 void WebServer::getArguments(
    ESP8266WebServer& server,
-   Argument arguments[],
-   int& numArguments)
+   Dictionary& arguments)
 {
-   for (int i = 0; i < MAX_ARGUMENTS; i++)
+   for (int i = 0; i < server.args(); i++)
    {
-      if (i < server.args())
-      {
-         arguments[i].setName(server.argName(i));
-         arguments[i].setValue(server.arg(i));
-      }
-      else
-      {
-         arguments[i].setName("");
-         arguments[i].setValue("");
-      }
+      arguments[server.argName(i)] = server.arg(i);
    }
-
-   numArguments = server.args();
 }
 

@@ -166,11 +166,6 @@ bool Timer::isExpired() const
 void Timer::setMessage(
    MessagePtr message)
 {
-   if (message)
-   {
-      message->setFree();
-   }
-
    this->message = message;
 }
 

@@ -10,20 +10,16 @@
 
 #pragma once
 
-#include "Map.hpp"
+#include "../../STL/Map.hpp"
+#include "../../STL/Set.hpp"
 #include "Message.hpp"
 #include "MessageHandler.hpp"
-#include "Set.hpp"
 
-const int MAX_MESSAGE_HANDLERS = 30;
+typedef Map<String, MessageHandler*> MessageHandlerMap;
 
-const int MAX_TOPICS = 10;
+typedef Set<MessageHandler*> MessageHandlerSet;
 
-typedef Map<String, MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerMap;
-
-typedef Set<MessageHandler*, MAX_MESSAGE_HANDLERS> MessageHandlerSet;
-
-typedef Map<Topic, MessageHandlerSet, MAX_TOPICS> SubscriptionMap;
+typedef Map<Topic, MessageHandlerSet> SubscriptionMap;
 
 class MessageRouter
 {

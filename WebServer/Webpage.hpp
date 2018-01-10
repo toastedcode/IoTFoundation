@@ -2,8 +2,9 @@
 
 #include <ESP8266WebServer.h>
 
-#include "Argument.hpp"
 #include "CommonDefs.hpp"
+#include "Dictionary.hpp"
+#include "Messaging.hpp"
 
 class Webpage
 {
@@ -30,8 +31,13 @@ public:
    virtual bool handle(
       const HTTPMethod& requestMethod,
       const String& requestUri,
-      Argument arguments[],
-      const int& numArguments,
+      const Dictionary& arguments,
+      String& responsePath);
+
+   virtual bool handle(
+      const HTTPMethod& requestMethod,
+      const String& requestUri,
+      MessagePtr message,
       String& responsePath);
 
 protected:

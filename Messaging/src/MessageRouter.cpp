@@ -9,7 +9,7 @@
 // *****************************************************************************
 
 #include "Logger.hpp"
-#include "MessageFactory.hpp"
+#include "MessagePool.hpp"
 #include "MessageRouter.hpp"
 #include "StringUtils.hpp"
 
@@ -55,13 +55,22 @@ bool MessageRouter::unregisterHandler(
 bool MessageRouter::isRegistered(
    MessageHandler* handler)
 {
-   return (handlers.find(handler) != 0);
+   bool found = false;
+
+   for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
+   {
+      if (handler == it->second)
+      {
+         found = true;
+      }
+   }
+   return (found);
 }
 
 bool MessageRouter::isRegistered(
    const String& handlerId)
 {
-   return (handlers.get(handlerId) != 0);
+   return (handlers.isSet(handlerId));
 }
 
 bool MessageRouter::subscribe(
@@ -70,7 +79,7 @@ bool MessageRouter::subscribe(
 {
    if (isSubscribed(handler, topic) == false)
    {
-      subscriptions[topic].add(handler);
+      subscriptions[topic].insert(handler);
 
       Logger::logDebugFinest(
          F("MessageRouter::subscribe: Message handler [%s] subscribed to topic [%s]."),
@@ -85,7 +94,7 @@ bool MessageRouter::unsubscribe(
    MessageHandler* handler,
    Topic topic)
 {
-   subscriptions[topic].remove(handler);
+   subscriptions[topic].erase(handler);
 
    return (true);
 }
@@ -94,14 +103,16 @@ bool MessageRouter::isSubscribed(
    MessageHandler* handler,
    Topic topic)
 {
-   MessageHandlerSet topicHandlers = subscriptions[topic];
-   return (topicHandlers.contains(handler));
+   MessageHandlerSet& topicHandlers = subscriptions[topic];
+   return (subscriptions[topic].find(handler) != topicHandlers.end());
 }
 
 bool MessageRouter::send(
    MessagePtr message)
 {
    bool success = false;
+
+   Logger::logDebugFinest("Dispatching %s to %s", message->getMessageId().c_str(), message->getDestination().c_str());
 
    // Direct un-addressed messages to the default handler.
    if ((message->getDestination() == "") &&
@@ -112,19 +123,18 @@ bool MessageRouter::send(
    // Otherwise, search for a matching message handler.
    else
    {
-      // TODO: Make use of MessageHandlerMap operations.
-      for (int i = 0; i < handlers.length(); i++)
+      for (Map<String, MessageHandler*>::Iterator it = handlers.begin(); it != handlers.end(); it++)
       {
-         const MessageHandlerMap::Entry* entry = handlers.item(i);
+         MessageHandler* handler = it->second;
 
-         if (match(message, entry->value))
+         if (match(message, handler))
          {
             Logger::logDebugFinest(
                F("MessageRouter::send: Dispatching message [%s] to destination [%s]."),
                message->getMessageId().c_str(),
                message->getDestination().c_str());
 
-            success = entry->value->queueMessage(message);
+            success = handler->queueMessage(message);
             break;
          }
       }
@@ -137,7 +147,7 @@ bool MessageRouter::send(
          message->getMessageId().c_str(),
          message->getDestination().c_str());
 
-      message->setFree();
+      MessagePool::freeMessage(message);
    }
 
    return (success);
@@ -154,17 +164,19 @@ bool MessageRouter::publish(
       F("MessageRouter::publish: Broadcasting message [%s] with topic [%s] to %d subscribers."),
       message->getMessageId().c_str(),
       message->getTopic().c_str(),
-      topicHandlers.length());
+      topicHandlers.size());
 
-   for (int i = 0; i < topicHandlers.length(); i++)
+   for (List<MessageHandler*>::Iterator it = topicHandlers.begin(); it != topicHandlers.end(); it++)
    {
-      MessagePtr broadcastMessage = MessageFactory::newMessage(message);
+      MessageHandler* handler = (*it);
+
+      MessagePtr broadcastMessage = MessagePool::copyMessage(message);
 
       success &= ((broadcastMessage) &&
-                  topicHandlers.item(i)->value->queueMessage(broadcastMessage));
+                  handler->queueMessage(broadcastMessage));
    }
 
-   message->setFree();
+   MessagePool::freeMessage(message);
 
    return (success);
 }

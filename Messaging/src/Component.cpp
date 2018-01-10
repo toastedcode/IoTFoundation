@@ -10,7 +10,7 @@
 
 #include "Component.hpp"
 #include "Logger.hpp"
-#include "MessageFactory.hpp"
+#include "MessagePool.hpp"
 #include "MessageRouter.hpp"
 #include "StaticMessageQueue.hpp"
 
@@ -40,7 +40,7 @@ void Component::loop()
    {
       handleMessage(message);
 
-      message->setFree();
+      MessagePool::freeMessage(message);
 
       message = messageQueue->dequeue();
    }
@@ -53,13 +53,16 @@ void Component::handleMessage(
    //  ping
    if (message->getMessageId() == "ping")
    {
-      Message* reply = MessageFactory::newMessage();
+      Message* reply = MessagePool::newMessage();
 
-      reply->setMessageId("pong");
-      reply->setSource(getId());
-      reply->setDestination(message->getSource());
+      if (reply)
+      {
+         reply->setMessageId("pong");
+         reply->setSource(getId());
+         reply->setDestination(message->getSource());
 
-      MessageRouter::send(reply);
+         MessageRouter::send(reply);
+      }
    }
    else
    {
@@ -69,5 +72,5 @@ void Component::handleMessage(
          getId().c_str());
    }
 
-   message->setFree();
+   MessagePool::freeMessage(message);
 }
