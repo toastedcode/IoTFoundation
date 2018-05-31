@@ -10,7 +10,7 @@ SMSAdapter::SMSAdapter(
    const String& twilioAuthToken,
    const String& twilioFingerprint,
    const String& twilioPhoneNumber) :
-      Adapter(id, new TwilioProtocol()),
+      Adapter(id, (Protocol*)new TwilioProtocol()),
       host(host),
       port(port),
       twilioAccountSid(twilioAccountSid),
@@ -18,12 +18,32 @@ SMSAdapter::SMSAdapter(
       twilioFingerprint(twilioFingerprint),
       twilioPhoneNumber(twilioPhoneNumber)
 {
-
+  // Nothing to do here.
 }
 
 SMSAdapter::~SMSAdapter()
 {
+   // Nothing to do here.
+}
 
+// TODO: Move this into SMS.h and allow sending without using the messaging classes.
+void SMSAdapter::sendSMSMessage(
+   const String& phoneNumber,
+   const String& body)
+{
+   static MessagePtr message = 0;
+
+   if (message == 0)
+   {
+      message = new Message();
+   }
+
+   message->initialize();
+   message->setDestination(getId());
+   TwilioProtocol::setToNumber(message, phoneNumber);
+   TwilioProtocol::setBody(message, body);
+
+   sendRemoteMessage(message);
 }
 
 bool SMSAdapter::sendRemoteMessage(
@@ -36,11 +56,11 @@ bool SMSAdapter::sendRemoteMessage(
    // Note: this is only checking ASCII length, not UCS-2 encoding.
    if (message->getString("body").length() > 1600)
    {
-      Logger::logWarning("SMS message body must be 1600 or fewer characters.");
+      Logger::logWarning(F("SMS message body must be 1600 or fewer characters."));
    }
    else if (!client.connect(host.c_str(), port))
    {
-      Logger::logWarning("Failed to connect to host %s:%d.", host.c_str(), port);
+      Logger::logWarning(F("Failed to connect to host %s:%d."), host.c_str(), port);
    }
    // TODO: Figure out certificate validation.
    /*
@@ -77,7 +97,7 @@ MessagePtr SMSAdapter::getRemoteMessage()
 
       // For now, just log response.
       // TODO: Parse and handle failures.
-      Logger::logDebug("SMS reponse: %s", serializedMessage.c_str());
+      Logger::logDebug(F("SMS reponse: %s"), serializedMessage.c_str());
    }
 
    return (message);

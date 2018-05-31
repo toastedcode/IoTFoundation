@@ -18,6 +18,7 @@ class SMSAdapter : public Adapter
 
 public:
 
+   // Constructor.
    SMSAdapter(
       const String& id,
       const String& host,
@@ -27,7 +28,12 @@ public:
       const String& twilioFingerprint,
       const String& twilioPhoneNumber);
 
+   // Destructor.
    virtual ~SMSAdapter();
+
+   void sendSMSMessage(
+      const String& phoneNumber,
+      const String& body);
 
    virtual bool sendRemoteMessage(
       MessagePtr message);

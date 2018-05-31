@@ -1,11 +1,8 @@
+// From: https://github.com/zenmanenergy/ESP8266-Arduino-Examples/blob/master/helloWorld_urlencoded/urlencode.ino
+
 #pragma once
 
-/*
-
- From: https://github.com/zenmanenergy/ESP8266-Arduino-Examples/blob/master/helloWorld_urlencoded/urlencode.ino
-
-*/
-#include <Arduino.h>
+#include "CommonDefs.hpp"
 
 unsigned char h2int(char c);
 String urldecode(String str);

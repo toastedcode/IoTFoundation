@@ -20,7 +20,7 @@ public:
       MessagePtr message);
 
    static void setAccountSid(
-      MessagePtr& message,
+      MessagePtr message,
       const String& accountSid);
 
    static String getAuthToken(

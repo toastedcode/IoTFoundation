@@ -1,7 +1,10 @@
+//#include "base64.h"
 #include "TwilioProtocol.hpp"
 #include "url_coding.hpp"
+// Note: Must include Arduino.h (via TwilioProtocol.hpp) because base64.h does not define String.
+#include "base64.h"
 
-virtual bool TwilioProtocol::parse(
+bool TwilioProtocol::parse(
    const String& messageString,
    MessagePtr message)
 {
@@ -45,95 +48,95 @@ String TwilioProtocol::serialize(
 }
 
 String TwilioProtocol::getAccountSid(
-   MessagePtr message) const
+   MessagePtr message)
 {
-   return (message->getString("accountSid"));
+   return (message->getString(F("accountSid")));
 }
 
 void TwilioProtocol::setAccountSid(
    MessagePtr message,
    const String& accountSid)
 {
-   message->set("accountSid", accountSid);
+   message->set(F("accountSid"), accountSid);
 }
 
 String TwilioProtocol::getAuthToken(
    MessagePtr message)
 {
-   return (message->getString("authToken"));
+   return (message->getString(F("authToken")));
 }
 
 void TwilioProtocol::setAuthToken(
    MessagePtr message,
    const String& authToken)
 {
-   message->set("authToken", authToken);
+   message->set(F("authToken"), authToken);
 }
 
 String TwilioProtocol::getHost(
    MessagePtr message)
 {
-   return (message->getString("host"));
+   return (message->getString(F("host")));
 }
 
 void TwilioProtocol::setHost(
    MessagePtr message,
    const String& host)
 {
-   message->set("host", host);
+   message->set(F("host"), host);
 }
 
 String TwilioProtocol::getUrlImage(
    MessagePtr message)
 {
-   return (message->getString("urlImage"));
+   return (message->getString(F("urlImage")));
 }
 
 void TwilioProtocol::setUrlImage(
    MessagePtr message,
    const String& urlImage)
 {
-   message->set("urlImage", urlImage);
+   message->set(F("urlImage"), urlImage);
 }
 
 
 String TwilioProtocol::getToNumber(
    MessagePtr message)
 {
-   return (message->getString("toNumber"));
+   return (message->getString(F("toNumber")));
 }
 
 void TwilioProtocol::setToNumber(
    MessagePtr message,
    const String& phoneNumber)
 {
-   message->set("toNumber", phoneNumber);
+   message->set(F("toNumber"), phoneNumber);
 }
 
 String TwilioProtocol::getFromNumber(
    MessagePtr message)
 {
-   return (message->getString("fromNumber"));
+   return (message->getString(F("fromNumber")));
 }
 
 void TwilioProtocol::setFromNumber(
    MessagePtr message,
    const String& phoneNumber)
 {
-   message->set("fromNumber", phoneNumber);
+   message->set(F("fromNumber"), phoneNumber);
 }
 
 String TwilioProtocol::getBody(
    MessagePtr message)
 {
-   return (message->getString("body"));
+   return (message->getString(F("body")));
 }
 
 void TwilioProtocol::setBody(
    MessagePtr message,
    const String& body)
 {
-   message->set("body", body);
+   message->set(F("body"), body);
 }
 
 String TwilioProtocol::getAuthHeader(
@@ -153,7 +156,7 @@ String TwilioProtocol::getAuthHeader(
 
    String encoded = base64::encode((uint8_t*)toencode, toencodeLen-1);
    String encoded_string = String(encoded);
-   std::string::size_type i = 0;
+   int i = 0;
 
    // Strip newlines (after every 72 characters in spec)
    while (i < encoded_string.length())
