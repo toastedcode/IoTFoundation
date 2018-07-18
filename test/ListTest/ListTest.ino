@@ -14,13 +14,10 @@ void setup()
    {
       list.push_back(i);
    }
-
-   for (int i = 0; i < 10; i++)
+   
+   for (List<int>::Iterator it = list.begin(); it != list.end(); it++)
    {
-     for (List<int>::Iterator it = list.begin(); it != list.end(); it++)
-     {
-        Logger::logDebug("%d", *it);
-     }
+      Logger::logDebug("%d", *it);
    }
 }
 
