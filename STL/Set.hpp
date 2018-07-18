@@ -12,6 +12,9 @@ public:
 
    Set();
 
+   Set(
+      const Set& copyObject);
+
    virtual ~Set();
 
    virtual Iterator begin() const;
@@ -45,11 +48,21 @@ private:
    List<T> list;
 };
 
+// Constructor.
 template<typename T>
 Set<T>::Set()
 {  
 }
 
+// Copy constructor.
+template<class T>
+Set<T>::Set(
+   const Set& copyObject) :
+      list(copyObject.list)
+{
+}
+
+// Destructor.
 template<typename T>
 Set<T>::~Set()
 {
