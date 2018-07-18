@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include "Logger.h"
+
 template <typename T>
 class List
 {
@@ -9,6 +11,9 @@ class List
 public:
 
    List();
+
+   List(
+      const List& copyObject);
 
    virtual ~List();
 
@@ -91,11 +96,25 @@ List<T>::List():
 {
 }
 
+// Copy constructor.
+template<class T>
+List<T>::List(
+   const List& copyObject) :
+      listSize(0),
+      startNode(NULL),
+      endNode(NULL)
+{
+   for (typename List<T>::Iterator it = copyObject.begin(); it != copyObject.end(); it++)
+   {
+      push_back(*it);
+   }
+}
+
 // Destructor.
 template<class T>
 List<T>::~List()
 {
-  clear();
+   clear();
 }
 
 // Get size
@@ -141,16 +160,16 @@ void List<T>::remove(
 template<class T>
 void List<T>::clear()
 {
-  Node* tmp = startNode;
-  while (startNode != NULL)
-  {
-    tmp = startNode;
-    startNode = startNode->next;
-    delete tmp; // Delete item
-    listSize--; // Decrease counter
-  }
+   Node* tmp = startNode;
+   while (startNode != NULL)
+   {
+      tmp = startNode;
+      startNode = startNode->next;
+      delete tmp; // Delete item
+      listSize--; // Decrease counter
+   }
   
-  endNode = NULL;
+   endNode = NULL;
 }
 
 // Assignment operator.
