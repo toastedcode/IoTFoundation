@@ -15,6 +15,9 @@ public:
 
    Map();
 
+   Map(
+      const Map& copyObject);
+
    virtual ~Map();
 
    virtual bool isSet(const KEY& key) const;
@@ -57,6 +60,13 @@ private:
 template<typename KEY, typename VALUE>
 Map<KEY, VALUE>::Map()
 {  
+}
+
+template<typename KEY, typename VALUE>
+Map<KEY, VALUE>::Map(
+   const Map& copyObject) :
+      list(copyObject.list)
+{
 }
 
 template<typename KEY, typename VALUE>
