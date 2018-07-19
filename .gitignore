@@ -84,3 +84,8 @@ $RECYCLE.BIN/
 *.mk
 .settings/
 Debug/
+
+# =========================
+# Private
+# =========================
+private.txt
