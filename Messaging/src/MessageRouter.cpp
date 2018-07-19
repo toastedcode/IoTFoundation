@@ -172,7 +172,8 @@ bool MessageRouter::publish(
 
       MessagePtr broadcastMessage = MessagePool::copyMessage(message);
 
-      success &= ((broadcastMessage) &&
+      success &= (broadcastMessage &&
+                  handler &&
                   handler->queueMessage(broadcastMessage));
    }
 
