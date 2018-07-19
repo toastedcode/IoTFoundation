@@ -26,7 +26,7 @@ void setup()
 
    WifiBoard::getBoard()->connectWifi("REDACTED", "REDACTED");
 
-   sms->sendSMSMessage("+17247572815", "I bless the rains down in Africa.");
+   sms->sendSMSMessage("REDACTED", "I bless the rains down in Africa.");
 }
 
 void loop()
