@@ -26,26 +26,6 @@ SMSAdapter::~SMSAdapter()
    // Nothing to do here.
 }
 
-// TODO: Move this into SMS.h and allow sending without using the messaging classes.
-void SMSAdapter::sendSMSMessage(
-   const String& phoneNumber,
-   const String& body)
-{
-   static MessagePtr message = 0;
-
-   if (message == 0)
-   {
-      message = new Message();
-   }
-
-   message->initialize();
-   message->setDestination(getId());
-   TwilioProtocol::setToNumber(message, phoneNumber);
-   TwilioProtocol::setBody(message, body);
-
-   sendRemoteMessage(message);
-}
-
 bool SMSAdapter::sendRemoteMessage(
    MessagePtr message)
 {

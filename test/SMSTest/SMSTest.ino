@@ -1,35 +1,29 @@
 #include <Board.h>
 #include <Logger.h>
-#include <Messaging.h>
 #include <SMS.h>
-
-SMSAdapter* sms = 0;
 
 void setup()
 {
    Serial.begin(9600);
    Logger::setLogger(new SerialLogger());
 
+   Logger::logDebug("\n\n********** SMS Test **********\n\n");
+
    Board::setBoard(new Esp8266Board());
 
-   Messaging::setup(10);
+   WifiBoard::getBoard()->connectWifi("compunetix-guest", "compunetix");
 
-   sms = new SMSAdapter("sms",             // id
-                        "api.twilio.com",  // host
-                        443,               // port
-                        "REDACTED",        // account sid
-                        "REDACTED",        // auth token
-                        "REDACTED",        // api.twilio.com SHA1 fingerprint, this one was valid as of May 2018.
-                        "REDACTED");       // from phone number
+   SMS::setup(
+      "api.twilio.com",  // host
+      443,               // port
+      "AC47bd79771c6965a92b58d94440e8fa59",  // account sid
+      "e97eb2e67fee5d1a6f88a3f66dde0fab",    // auth token
+      "REDACTED",        // api.twilio.com SHA1 fingerprint, this one was valid as of May 2018.
+      "+14123243446");   // from phone number
 
-   Messaging::registerHandler(sms);
-
-   WifiBoard::getBoard()->connectWifi("REDACTED", "REDACTED");
-
-   sms->sendSMSMessage("REDACTED", "I bless the rains down in Africa.");
+   SMS::sendSMS("+17247572815", "I bless the rains down in Africa.");
 }
 
 void loop()
 {
-  sms->loop(); 
 }
