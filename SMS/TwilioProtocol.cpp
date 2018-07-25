@@ -1,4 +1,3 @@
-//#include "base64.h"
 #include "TwilioProtocol.hpp"
 #include "url_coding.hpp"
 // Note: Must include Arduino.h (via TwilioProtocol.hpp) because base64.h does not define String.

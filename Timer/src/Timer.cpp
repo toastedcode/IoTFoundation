@@ -258,7 +258,7 @@ void Timer::expire()
 
    if (type == PERIODIC)
    {
-	  if (isStarted())
+      if (isStarted())
       {
          reset();
       }
