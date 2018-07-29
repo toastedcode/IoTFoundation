@@ -8,6 +8,8 @@ class Timer
 
 public:
 
+   friend class Pool<Timer>;
+
    enum TimerType
    {
       ONE_SHOT,
@@ -72,9 +74,9 @@ private:
 
    void expire();
 
-   static Timer* timers;
+   typedef Pool<Timer> TimerPool;
 
-   static int numberOfTimers;
+   static TimerPool timerPool;
 
    String id;
 

@@ -6,14 +6,12 @@
 //                              Public (static)
 // *****************************************************************************
 
-Timer* Timer::timers;
-
-int Timer::numberOfTimers = 0;
+Timer::TimerPool Timer::timerPool(0);
 
 void Timer::setup(
    const int& numberOfTimers)
 {
-   allocate(numberOfTimers);
+   timerPool.allocate(numberOfTimers);
 }
 
 
@@ -98,20 +96,19 @@ void Timer::freeTimer(
       timer->inUse = false;
       timer->startTime = 0;
       timer->expireTime = 0;
+
+      timerPool.setFree(timer);
    }
 }
 
 
 void Timer::loop()
 {
-   for (int i = 0; i < numberOfTimers; i++)
-   {
-      Timer& timer = timers[i];
+   Set<Timer*> inUseSet = timerPool.inUseSet();
 
-      if (timer.inUse == true)
-      {
-         timer.update();
-      }
+   for (Set<Timer*>::Iterator it = inUseSet.begin(); it != inUseSet.end(); it++)
+   {
+      (*it)->update();
    }
 }
 
@@ -123,7 +120,7 @@ Timer::~Timer() {}
 
 void Timer::start()
 {
-   if (inUse == true)
+   if (inUse)
    {
       reset();
    }
@@ -131,7 +128,7 @@ void Timer::start()
 
 void Timer::stop()
 {
-   if (inUse == true)
+   if (inUse)
    {
       startTime = 0;
       expireTime = 0;
@@ -140,7 +137,7 @@ void Timer::stop()
 
 void Timer::reset()
 {
-   if (inUse == true)
+   if (inUse)
    {
       Board* board = Board::getBoard();
 
@@ -182,30 +179,13 @@ void Timer::setListener(
 void Timer::allocate(
    const int& numberOfTimers)
 {
-   // Destroy any existing pool.
-   if (timers != 0)
-   {
-      delete [] timers;
-      Timer::numberOfTimers = 0;
-   }
-
    // Create the pool.
-   timers = new Timer[numberOfTimers];
-   Timer::numberOfTimers = numberOfTimers;
+   timerPool.allocate(numberOfTimers);
 }
 
 Timer* Timer::getFreeTimer()
 {
-   Timer* freeTimer = 0;
-
-   for (int i = 0; i < numberOfTimers; i++)
-   {
-      if (timers[i].inUse == false)
-      {
-         freeTimer = &(timers[i]);
-         break;
-      }
-   }
+   Timer* freeTimer = timerPool.getFree();
 
    if (!freeTimer)
    {

@@ -8,10 +8,15 @@ class Pool
 
 public:
 
+   Pool();
+
    Pool(
       const int& size);
 
    ~Pool();
+
+   void allocate(
+      const int& size);
 
    unsigned int size() const;
 
@@ -22,6 +27,8 @@ public:
    void setFree(
       T* value);
 
+   const Set<T*>& inUseSet();
+
 private:
 
    Set<T*> inUse;
@@ -30,15 +37,15 @@ private:
 };
 
 template<class T>
+Pool<T>::Pool()
+{
+}
+
+template<class T>
 Pool<T>::Pool(
    const int& size)
 {
-   // Create the pool.
-   for (int i = 0; i < size; i++)
-   {
-      free.insert(new T());
-   }
-
+   allocate(size);
 }
 
 template<class T>
@@ -55,6 +62,28 @@ Pool<T>::~Pool()
       delete(*it);
    }
    inUse.clear();
+}
+
+template<class T>
+void Pool<T>::allocate(
+   const int& size)
+{
+   for (typename Set<T*>::Iterator it = free.begin(); it != free.end(); it++)
+   {
+      delete(*it);
+   }
+   free.clear();
+
+   for (typename Set<T*>::Iterator it = inUse.begin(); it != inUse.end(); it++)
+   {
+      delete(*it);
+   }
+   inUse.clear();
+
+   for (int i = 0; i < size; i++)
+   {
+      free.insert(new T());
+   }
 }
 
 template<class T>
@@ -90,4 +119,10 @@ void Pool<T>::setFree(
 {
    inUse.erase(value);
    free.insert(value);
+}
+
+template<class T>
+const Set<T*>& Pool<T>::inUseSet()
+{
+   return (inUse);
 }
