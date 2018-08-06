@@ -69,12 +69,6 @@ public:
    // This operation retrieves the current IP address (if connected) of the ESP8266.
    virtual String getIpAddress() const;
 
-   // This operation attempts to connect to the specified Wifi network using the stored SSID and password.
-   // True is returned if the operation was successful; false otherwise.
-   // Note: This operation blocks while attempting to make the connection.
-   virtual bool connectWifi(
-      const int& connectionTimeout = 30);
-
    // This operation attempts to connect to the specified Wifi network using the specified SSID and password.
    // True is returned if the operation was successful; false otherwise.
    // Note: This operation blocks while attempting to make the connection.

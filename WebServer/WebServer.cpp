@@ -20,6 +20,8 @@ WebServer::~WebServer()
 
 void WebServer::setup()
 {
+   Logger::logDebug("WebServer::setup: Starting web server on port %d.", port);
+
    server = new ESP8266WebServer(port);
    server->addHandler(this);
    server->begin();
@@ -44,7 +46,7 @@ bool WebServer::handle(
 {
    bool success = true;
 
-   Logger::logDebug("WebServer::handle: %s", requestUri.c_str());
+   Logger::logDebug(F("WebServer::handle: %s"), requestUri.c_str());
 
    success = servePage(server, requestMethod, requestUri);
 
@@ -73,6 +75,8 @@ void WebServer::handleNotFound(
 void WebServer::addPage(
    Webpage* webpage)
 {
+   Logger::logDebug(F("WebServer::addPage: Hosting webpage: %s"), webpage->getUri().c_str());
+
    webpages[webpage->getUri()] = webpage;
 }
 
@@ -109,7 +113,7 @@ bool WebServer::servePage(
 
    if ((webpage != 0) && (webpage->canHandle(requestMethod, requestUri)))
    {
-      Logger::logDebug("WebServer::servePage: %s", requestUri.c_str());
+      Logger::logDebug(F("WebServer::servePage: %s"), requestUri.c_str());
 
       Dictionary arguments;
       getArguments(server, arguments);
@@ -139,7 +143,7 @@ bool WebServer::serveFile(
 
    if (file)
    {
-      Logger::logDebug("WebServer::serveFile: %s", requestUri.c_str());
+      Logger::logDebug(F("WebServer::serveFile: %s"), requestUri.c_str());
 
       if (server.hasArg("download"))
       {
@@ -149,7 +153,7 @@ bool WebServer::serveFile(
       // Send the file contents.
       if (server.streamFile(file, dataType) != file.size())
       {
-         Logger::logWarning("WebServer::serveFile: Sent less data than expected.");
+         Logger::logWarning(F("WebServer::serveFile: Sent less data than expected."));
          success = true;
       }
       else
