@@ -15,7 +15,7 @@ typedef StdString String;
 
 #define F(expression) expression
 #define PROGMEM
-#define FPSTR(expression) expressio
+#define FPSTR(expression) expression
 
 #else
 
