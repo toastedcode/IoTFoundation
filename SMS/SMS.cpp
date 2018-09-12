@@ -1,7 +1,6 @@
 #include "SMS.hpp"
 #include "TwilioProtocol.hpp"
-//#include "WiFiClientSecure.h"
-#include "ESP8266WiFi.h"
+#include "WiFiClientSecure.h"
 
 String SMS::host;
 
@@ -37,8 +36,7 @@ bool SMS::sendSMS(
 {
    bool isSuccess = false;
 
-   //static WiFiClientSecure client;
-   static WiFiClient client;
+   static WiFiClientSecure client;
 
    static Message message;
 
@@ -55,13 +53,11 @@ bool SMS::sendSMS(
    {
       Logger::logWarning(F("Failed to connect to host %s:%d."), host.c_str(), port);
    }
-   // TODO: Figure out certificate validation.
-   /*
-   else if (!client.verify(fingerprint.c_str(), host.c_str()))
+   // Note: Obtain fingerprint using https://www.grc.com/fingerprints.htm
+   else if (!client.verify(twilioFingerprint.c_str(), host.c_str()))
    {
       Logger::logWarning("Could not verify host %s:%d certificate.", host.c_str(), port);
    }
-   */
    else
    {
       message.initialize();
@@ -88,7 +84,7 @@ bool SMS::sendSMS(
 
             // For now, just log response.
             // TODO: Parse and handle failures.
-            Logger::logDebug(F("SMS reponse: %s"), serializedMessage.c_str());
+            Logger::logDebugFinest(F("SMS reponse: %s"), serializedMessage.c_str());
          }
       }
 

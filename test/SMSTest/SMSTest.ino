@@ -18,7 +18,7 @@ void setup()
       443,               // port
       "REDACTED",  // account sid
       "REDACTED",    // auth token
-      "REDACTED",        // api.twilio.com SHA1 fingerprint, this one was valid as of May 2018.
+      "4C FE 00 19 F3 57 89 7B 02 9A A4 AA 2E 7B CB 6E 53 D1 7E AE",   // api.twilio.com SHA1 fingerprint, this one was valid as of 9/12/2018.
       "REDACTED");   // from phone number
 
    SMS::sendSMS("REDACTED", "I bless the rains down in Africa.");

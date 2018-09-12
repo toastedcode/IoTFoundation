@@ -133,9 +133,9 @@ bool Properties::parseLine(
       String lhs = line.substring(0, pos);
       String rhs = line.substring(pos + 1);
 
-      // TODO: Implment a trim function.
-      lhs = StringUtils::removeAll(lhs, " \n\r");
-      rhs = StringUtils::removeAll(rhs, " \n\r");
+      // Remove leading/trailing whitespace.
+      lhs.trim();
+      rhs.trim();
 
       if ((lhs.length() > 0) &&
           (rhs.length() > 0))

@@ -18,7 +18,7 @@ String TwilioProtocol::serialize(
 
    String postData = "To=" + urlencode(getToNumber(message)) +
                      "&From=" + urlencode(getFromNumber(message)) +
-                     "&Body=" + getBody(message);
+                     "&Body=" + urlencode(getBody(message));
 
    // Attempt to send an SMS or MMS, depending on picture URL
    String urlImage = getUrlImage(message);
@@ -33,15 +33,14 @@ String TwilioProtocol::serialize(
 
    serializedMessage = "POST /2010-04-01/Accounts/" +
                        getAccountSid(message) + "/Messages HTTP/1.1\r\n" +
-                       authHeader + "\r\n" + "Host: " + getHost(message) + "\r\n" +
+                       authHeader + "\r\n" +
+                       "Host: " + getHost(message) + "\r\n" +
                        "Cache-control: no-cache\r\n" +
                        "User-Agent: ESP8266 Twilio Example\r\n" +
-                       "Content-Type: " +
-                       "application/x-www-form-urlencoded\r\n" +
+                       "Content-Type: application/x-www-form-urlencoded\r\n" +
                        "Content-Length: " + postData.length() +"\r\n" +
                        "Connection: close\r\n" +
                        "\r\n" + postData + "\r\n";
-
 
    return (serializedMessage);
 }

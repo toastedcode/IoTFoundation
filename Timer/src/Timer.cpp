@@ -160,6 +160,21 @@ bool Timer::isExpired() const
            (expireTime == 0));
 }
 
+long Timer::getExpireTime()
+{
+   long timeToExpiration = 0;
+
+   Board* board = Board::getBoard();
+
+   if (isStarted() && board)
+   {
+      unsigned long currentTime = board->systemTime();
+      timeToExpiration = (expireTime - currentTime);
+   }
+
+   return (timeToExpiration);
+}
+
 void Timer::setMessage(
    MessagePtr message)
 {

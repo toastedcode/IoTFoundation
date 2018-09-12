@@ -16,6 +16,8 @@ bool Logger::loggingEnabled = true;
 
 LogLevel Logger::logLevel = DEBUG;
 
+char Logger::sBuffer[Logger::BUFFER_SIZE];
+
 LogLevel fromString(
    const String& logLevelString)
 {
@@ -62,8 +64,7 @@ void Logger::logDebugFinest(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf(sBuffer, 200, format, arguments);
+   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
 
    if (instance && loggingEnabled && shouldLog(DEBUG_FINEST))
    {
@@ -80,8 +81,7 @@ void Logger::logDebug(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf(sBuffer, 200, format, arguments);
+   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
 
    if (instance && loggingEnabled && shouldLog(DEBUG))
    {
@@ -98,8 +98,7 @@ void Logger::logInfo(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf(sBuffer, 200, format, arguments);
+   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
 
    if (instance && loggingEnabled)
    {
@@ -116,8 +115,7 @@ void Logger::logWarning(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf(sBuffer, 200, format, arguments);
+   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
 
    if (instance && loggingEnabled && shouldLog(WARNING))
    {
@@ -134,8 +132,7 @@ void Logger::logSevere(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf(sBuffer, 200, format, arguments);
+   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
 
    if (instance && loggingEnabled && shouldLog(SEVERE))
    {
@@ -153,8 +150,7 @@ void Logger::logDebugFinest(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf_P(sBuffer, 200, (PGM_P)format, arguments);
+   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
 
    if (instance && loggingEnabled && shouldLog(DEBUG_FINEST))
    {
@@ -171,8 +167,7 @@ void Logger::logDebug(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf_P(sBuffer, 200, (PGM_P)format, arguments);
+   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
 
    if (instance && loggingEnabled && shouldLog(DEBUG))
    {
@@ -189,8 +184,7 @@ void Logger::logInfo(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf_P(sBuffer, 200, (PGM_P)format, arguments);
+   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
 
    if (instance && loggingEnabled && shouldLog(INFO))
    {
@@ -207,8 +201,7 @@ void Logger::logWarning(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf_P(sBuffer, 200, (PGM_P)format, arguments);
+   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
 
    if (instance && loggingEnabled && shouldLog(WARNING))
    {
@@ -225,8 +218,7 @@ void Logger::logSevere(
    va_list arguments;
    va_start(arguments, format);
 
-   static char sBuffer[200];
-   vsnprintf_P(sBuffer, 200, (PGM_P)format, arguments);
+   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
 
    if (instance && loggingEnabled && shouldLog(SEVERE))
    {

@@ -55,6 +55,8 @@ public:
 
    bool isExpired() const;
 
+   long getExpireTime();
+
    void setMessage(
       MessagePtr message);
 

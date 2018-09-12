@@ -124,11 +124,15 @@ private:
    // the logger should log.
    static bool shouldLog(LogLevel logLevel);
 
+   static const int BUFFER_SIZE = 512;  // bytes
+
    static Logger* instance;
 
    static bool loggingEnabled;
 
    static LogLevel logLevel;
+
+   static char sBuffer[BUFFER_SIZE];
 };
 
 // *****************************************************************************
