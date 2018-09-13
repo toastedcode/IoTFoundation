@@ -25,6 +25,8 @@ public:
    void set(const String& name, char* value);
    void set(const String& name, String value);
 
+   void unset(const String& name);
+
    // Dumps the contents of the dictionary to a string.
    String toString() const;
 };

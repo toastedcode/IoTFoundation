@@ -12,6 +12,7 @@
 #include "Address.hpp"
 #include "MessagePool.hpp"
 #include "MessageRouter.hpp"
+#include "ProtocolFactory.hpp"
 #include "StaticMessageQueue.hpp"
 
 Adapter::Adapter(
@@ -22,6 +23,13 @@ Adapter::Adapter(
 {
 }
 
+Adapter::Adapter(
+   MessagePtr parameters) :
+      Component(parameters)
+{
+   protocol = ProtocolFactory::create(parameters->getString("protocol"));
+}
+
 void Adapter::handleMessage(
    MessagePtr message)
 {
@@ -29,7 +37,17 @@ void Adapter::handleMessage(
    // Ex. adapterId@remoteId -> remoteId
    Address dest(message->getDestination());
    dest.pop();
-   message->setDestination(dest.toString());
+
+   String destination = dest.toString();
+
+   if (destination.length() > 0)
+   {
+      message->setDestination(destination);
+   }
+   else
+   {
+      message->unset("destination");
+   }
 
    sendRemoteMessage(message);
    MessagePool::freeMessage(message);

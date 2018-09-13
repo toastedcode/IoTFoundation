@@ -10,6 +10,7 @@
 //                               Typedefs
 // *****************************************************************************
 
+// TODO: Change to use Dictionary.
 typedef Component* (*ComponentConstructor)(MessagePtr);
 
 typedef Map<String, ComponentConstructor> ConstructorRegistry;

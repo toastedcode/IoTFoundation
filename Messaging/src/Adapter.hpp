@@ -22,6 +22,9 @@ public:
       const String& id,
       Protocol* protocol);
 
+   Adapter(
+      MessagePtr parameters);
+
    virtual ~Adapter();
 
    void setProtocol(

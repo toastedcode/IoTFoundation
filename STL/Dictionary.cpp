@@ -116,6 +116,11 @@ void Dictionary::set(const String& name, String value)
    put(name, String(value));
 }
 
+void Dictionary::unset(const String& name)
+{
+   erase(name);
+}
+
 String Dictionary::toString() const
 {
    String s;
