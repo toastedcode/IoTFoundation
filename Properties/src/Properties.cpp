@@ -126,22 +126,32 @@ bool Properties::parseLine(
 {
    bool success = false;
 
-   int pos = StringUtils::findFirstOf(line, "=");
+   int pos = StringUtils::findFirstNotOf(line, " \t");
 
-   if (pos < line.length())
+   if (line.charAt(pos) == '#')
    {
-      String lhs = line.substring(0, pos);
-      String rhs = line.substring(pos + 1);
+      // Ignore comments.
+      success = true;
+   }
+   else
+   {
+      pos = StringUtils::findFirstOf(line, "=");
 
-      // Remove leading/trailing whitespace.
-      lhs.trim();
-      rhs.trim();
-
-      if ((lhs.length() > 0) &&
-          (rhs.length() > 0))
+      if (pos < line.length())
       {
-         put(lhs, rhs);
-         success = true;
+         String lhs = line.substring(0, pos);
+         String rhs = line.substring(pos + 1);
+
+         // Remove leading/trailing whitespace.
+         lhs.trim();
+         rhs.trim();
+
+         if ((lhs.length() > 0) &&
+             (rhs.length() > 0))
+         {
+            put(lhs, rhs);
+            success = true;
+         }
       }
    }
 
