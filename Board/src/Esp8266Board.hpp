@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "BoardFactory.hpp"
 #include "WifiBoard.hpp"
 
 class Esp8266Board : public WifiBoard
@@ -99,3 +100,5 @@ public:
    // True is returned if the operation was successful; false otherwise.
    virtual bool stopAccessPoint();
 };
+
+REGISTER_BOARD(Esp8266Board, Esp8266Board)
