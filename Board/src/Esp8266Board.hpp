@@ -23,6 +23,8 @@ public:
    // Destructor.
    virtual ~Esp8266Board();
 
+   int getChipId();
+
    // **************************************************************************
    // Board operations.
 

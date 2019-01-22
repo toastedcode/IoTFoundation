@@ -7,6 +7,11 @@ Esp8266Board::Esp8266Board() {}
 
 Esp8266Board::~Esp8266Board() {}
 
+int Esp8266Board::getChipId()
+{
+   return (ESP.getChipId());
+}
+
 // **************************************************************************
 // Board operations
 
