@@ -20,7 +20,7 @@ WebServer::~WebServer()
 
 void WebServer::setup()
 {
-   Logger::logDebug("WebServer::setup: Starting web server on port %d.", port);
+   Logger::logDebug(F("WebServer::setup: Starting web server on port %d."), port);
 
    server = new ESP8266WebServer(port);
    server->addHandler(this);
@@ -143,7 +143,7 @@ bool WebServer::serveFile(
 
    if (file)
    {
-      Logger::logDebug(F("WebServer::serveFile: %s"), requestUri.c_str());
+      Logger::logDebug(F("WebServer::serveFile: %s (%d bytes)"), requestUri.c_str(), file.size());
 
       if (server.hasArg("download"))
       {
@@ -151,9 +151,10 @@ bool WebServer::serveFile(
       }
 
       // Send the file contents.
-      if (server.streamFile(file, dataType) != file.size())
+      int bytesSent = server.streamFile(file, dataType);
+      if (bytesSent != file.size())
       {
-         Logger::logWarning(F("WebServer::serveFile: Sent less data than expected."));
+         Logger::logWarning(F("WebServer::serveFile: Sent less data than expected. (%d/%d)"), bytesSent, file.size());
          success = true;
       }
       else

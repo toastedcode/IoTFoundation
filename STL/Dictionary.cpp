@@ -68,6 +68,19 @@ int Dictionary::getInt(const String& name) const
    return (value);
 }
 
+long Dictionary::getLong(const String& name) const
+{
+   long value = 0;
+
+   Map<String, String>::Iterator foundIt = find(name);
+   if (foundIt != end())
+   {
+      value = foundIt->second.toInt();  // Note: toInt() actually returns long
+   }
+
+   return (value);
+}
+
 String Dictionary::getString(const String& name) const
 {
    String value = "";
@@ -91,6 +104,11 @@ void Dictionary::set(const String& name, char value)
    put(name, String(value));
 }
 
+void Dictionary::set(const String& name, char* value)
+{
+   put(name, String(value));
+}
+
 void Dictionary::set(const String& name, double value)
 {
    put(name, String(value));
@@ -106,7 +124,7 @@ void Dictionary::set(const String& name, int value)
    put(name, String(value));
 }
 
-void Dictionary::set(const String& name, char* value)
+void Dictionary::set(const String& name, long value)
 {
    put(name, String(value));
 }

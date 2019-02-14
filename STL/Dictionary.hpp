@@ -14,15 +14,17 @@ public:
    double getDouble(const String& name) const;
    float getFloat(const String& name) const;
    int getInt(const String& name) const;
+   long getLong(const String& name) const;
    String getString(const String& name) const;
 
    // Operations for setting properties.
    void set(const String& name, bool value);
    void set(const String& name, char value);
+   void set(const String& name, char* value);
    void set(const String& name, double value);
    void set(const String& name, float value);
    void set(const String& name, int value);
-   void set(const String& name, char* value);
+   void set(const String& name, long value);
    void set(const String& name, String value);
 
    void unset(const String& name);
