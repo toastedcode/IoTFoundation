@@ -29,7 +29,15 @@ public:
    static Board* create(
       const String& classId);
 
-   static BoardConstructorRegistry registry;
+private:
+
+   static BoardConstructorRegistry& getRegistry()
+   {
+      // Note: This construct-on-first-use idiom helps us avoid the static initialization order fiasco.
+      static BoardConstructorRegistry* registry = new BoardConstructorRegistry();
+
+      return (*registry);
+   }
 };
 
 // *****************************************************************************

@@ -1,14 +1,12 @@
 #include "BoardFactory.hpp"
 #include "Logger.hpp"
 
-BoardConstructorRegistry BoardFactory::registry;
-
 void BoardFactory::registerBoard(
    const String& name,
    BoardConstructor constructor)
 {
-    // Register the class constructor.
-   registry[name] = constructor;
+   // Register the class constructor.
+   getRegistry()[name] = constructor;
 
    Logger::logDebugFinest(F("BoardFactory::registerBoard: Registered board [%s]."), name.c_str());
 }
@@ -18,9 +16,9 @@ Board* BoardFactory::create(
 {
    Board* board = 0;
 
-   Map<String, BoardConstructor>::Iterator foundIt = registry.find(classId);
+   Map<String, BoardConstructor>::Iterator foundIt = getRegistry().find(classId);
 
-   if (foundIt != registry.end())
+   if (foundIt != getRegistry().end())
    {
       const BoardConstructor* constructor = &(foundIt->second);
 
@@ -32,8 +30,12 @@ Board* BoardFactory::create(
       }
       else
       {
-         Logger::logWarning(F("BoardFactory::create: No board registered under class id [%s]."), classId.c_str());
+         Logger::logWarning(F("BoardFactory::create: No board constructor registered under class id [%s]."), classId.c_str());
       }
+   }
+   else
+   {
+      Logger::logWarning(F("BoardFactory::create: No board registered under class id [%s]."), classId.c_str());
    }
 
    return (board);
