@@ -18,6 +18,8 @@ LogLevel Logger::logLevel = DEBUG;
 
 char Logger::sBuffer[Logger::BUFFER_SIZE];
 
+bool Logger::recursionGuard = false;
+
 LogLevel fromString(
    const String& logLevelString)
 {
@@ -64,12 +66,7 @@ void Logger::logDebugFinest(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(DEBUG_FINEST))
-   {
-      instance->log(DEBUG_FINEST, String(sBuffer));
-   }
+   logAt(DEBUG_FINEST, format, arguments);
 
    va_end(arguments);
 }
@@ -81,12 +78,7 @@ void Logger::logDebug(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(DEBUG))
-   {
-      instance->log(DEBUG, String(sBuffer));
-   }
+   logAt(DEBUG, format, arguments);
 
    va_end(arguments);
 }
@@ -98,12 +90,7 @@ void Logger::logInfo(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
-
-   if (instance && loggingEnabled)
-   {
-      instance->log(INFO, String(sBuffer));
-   }
+   logAt(INFO, format, arguments);
 
    va_end(arguments);
 }
@@ -115,12 +102,7 @@ void Logger::logWarning(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(WARNING))
-   {
-      instance->log(WARNING, String(sBuffer));
-   }
+   logAt(WARNING, format, arguments);
 
    va_end(arguments);
 }
@@ -132,11 +114,28 @@ void Logger::logSevere(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
+   logAt(SEVERE, format, arguments);
 
-   if (instance && loggingEnabled && shouldLog(SEVERE))
+   va_end(arguments);
+}
+
+void Logger::logAt(
+   const LogLevel& logLevel,
+   const char* format,
+   ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   if (instance && loggingEnabled && shouldLog(logLevel) && !recursionGuard)
    {
-      instance->log(SEVERE, String(sBuffer));
+      recursionGuard = true;
+
+      vsnprintf(sBuffer, BUFFER_SIZE, format, arguments);
+
+      instance->log(logLevel, String(sBuffer));
+
+      recursionGuard = false;
    }
 
    va_end(arguments);
@@ -150,12 +149,7 @@ void Logger::logDebugFinest(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(DEBUG_FINEST))
-   {
-      instance->log(DEBUG_FINEST, String(sBuffer));
-   }
+   logAt(DEBUG_FINEST, format, arguments);
 
    va_end(arguments);
 }
@@ -167,12 +161,7 @@ void Logger::logDebug(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(DEBUG))
-   {
-      instance->log(DEBUG, String(sBuffer));
-   }
+   logAt(DEBUG, format, arguments);
 
    va_end(arguments);
 }
@@ -184,12 +173,7 @@ void Logger::logInfo(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(INFO))
-   {
-      instance->log(INFO, String(sBuffer));
-   }
+   logAt(INFO, format, arguments);
 
    va_end(arguments);
 }
@@ -201,12 +185,7 @@ void Logger::logWarning(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
-
-   if (instance && loggingEnabled && shouldLog(WARNING))
-   {
-      instance->log(WARNING, String(sBuffer));
-   }
+   logAt(WARNING, format, arguments);
 
    va_end(arguments);
 }
@@ -218,11 +197,28 @@ void Logger::logSevere(
    va_list arguments;
    va_start(arguments, format);
 
-   vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
+   logAt(SEVERE, format, arguments);
 
-   if (instance && loggingEnabled && shouldLog(SEVERE))
+   va_end(arguments);
+}
+
+void Logger::logAt(
+   const LogLevel& logLevel,
+   const __FlashStringHelper* format,
+   ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   if (instance && loggingEnabled && shouldLog(logLevel) && !recursionGuard)
    {
-      instance->log(SEVERE, String(sBuffer));
+      recursionGuard = true;
+
+      vsnprintf_P(sBuffer, BUFFER_SIZE, (PGM_P)format, arguments);
+
+      instance->log(logLevel, String(sBuffer));
+
+      recursionGuard = false;
    }
 
    va_end(arguments);

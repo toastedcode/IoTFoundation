@@ -88,6 +88,11 @@ public:
       const char* format,
       ...);
 
+   static void logAt(
+      const LogLevel& logLevel,
+      const char* format,
+      ...);
+
 #ifdef ARDUINO
    static void logDebugFinest(
       const __FlashStringHelper* format,
@@ -108,6 +113,12 @@ public:
    static void logSevere(
       const __FlashStringHelper* format,
       ...);
+
+   static void logAt(
+      const LogLevel& logLevel,
+      const __FlashStringHelper* format,
+      ...);
+
 #endif
 
 protected:
@@ -133,6 +144,8 @@ private:
    static LogLevel logLevel;
 
    static char sBuffer[BUFFER_SIZE];
+
+   static bool recursionGuard;
 };
 
 // *****************************************************************************
