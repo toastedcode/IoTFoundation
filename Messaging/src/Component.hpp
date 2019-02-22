@@ -41,6 +41,9 @@ public:
 
 protected:
 
+   virtual MessagePtr pingReply(
+      MessagePtr ping);
+
    String id;
 
    MessageQueue* messageQueue;

@@ -53,14 +53,10 @@ void Component::handleMessage(
    //  ping
    if (message->getMessageId() == "ping")
    {
-      Message* reply = MessagePool::newMessage();
+      Message* reply = pingReply(message);
 
       if (reply)
       {
-         reply->setMessageId("pong");
-         reply->setSource(getId());
-         reply->setDestination(message->getSource());
-
          MessageRouter::send(reply);
       }
    }
@@ -73,4 +69,23 @@ void Component::handleMessage(
    }
 
    MessagePool::freeMessage(message);
+}
+
+MessagePtr Component::pingReply(
+   MessagePtr ping)
+{
+   MessagePtr reply = MessagePool::newMessage();
+
+   if (reply)
+   {
+      reply->setMessageId("pong");
+      reply->setSource(getId());
+
+      if (ping)
+      {
+         reply->setDestination(ping->getSource());
+      }
+   }
+
+   return (reply);
 }
