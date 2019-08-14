@@ -1,18 +1,19 @@
-#include "Esp8266Board.hpp"
+#include "Esp32Board.hpp"
 
-Esp8266Board::Esp8266Board() :
+Esp32Board::Esp32Board() :
    EspBoard()
 {
 }
 
-Esp8266Board::~Esp8266Board()
+Esp32Board::~Esp32Board()
 {
 }
 
-int Esp8266Board::getChipId()
+int Esp32Board::getChipId()
 {
-#ifdef ESP8266
-   return (ESP.getChipId());
+#ifdef ESP32
+   // TODO
+   return (0);
 #else
    return (0);
 #endif
@@ -21,17 +22,17 @@ int Esp8266Board::getChipId()
 // **************************************************************************
 // Board operations
 
-String Esp8266Board::getBoardName()
+String Esp32Board::getBoardName()
 {
-   return (F("ESP8266"));
+   return (F("ESP32"));
 }
 
-void Esp8266Board::analogWrite(
+void Esp32Board::analogWrite(
    const int& pin,
    const int& value)
 {
-#ifdef ESP8266
-   ::analogWrite(pin, value);
+#ifdef ESP32
+   // TODO
 #endif
 }
 

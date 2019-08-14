@@ -1,20 +1,19 @@
 #pragma once
 
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-
 #include "Dictionary.hpp"
+#include "EspWebServer.hpp"
+#include "EspWifi.hpp"
 #include "Webpage.hpp"
 
-class WebServer : public RequestHandler
+class WebpageServer : public RequestHandler
 {
 
 public:
 
-   WebServer(
+   WebpageServer(
       const int& port);
 
-   virtual ~WebServer();
+   virtual ~WebpageServer();
 
    virtual void setup();
 
@@ -28,7 +27,7 @@ public:
       String uri);
 
    virtual bool handle(
-      ESP8266WebServer& server,
+      EspWebServer& server,
       HTTPMethod requestMethod,
       String requestUri);
 
@@ -46,17 +45,17 @@ public:
 protected:
 
    bool servePage(
-      ESP8266WebServer& server,
+      EspWebServer& server,
       HTTPMethod requestMethod,
       String requestUri);
 
    bool serveFile(
-      ESP8266WebServer& server,
+      EspWebServer& server,
       HTTPMethod requestMethod,
       String requestUri);
 
    virtual void handleNotFound(
-      ESP8266WebServer& server,
+      EspWebServer& server,
       HTTPMethod requestMethod,
       String requestUri);
 
@@ -64,14 +63,15 @@ protected:
       const String& path);
 
    static void getArguments(
-      ESP8266WebServer& server,
+      EspWebServer& server,
       Dictionary& arguments);
 
 private:
 
    int port;
 
-   ESP8266WebServer* server;
+   EspWebServer* server;
 
    Map<String, Webpage*> webpages;
 };
+

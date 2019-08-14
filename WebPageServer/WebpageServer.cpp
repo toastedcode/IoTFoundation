@@ -1,11 +1,10 @@
-#include <FS.h>
-
 #include "Board.hpp"
+#include "EspSpiffs.hpp"
 #include "Logger.hpp"
 #include "Messaging.hpp"
-#include "WebServer.hpp"
+#include "WebpageServer.hpp"
 
-WebServer::WebServer(
+WebpageServer::WebpageServer(
    const int& port) :
      port(port),
      server(0)
@@ -13,40 +12,40 @@ WebServer::WebServer(
    // Nothing to do here.
 }
 
-WebServer::~WebServer()
+WebpageServer::~WebpageServer()
 {
    // Nothing to do here.
 }
 
-void WebServer::setup()
+void WebpageServer::setup()
 {
-   Logger::logDebug(F("WebServer::setup: Starting web server on port %d."), port);
+   Logger::logDebug(F("WebpageServer::setup: Starting web server on port %d."), port);
 
-   server = new ESP8266WebServer(port);
+   server = new EspWebServer(port);
    server->addHandler(this);
    server->begin();
 }
 
-void WebServer::loop()
+void WebpageServer::loop()
 {
    server->handleClient();
 }
 
-bool WebServer::canHandle(
+bool WebpageServer::canHandle(
    HTTPMethod method,
    String uri)
 {
    return (true);
 }
 
-bool WebServer::handle(
-   ESP8266WebServer& server,
+bool WebpageServer::handle(
+   EspWebServer& server,
    HTTPMethod requestMethod,
    String requestUri)
 {
    bool success = true;
 
-   Logger::logDebug(F("WebServer::handle: %s"), requestUri.c_str());
+   Logger::logDebug(F("WebpageServer::handle: %s"), requestUri.c_str());
 
    success = servePage(server, requestMethod, requestUri);
 
@@ -64,23 +63,23 @@ bool WebServer::handle(
    return (success);
 }
 
-void WebServer::handleNotFound(
-   ESP8266WebServer& server,
+void WebpageServer::handleNotFound(
+   EspWebServer& server,
    HTTPMethod requestMethod,
    String requestUri)
 {
    server.send(404, "text/plain", "File not found.");
 }
 
-void WebServer::addPage(
+void WebpageServer::addPage(
    Webpage* webpage)
 {
-   Logger::logDebug(F("WebServer::addPage: Hosting webpage: %s"), webpage->getUri().c_str());
+   Logger::logDebug(F("WebpageServer::addPage: Hosting webpage: %s"), webpage->getUri().c_str());
 
    webpages[webpage->getUri()] = webpage;
 }
 
-Webpage* WebServer::getPage(
+Webpage* WebpageServer::getPage(
    const String& uri)
 {
    Webpage* webpage = 0;
@@ -94,14 +93,14 @@ Webpage* WebServer::getPage(
    return (webpage);
 }
 
-void WebServer::removePage(
+void WebpageServer::removePage(
    const String& uri)
 {
    webpages.erase(uri);
 }
 
-bool WebServer::servePage(
-   ESP8266WebServer& server,
+bool WebpageServer::servePage(
+   EspWebServer& server,
    HTTPMethod requestMethod,
    String requestUri)
 {
@@ -113,7 +112,7 @@ bool WebServer::servePage(
 
    if ((webpage != 0) && (webpage->canHandle(requestMethod, requestUri)))
    {
-      Logger::logDebug(F("WebServer::servePage: %s"), requestUri.c_str());
+      Logger::logDebug(F("WebpageServer::servePage: %s"), requestUri.c_str());
 
       Dictionary arguments;
       getArguments(server, arguments);
@@ -128,8 +127,8 @@ bool WebServer::servePage(
    return (success);
 }
 
-bool WebServer::serveFile(
-   ESP8266WebServer& server,
+bool WebpageServer::serveFile(
+   EspWebServer& server,
    HTTPMethod requestMethod,
    String requestUri)
 {
@@ -143,7 +142,7 @@ bool WebServer::serveFile(
 
    if (file)
    {
-      Logger::logDebug(F("WebServer::serveFile: %s (%d bytes)"), requestUri.c_str(), file.size());
+      Logger::logDebug(F("WebpageServer::serveFile: %s (%d bytes)"), requestUri.c_str(), file.size());
 
       if (server.hasArg("download"))
       {
@@ -154,7 +153,7 @@ bool WebServer::serveFile(
       int bytesSent = server.streamFile(file, dataType);
       if (bytesSent != file.size())
       {
-         Logger::logWarning(F("WebServer::serveFile: Sent less data than expected. (%d/%d)"), bytesSent, file.size());
+         Logger::logWarning(F("WebpageServer::serveFile: Sent less data than expected. (%d/%d)"), bytesSent, file.size());
          success = true;
       }
       else
@@ -168,7 +167,7 @@ bool WebServer::serveFile(
    return (success);
 }
 
-String WebServer::getDataType(
+String WebpageServer::getDataType(
    const String& path)
 {
    String dataType = "text/plain";
@@ -218,8 +217,8 @@ String WebServer::getDataType(
    return (dataType);
 }
 
-void WebServer::getArguments(
-   ESP8266WebServer& server,
+void WebpageServer::getArguments(
+   EspWebServer& server,
    Dictionary& arguments)
 {
    for (int i = 0; i < server.args(); i++)
@@ -227,4 +226,3 @@ void WebServer::getArguments(
       arguments[server.argName(i)] = server.arg(i);
    }
 }
-

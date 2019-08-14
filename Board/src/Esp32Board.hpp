@@ -1,9 +1,9 @@
 // *****************************************************************************
 // *****************************************************************************
-// Esp8266Board.hpp
+// Esp32Board.hpp
 //
 // Author: Jason Tost
-// Date:   10.17.2016
+// Date:   8.8.2019
 //
 // *****************************************************************************
 // *****************************************************************************
@@ -13,16 +13,16 @@
 #include "BoardFactory.hpp"
 #include "EspBoard.hpp"
 
-class Esp8266Board : public EspBoard
+class Esp32Board : public EspBoard
 {
 
 public:
 
    // Constructor.
-   Esp8266Board();
+   Esp32Board();
 
    // Destructor.
-   virtual ~Esp8266Board();
+   virtual ~Esp32Board();
 
    virtual int getChipId();
 
@@ -40,4 +40,4 @@ public:
 
 };
 
-REGISTER_BOARD(Esp8266Board, Esp8266Board)
+REGISTER_BOARD(Esp32Board, Esp32Board)

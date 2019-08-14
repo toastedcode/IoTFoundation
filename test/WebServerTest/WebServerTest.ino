@@ -1,14 +1,15 @@
-#include "Esp8266Board.hpp"
-#include "FS.h"
+#include "Esp32Board.hpp"
+#include "EspSpiffs.hpp"
+#include "EspWebServer.hpp"
 #include "Properties.hpp"
 #include "PropertiesPage.hpp"
-#include "WebServer.hpp"
+#include "WebpageServer.hpp"
 
 const String PROPERTIES_FILE = "/robox.properties";
 
 Properties properties;
 
-WebServer webServer(80);
+WebpageServer webpageServer(80);
 
 // *****************************************************************************
 //                                  Arduino
@@ -23,7 +24,7 @@ void setup()
 
    Logger::logDebug("\n\n********** Web Server Test **********\n\n");
    
-   Board::setBoard(new Esp8266Board());
+   Board::setBoard(new Esp32Board());
 
    // Load properties.
    properties.load(PROPERTIES_FILE);
@@ -32,11 +33,11 @@ void setup()
 
    WifiBoard::getBoard()->connectWifi(properties.getString("wifi.ssid"), properties.getString("wifi.password"));
 
-   webServer.setup();
-   webServer.addPage(new PropertiesPage());
+   webpageServer.setup();
+   webpageServer.addPage(new PropertiesPage());
 }
 
 void loop()
 {
-   webServer.loop();
+   webpageServer.loop();
 }

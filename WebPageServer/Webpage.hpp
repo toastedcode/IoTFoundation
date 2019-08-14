@@ -1,9 +1,8 @@
 #pragma once
 
-#include <ESP8266WebServer.h>
-
 #include "CommonDefs.hpp"
 #include "Dictionary.hpp"
+#include "EspWebServer.hpp"
 #include "Messaging.hpp"
 
 class Webpage

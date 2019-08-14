@@ -1,5 +1,4 @@
-#include <FS.h>
-
+#include "EspSpiffs.hpp"
 #include "Logger.hpp"
 #include "Properties.hpp"
 #include "StringUtils.hpp"

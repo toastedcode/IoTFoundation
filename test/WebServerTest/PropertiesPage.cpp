@@ -1,7 +1,6 @@
-#include <FS.h>
-
 #include "Board.hpp"
 #include "CommonDefs.hpp"
+#include "EspSpiffs.hpp"
 #include "Logger.hpp"
 #include "Properties.hpp"
 #include "PropertiesPage.hpp"
